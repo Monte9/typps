@@ -17,11 +17,18 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var currencyFormatter: NSNumberFormatter?
     
     @IBOutlet weak var totalBillAmountTextField: UITextField!
-
+    @IBOutlet weak var taxHintLabel: UILabel!
+    
+    //Views
     @IBOutlet weak var welcomeView: UIView!
+    @IBOutlet weak var taxView: UIView!
+    
+    var isTaxEnabled: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        taxHintLabel.text = "(off)"
         
         // Delegate for LocationService
         LocationService.sharedInstance.delegate = self
@@ -51,10 +58,31 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         print("Change detected")
         if (totalBillAmountTextField.text == "") {
             totalBillAmountTextField.text = "$"
-            welcomeView.hidden = true
+            welcomeView.hidden = false
         }
         
+        if (totalBillAmountTextField.text == "$") {
+            welcomeView.hidden = false
+        }
+        
+        if (totalBillAmountTextField.text != "$") {
+            welcomeView.hidden = true
+        }
     }
+    
+    @IBAction func taxViewTapped(sender: UITapGestureRecognizer) {
+        isTaxEnabled = !isTaxEnabled
+        
+        if (isTaxEnabled) {
+            taxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+            taxHintLabel.text = "(tax included)"
+        } else {
+            taxView.backgroundColor = UIColor(red: 117/255, green: 124/255, blue: 121/255, alpha: 1)
+            taxHintLabel.text = "(off)"
+        }
+    }
+    
+    
     
     
     
