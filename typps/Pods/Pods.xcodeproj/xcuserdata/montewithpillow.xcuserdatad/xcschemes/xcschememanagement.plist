@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FontAwesomeKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-typps.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -27,12 +32,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A0766B43E29F7C3E1F9E9371143C0AE7</key>
+		<key>8BE9D4B6FF6D92923152CB0534F2BB94</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>AE6A4AC269D91F7FF73F67FEEEF0FC11</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD585FC1E1372FC0EC85D9F34AB120F7</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -8,5 +8,6 @@ target 'typps' do
   # Pods for typps
   pod 'AFNetworking', '~> 2.5'
   pod 'BDBOAuth1Manager'
+  pod 'FontAwesomeKit', '~> 2.2.0'
 
 end

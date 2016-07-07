@@ -9,18 +9,104 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController, LocationServiceDelegate {
+class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate {
     
     var nearbyBusinesses: [YelpBusiness]! = [YelpBusiness]()
     var minDistance: String?
+    
+    var currencyFormatter: NSNumberFormatter?
+    
+    @IBOutlet weak var totalBillAmountTextField: UITextField!
 
+    @IBOutlet weak var welcomeView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         // Delegate for LocationService
         LocationService.sharedInstance.delegate = self
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        
+        //Customize the navigation bar title and color
+        let navigationBar = self.navigationController?.navigationBar
+        
+        //make navigation bar transparent
+        navigationBar!.setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        navigationBar!.shadowImage = UIImage()
+        navigationBar!.translucent = true
+        
+        //set navigation bar title with color
+        navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
+        navigationItem.title = "typps"
+        
+        //set totalBillAmountPlaceholder
+        totalBillAmountTextField.text = "$"
+        welcomeView.hidden = false
+        
+    }
+    
+    @IBAction func textFieldDidChange(sender: AnyObject) {
+        print("Change detected")
+        if (totalBillAmountTextField.text == "") {
+            totalBillAmountTextField.text = "$"
+            welcomeView.hidden = true
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @IBAction func getMyLocationButton(sender: AnyObject) {
         print("Getting my location now..")
