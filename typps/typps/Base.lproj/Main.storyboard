@@ -47,6 +47,59 @@
                                     <constraint firstItem="27w-yf-lFo" firstAttribute="top" secondItem="ZXU-S7-Yt0" secondAttribute="top" constant="5" id="xMm-q8-8pi"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iss-eA-2qX">
+                                <rect key="frame" x="0.0" y="204" width="120" height="120"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8.750 %" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ii-K3-ZSy">
+                                        <rect key="frame" x="13" y="42" width="94" height="35"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-MediumItalic" family="Avenir Next" pointSize="25"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(tax included)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4rT-j6-8Au">
+                                        <rect key="frame" x="13" y="85" width="94" height="21"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-UltraLightItalic" family="Avenir Next" pointSize="15"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.46038705769028537" green="0.48467548076923073" blue="0.4730654730252582" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="4rT-j6-8Au" firstAttribute="leading" secondItem="Iss-eA-2qX" secondAttribute="leading" constant="13" id="6RN-TB-gBt"/>
+                                    <constraint firstItem="4rT-j6-8Au" firstAttribute="centerX" secondItem="Iss-eA-2qX" secondAttribute="centerX" id="BhG-jL-hJ9"/>
+                                    <constraint firstAttribute="height" constant="120" id="DQV-lJ-QMp"/>
+                                    <constraint firstAttribute="bottom" secondItem="4rT-j6-8Au" secondAttribute="bottom" constant="14" id="ISd-RP-rVy"/>
+                                    <constraint firstItem="9ii-K3-ZSy" firstAttribute="centerY" secondItem="Iss-eA-2qX" secondAttribute="centerY" id="MVX-Zx-4eX"/>
+                                    <constraint firstAttribute="width" constant="120" id="jKR-xU-ssu"/>
+                                    <constraint firstItem="9ii-K3-ZSy" firstAttribute="centerX" secondItem="Iss-eA-2qX" secondAttribute="centerX" id="jeI-cM-B0h"/>
+                                    <constraint firstAttribute="trailing" secondItem="4rT-j6-8Au" secondAttribute="trailing" constant="13" id="jza-g7-GOm"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="gHC-zz-wQk" appends="YES" id="qAm-zA-eO5"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jHF-YB-Qg4">
+                                <rect key="frame" x="120" y="204" width="200" height="120"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 %" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="toz-Kn-UW4">
+                                        <rect key="frame" x="36" y="22" width="128" height="76"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="55"/>
+                                        <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="toz-Kn-UW4" firstAttribute="centerX" secondItem="jHF-YB-Qg4" secondAttribute="centerX" id="kQC-wT-sDP"/>
+                                    <constraint firstAttribute="height" constant="120" id="lhI-7f-WCt"/>
+                                    <constraint firstItem="toz-Kn-UW4" firstAttribute="centerY" secondItem="jHF-YB-Qg4" secondAttribute="centerY" id="twl-Or-YmF"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="uIY-ak-78R" appends="YES" id="mHn-nh-hfv"/>
+                                </connections>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0A4-U0-z5g">
                                 <rect key="frame" x="0.0" y="204" width="320" height="364"/>
                                 <subviews>
@@ -94,45 +147,6 @@
                                     <constraint firstAttribute="trailing" secondItem="Jeh-Bd-QIe" secondAttribute="trailing" constant="20" id="sWk-Ud-4B6"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iss-eA-2qX">
-                                <rect key="frame" x="0.0" y="204" width="120" height="120"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8.750 %" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ii-K3-ZSy">
-                                        <rect key="frame" x="13" y="42" width="94" height="35"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-MediumItalic" family="Avenir Next" pointSize="25"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="tax included" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4rT-j6-8Au">
-                                        <rect key="frame" x="13" y="85" width="94" height="21"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-UltraLightItalic" family="Avenir Next" pointSize="15"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.46038705769028537" green="0.48467548076923073" blue="0.4730654730252582" alpha="1" colorSpace="calibratedRGB"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstItem="4rT-j6-8Au" firstAttribute="leading" secondItem="Iss-eA-2qX" secondAttribute="leading" constant="13" id="6RN-TB-gBt"/>
-                                    <constraint firstItem="4rT-j6-8Au" firstAttribute="centerX" secondItem="Iss-eA-2qX" secondAttribute="centerX" id="BhG-jL-hJ9"/>
-                                    <constraint firstAttribute="height" constant="120" id="DQV-lJ-QMp"/>
-                                    <constraint firstAttribute="bottom" secondItem="4rT-j6-8Au" secondAttribute="bottom" constant="14" id="ISd-RP-rVy"/>
-                                    <constraint firstItem="9ii-K3-ZSy" firstAttribute="centerY" secondItem="Iss-eA-2qX" secondAttribute="centerY" id="MVX-Zx-4eX"/>
-                                    <constraint firstAttribute="width" constant="120" id="jKR-xU-ssu"/>
-                                    <constraint firstItem="9ii-K3-ZSy" firstAttribute="centerX" secondItem="Iss-eA-2qX" secondAttribute="centerX" id="jeI-cM-B0h"/>
-                                    <constraint firstAttribute="trailing" secondItem="4rT-j6-8Au" secondAttribute="trailing" constant="13" id="jza-g7-GOm"/>
-                                </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="gHC-zz-wQk" appends="YES" id="qAm-zA-eO5"/>
-                                </connections>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jHF-YB-Qg4">
-                                <rect key="frame" x="120" y="204" width="200" height="120"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="120" id="lhI-7f-WCt"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -163,6 +177,8 @@
                     <connections>
                         <outlet property="taxHintLabel" destination="4rT-j6-8Au" id="h06-8B-yVs"/>
                         <outlet property="taxView" destination="Iss-eA-2qX" id="cB2-Ch-hkk"/>
+                        <outlet property="tipAmountLabel" destination="toz-Kn-UW4" id="fS6-jP-Hdw"/>
+                        <outlet property="tipView" destination="jHF-YB-Qg4" id="bAF-my-HQ9"/>
                         <outlet property="totalBillAmountTextField" destination="27w-yf-lFo" id="3aB-zs-nbp"/>
                         <outlet property="welcomeView" destination="0A4-U0-z5g" id="H0J-yJ-pfZ"/>
                     </connections>
@@ -174,6 +190,12 @@
                         <outlet property="delegate" destination="Iss-eA-2qX" id="jbL-iW-O8n"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="uIY-ak-78R">
+                    <connections>
+                        <action selector="setTipAmountWithPan:" destination="BYZ-38-t0r" id="IZL-cS-Kaz"/>
+                        <outlet property="delegate" destination="jHF-YB-Qg4" id="jmS-I8-8ce"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="662" y="317"/>
         </scene>

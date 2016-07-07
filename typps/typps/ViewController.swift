@@ -18,17 +18,25 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     @IBOutlet weak var totalBillAmountTextField: UITextField!
     @IBOutlet weak var taxHintLabel: UILabel!
+    @IBOutlet weak var tipAmountLabel: UILabel!
     
     //Views
     @IBOutlet weak var welcomeView: UIView!
     @IBOutlet weak var taxView: UIView!
+    @IBOutlet weak var tipView: UIView!
     
     var isTaxEnabled: Bool = false
+    var tipPercent: Int = 20
+    let tipPercentMax: Int = 30
+    let tipPercentMin: Int = 10
+    var tipPercentTapStart: Int = 20
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         taxHintLabel.text = "(off)"
+        tipAmountLabel.text = String(tipPercent) + " %"
+        print("Initial tip amount \(tipAmountLabel.text)")
         
         // Delegate for LocationService
         LocationService.sharedInstance.delegate = self
@@ -82,6 +90,48 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         }
     }
     
+    @IBAction func setTipAmountWithPan(sender: UIPanGestureRecognizer) {
+        let translation: CGPoint = sender.translationInView(self.view)
+        
+        if (sender.state == UIGestureRecognizerState.Began) {
+            self.tipPercentTapStart = self.tipPercent;
+        } else if (sender.state == UIGestureRecognizerState.Changed) {
+            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 10))
+            
+            if (self.tipPercent > self.tipPercentMax) {
+                self.tipPercent = self.tipPercentMax;
+            } else if (self.tipPercent < self.tipPercentMin) {
+                self.tipPercent = self.tipPercentMin;
+            }
+            
+            tipAmountLabel.text = String(tipPercent) + " %"
+            print("Updated tip amount \(tipAmountLabel.text)")
+        }
+        
+        
+//
+//        if (recognizer.state == UIGestureRecognizerStateBegan) {
+//            self.tipPercentTapStart = self.tipPercent; // this should be set on touch start only
+//            [self updateBillAmountViewColor:YES];
+//            // [self percentShowLarge];
+//            
+//        } else if (recognizer.state == UIGestureRecognizerStateChanged) {
+//            self.tipPercent = (self.tipPercentTapStart - translation.x / 20);
+//            
+//            if (self.tipPercent > self.tipPercentMax) {
+//                self.tipPercent = self.tipPercentMax;
+//            } else if (self.tipPercent < self.tipPercentMin) {
+//                self.tipPercent = self.tipPercentMin;
+//            }
+//            
+//            [self updateCalculation];
+//            [self updateBillAmountViewColor:NO];
+//            
+//        } else {
+//            // [self percentReturnNormal];
+//            return;
+//        }
+    }
     
     
     
