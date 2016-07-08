@@ -22,6 +22,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     let tipPercentMin: Int = 10
     var tipPercentTapStart: Int = 20
     
+    var totalBillAmount: Float = 0
+    
     //tip label position variables
     var tipLabelCenter: CGFloat = 220
     var tipLabelCenterMax: CGFloat = 0
@@ -48,6 +50,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var splitThreeImageView: UIImageView!
     @IBOutlet weak var splitFourPlusImageView: UIImageView!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var totalBillAmountLabel: UILabel!
     
     
     //Views
@@ -125,7 +128,18 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         if (totalBillAmountTextField.text != "$") {
             welcomeView.hidden = true
+            print(self.totalBillAmountTextField.text)
+            
+            if let total = self.totalBillAmountTextField.text {
+                let index: String.Index = total.startIndex.advancedBy(1)
+                totalBillAmount = Float(total.substringFromIndex(index))!
+                self.totalBillAmountLabel.text = "pay    $\(totalBillAmount)"
+            }
         }
+    }
+    
+    func updateTotalBillAmount(var total:Float) {
+        self.totalBillAmountLabel.text = "pay    $\(total)"
     }
     
     @IBAction func welcomeViewTapped(sender: UITapGestureRecognizer) {
@@ -147,10 +161,12 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             taxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             taxHintLabel.text = "(tax included)"
             taxView.layer.cornerRadius = 60
+            updateTotalBillAmount(totalBillAmount + totalBillAmount * 0.0875)
         } else {
             taxView.backgroundColor = UIColor(red: 117/255, green: 124/255, blue: 121/255, alpha: 1)
             taxHintLabel.text = "(off)"
             taxView.layer.cornerRadius = 0
+            updateTotalBillAmount(totalBillAmount - (totalBillAmount * 0.0875))
         }
     }
     
@@ -180,6 +196,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 self.tipPercent = self.tipPercentMin;
             }
             tipAmountLabel.text = String(tipPercent) + " %"
+            updateTotalBillAmount(totalBillAmount + totalBillAmount * Float( Float(tipPercent) / 100 ))
             
             //set the tipAmountLabel center based on pan gesture
             self.tipLabelCenter = self.tipLabelCenterStart + translation.x

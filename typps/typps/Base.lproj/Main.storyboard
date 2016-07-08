@@ -370,6 +370,7 @@
                         <outlet property="taxView" destination="Iss-eA-2qX" id="cB2-Ch-hkk"/>
                         <outlet property="tipAmountLabel" destination="toz-Kn-UW4" id="fS6-jP-Hdw"/>
                         <outlet property="tipView" destination="jHF-YB-Qg4" id="bAF-my-HQ9"/>
+                        <outlet property="totalBillAmountLabel" destination="L3T-Xo-Ncn" id="G0V-Dm-swm"/>
                         <outlet property="totalBillAmountTextField" destination="27w-yf-lFo" id="3aB-zs-nbp"/>
                         <outlet property="welcomeView" destination="0A4-U0-z5g" id="H0J-yJ-pfZ"/>
                         <outlet property="welcomeViewRestaurantImageView" destination="7Vh-0V-gRQ" id="zoB-pW-H2T"/>
