@@ -42,7 +42,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         taxHintLabel.text = "(off)"
         tipAmountLabel.text = String(tipPercent) + " %"
-        print("Initial tip amount \(tipAmountLabel.text)")
+        
+        totalBillAmountTextField.delegate = self
         
         // Delegate for LocationService
         LocationService.sharedInstance.delegate = self
@@ -84,18 +85,23 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func taxViewTapped(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
         isTaxEnabled = !isTaxEnabled
         
         if (isTaxEnabled) {
             taxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             taxHintLabel.text = "(tax included)"
+            taxView.layer.cornerRadius = 60
         } else {
             taxView.backgroundColor = UIColor(red: 117/255, green: 124/255, blue: 121/255, alpha: 1)
             taxHintLabel.text = "(off)"
+            taxView.layer.cornerRadius = 0
         }
     }
     
     @IBAction func setTipAmountWithPan(sender: UIPanGestureRecognizer) {
+        self.view.endEditing(true)
+        
         let translation: CGPoint = sender.translationInView(self.view)
         
         let parentView = sender.view
@@ -107,7 +113,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.tipPercentTapStart = self.tipPercent;
             self.tipLabelCenterStart = self.tipAmountLabel.center.x
             
-            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+           // AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             
         } else if (sender.state == UIGestureRecognizerState.Changed) {
             
@@ -130,32 +136,12 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.tipAmountLabel.center.x = self.tipLabelCenter
 
         }
-        
-        
-//
-//        if (recognizer.state == UIGestureRecognizerStateBegan) {
-//            self.tipPercentTapStart = self.tipPercent; // this should be set on touch start only
-//            [self updateBillAmountViewColor:YES];
-//            // [self percentShowLarge];
-//            
-//        } else if (recognizer.state == UIGestureRecognizerStateChanged) {
-//            self.tipPercent = (self.tipPercentTapStart - translation.x / 20);
-//            
-//            if (self.tipPercent > self.tipPercentMax) {
-//                self.tipPercent = self.tipPercentMax;
-//            } else if (self.tipPercent < self.tipPercentMin) {
-//                self.tipPercent = self.tipPercentMin;
-//            }
-//            
-//            [self updateCalculation];
-//            [self updateBillAmountViewColor:NO];
-//            
-//        } else {
-//            // [self percentReturnNormal];
-//            return;
-//        }
     }
     
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        self.view.endEditing(true);
+        return false;
+    }
     
     
     
@@ -229,7 +215,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         print("starting yelp search now..")
         
         //Example of Yelp search with more search options specified
-        YelpBusiness.searchWithTerm("", latitude: 37.8480965, longitude: -122.48114370000002, sort: .Distance, categories: [], deals: false, offset: nil, limit: 5) { (businesses: [YelpBusiness]!, error: NSError!) -> Void in
+        YelpBusiness.searchWithTerm("", latitude: latitude, longitude: longitude, sort: .Distance, categories: [], deals: false, offset: nil, limit: 5) { (businesses: [YelpBusiness]!, error: NSError!) -> Void in
             
             if (businesses != nil) {
                 self.minDistance = businesses.first?.distance
@@ -256,5 +242,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             print(self.nearbyBusinesses.count)
         }
     }
+    
 }
 

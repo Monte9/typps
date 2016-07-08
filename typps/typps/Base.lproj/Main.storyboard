@@ -57,7 +57,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(tax included)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4rT-j6-8Au">
-                                        <rect key="frame" x="13" y="85" width="94" height="21"/>
+                                        <rect key="frame" x="13" y="78" width="94" height="21"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-UltraLightItalic" family="Avenir Next" pointSize="15"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -69,7 +69,7 @@
                                     <constraint firstItem="4rT-j6-8Au" firstAttribute="leading" secondItem="Iss-eA-2qX" secondAttribute="leading" constant="13" id="6RN-TB-gBt"/>
                                     <constraint firstItem="4rT-j6-8Au" firstAttribute="centerX" secondItem="Iss-eA-2qX" secondAttribute="centerX" id="BhG-jL-hJ9"/>
                                     <constraint firstAttribute="height" constant="120" id="DQV-lJ-QMp"/>
-                                    <constraint firstAttribute="bottom" secondItem="4rT-j6-8Au" secondAttribute="bottom" constant="14" id="ISd-RP-rVy"/>
+                                    <constraint firstAttribute="bottom" secondItem="4rT-j6-8Au" secondAttribute="bottom" constant="21" id="ISd-RP-rVy"/>
                                     <constraint firstItem="9ii-K3-ZSy" firstAttribute="centerY" secondItem="Iss-eA-2qX" secondAttribute="centerY" id="MVX-Zx-4eX"/>
                                     <constraint firstAttribute="width" constant="120" id="jKR-xU-ssu"/>
                                     <constraint firstItem="9ii-K3-ZSy" firstAttribute="centerX" secondItem="Iss-eA-2qX" secondAttribute="centerX" id="jeI-cM-B0h"/>
