@@ -38,17 +38,20 @@ PODS:
     - FontAwesomeKit/Core
   - FontAwesomeKit/Zocial (2.2.0):
     - FontAwesomeKit/Core
+  - MBProgressHUD (0.9.2)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.5)
   - BDBOAuth1Manager
   - FontAwesomeKit (~> 2.2.0)
+  - MBProgressHUD (~> 0.9.2)
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   BDBOAuth1Manager: cd5a5872f355ca38180d52ca2dd844f0b0c84797
   FontAwesomeKit: 025fd4dd1017fe4e3f8d47b03e024deedbb33cd4
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
 
-PODFILE CHECKSUM: 59fb0721e395952e2c6cbc9bfeea7177bad1122e
+PODFILE CHECKSUM: 21e0e068700223da8a4cd60504d6cbc0688c1b6c
 
 COCOAPODS: 1.0.1

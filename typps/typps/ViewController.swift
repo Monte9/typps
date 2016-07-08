@@ -9,44 +9,65 @@
 import UIKit
 import CoreLocation
 import AudioToolbox
+import MBProgressHUD
 
 class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate {
     
-    var nearbyBusinesses: [YelpBusiness]! = [YelpBusiness]()
-    var minDistance: String?
-    
     var currencyFormatter: NSNumberFormatter?
     
-    @IBOutlet weak var totalBillAmountTextField: UITextField!
-    @IBOutlet weak var taxHintLabel: UILabel!
-    @IBOutlet weak var tipAmountLabel: UILabel!
-    
-    //Views
-    @IBOutlet weak var welcomeView: UIView!
-    @IBOutlet weak var taxView: UIView!
-    @IBOutlet weak var tipView: UIView!
-    
+    //tip percent variables
     var isTaxEnabled: Bool = false
     var tipPercent: Int = 20
     let tipPercentMax: Int = 30
     let tipPercentMin: Int = 10
     var tipPercentTapStart: Int = 20
     
+    //tip label position variables
     var tipLabelCenter: CGFloat = 220
     var tipLabelCenterMax: CGFloat = 0
     var tipLabelCenterMin: CGFloat = 0
     var tipLabelCenterStart: CGFloat = 0
     
+    var nearbyBusinesses: [YelpBusiness]! = [YelpBusiness]()
+    var minDistance: String?
+    
+    //Outlets
+    @IBOutlet weak var totalBillAmountTextField: UITextField!
+    @IBOutlet weak var taxHintLabel: UILabel!
+    @IBOutlet weak var tipAmountLabel: UILabel!
+    @IBOutlet weak var welcomeViewRestaurantImageView: UIImageView!
+    @IBOutlet weak var welcomeViewRestaurantNameLabel: UILabel!
+    @IBOutlet weak var restaurantImageView: UIImageView!
+    @IBOutlet weak var restaurantNameLabel: UILabel!
+    @IBOutlet weak var restaurantDistanceLabel: UILabel!
+    @IBOutlet weak var resultsCountLabel: UILabel!
+    @IBOutlet weak var splitTwoImageView: UIImageView!
+    @IBOutlet weak var splitThreeImageView: UIImageView!
+    @IBOutlet weak var splitFourPlusImageView: UIImageView!
+    
+    
+    //Views
+    @IBOutlet weak var welcomeView: UIView!
+    @IBOutlet weak var taxView: UIView!
+    @IBOutlet weak var tipView: UIView!
+    @IBOutlet weak var splitTwoView: UIView!
+    @IBOutlet weak var splitThreeView: UIView!
+    @IBOutlet weak var splitFourPlusView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        taxHintLabel.text = "(off)"
-        tipAmountLabel.text = String(tipPercent) + " %"
         
         totalBillAmountTextField.delegate = self
         
         // Delegate for LocationService
         LocationService.sharedInstance.delegate = self
+        
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        //Fetch current location and find current restaurant/bar
+        LocationService.sharedInstance.startUpdatingLocation()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -63,10 +84,16 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
         navigationItem.title = "typps"
         
+        //add rounded edges to restaurantImageView
+        restaurantImageView.layer.cornerRadius = 5
+        restaurantImageView.clipsToBounds = true
+        
         //set totalBillAmountPlaceholder
         totalBillAmountTextField.text = "$"
         welcomeView.hidden = false
         
+        taxHintLabel.text = "(off)"
+        tipAmountLabel.text = String(tipPercent) + " %"
     }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
@@ -83,6 +110,12 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             welcomeView.hidden = true
         }
     }
+    
+    @IBAction func welcomeViewTapped(sender: UITapGestureRecognizer) {
+        //hide decimal pad
+        self.view.endEditing(true)
+    }
+    
     
     @IBAction func taxViewTapped(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
@@ -118,7 +151,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         } else if (sender.state == UIGestureRecognizerState.Changed) {
             
             //set the tipAmountLabel text based on pan gesture
-            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 10))
+            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 7))
             if (self.tipPercent > self.tipPercentMax) {
                 self.tipPercent = self.tipPercentMax;
             } else if (self.tipPercent < self.tipPercentMin) {
@@ -138,71 +171,29 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         }
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        self.view.endEditing(true);
-        return false;
+    @IBAction func splitTwoViewTapped(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+        splitTwoImageView.image = UIImage(named: "two_selected")
+        
     }
     
+    @IBAction func splitThreeViewTapped(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+        splitThreeImageView.image = UIImage(named: "three_selected")
+    }
     
+    @IBAction func splitFourPlusViewTapped(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+        splitFourPlusImageView.image = UIImage(named: "four_selected")
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    @IBAction func getMyLocationButton(sender: AnyObject) {
-        print("Getting my location now..")
-        LocationService.sharedInstance.startUpdatingLocation()
+    @IBAction func splitFourPlusViewLongTap(sender: UILongPressGestureRecognizer) {
+        self.view.endEditing(true)
+        splitFourPlusImageView.image = UIImage(named: "six_selected")
     }
     
     func tracingLocation(currentLocation: CLLocation) {
-        print(currentLocation.coordinate.latitude)
-        print(currentLocation.coordinate.longitude)
+        print("Starting yelp search with params: [food, \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)]")
         startYelpSearch("food", latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
         LocationService.sharedInstance.stopUpdatingLocation()
     }
@@ -212,15 +203,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func startYelpSearch(term: String, latitude: NSNumber?, longitude: NSNumber?) {
-        print("starting yelp search now..")
-        
-        //Example of Yelp search with more search options specified
         YelpBusiness.searchWithTerm("", latitude: latitude, longitude: longitude, sort: .Distance, categories: [], deals: false, offset: nil, limit: 5) { (businesses: [YelpBusiness]!, error: NSError!) -> Void in
             
             if (businesses != nil) {
                 self.minDistance = businesses.first?.distance
-
-                print("Got results")
                 for business in businesses {
                     if (business.distance <= self.minDistance) {
                         self.nearbyBusinesses.insert(business, atIndex: 0)
@@ -232,14 +218,18 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 print("NO DATA RETURNED")
             }
             
-            for business in self.nearbyBusinesses {
-                print(business.name!)
-                print(business.address!)
-                print(business.distance)
-                print(business.latitude)
-                print(business.longitude)
+            if (self.nearbyBusinesses != nil) {
+                for business in self.nearbyBusinesses {
+                    self.restaurantImageView.setImageWithURL(business.imageURL!)
+                    self.welcomeViewRestaurantImageView.setImageWithURL(business.imageURL!)
+                    self.restaurantNameLabel.text = business.name
+                    self.welcomeViewRestaurantNameLabel.text = business.name
+                    print("\(business.name) is \(business.distance) mi away from current location")
+                    self.resultsCountLabel.text = String(self.nearbyBusinesses.count)
+                }
+                // Hide HUD once network request comes back (must be done on main UI thread)
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
             }
-            print(self.nearbyBusinesses.count)
         }
     }
     
