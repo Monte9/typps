@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import AudioToolbox
 
 class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate {
     
@@ -30,6 +31,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     let tipPercentMax: Int = 30
     let tipPercentMin: Int = 10
     var tipPercentTapStart: Int = 20
+    
+    var tipLabelCenter: CGFloat = 220
+    var tipLabelCenterMax: CGFloat = 0
+    var tipLabelCenterMin: CGFloat = 0
+    var tipLabelCenterStart: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +69,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
-        print("Change detected")
         if (totalBillAmountTextField.text == "") {
             totalBillAmountTextField.text = "$"
             welcomeView.hidden = false
@@ -93,19 +98,37 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBAction func setTipAmountWithPan(sender: UIPanGestureRecognizer) {
         let translation: CGPoint = sender.translationInView(self.view)
         
+        let parentView = sender.view
+        tipLabelCenterMax = (parentView?.frame.width)! - 64
+        tipLabelCenterMin = 64
+
         if (sender.state == UIGestureRecognizerState.Began) {
-            self.tipPercentTapStart = self.tipPercent;
-        } else if (sender.state == UIGestureRecognizerState.Changed) {
-            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 10))
             
+            self.tipPercentTapStart = self.tipPercent;
+            self.tipLabelCenterStart = self.tipAmountLabel.center.x
+            
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            
+        } else if (sender.state == UIGestureRecognizerState.Changed) {
+            
+            //set the tipAmountLabel text based on pan gesture
+            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 10))
             if (self.tipPercent > self.tipPercentMax) {
                 self.tipPercent = self.tipPercentMax;
             } else if (self.tipPercent < self.tipPercentMin) {
                 self.tipPercent = self.tipPercentMin;
             }
-            
             tipAmountLabel.text = String(tipPercent) + " %"
-            print("Updated tip amount \(tipAmountLabel.text)")
+            
+            //set the tipAmountLabel center based on pan gesture
+            self.tipLabelCenter = self.tipLabelCenterStart + translation.x
+            if (self.tipLabelCenter > self.tipLabelCenterMax) {
+                self.tipLabelCenter = self.tipLabelCenterMax;
+            } else if (self.tipLabelCenter < self.tipLabelCenterMin) {
+                self.tipLabelCenter = self.tipLabelCenterMin;
+            }
+            self.tipAmountLabel.center.x = self.tipLabelCenter
+
         }
         
         
