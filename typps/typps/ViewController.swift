@@ -31,6 +31,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var nearbyBusinesses: [YelpBusiness]! = [YelpBusiness]()
     var minDistance: String?
     
+    //split bill variables
+    var splitBillMode = false
+    
     //Outlets
     @IBOutlet weak var totalBillAmountTextField: UITextField!
     @IBOutlet weak var taxHintLabel: UILabel!
@@ -44,6 +47,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var splitTwoImageView: UIImageView!
     @IBOutlet weak var splitThreeImageView: UIImageView!
     @IBOutlet weak var splitFourPlusImageView: UIImageView!
+    @IBOutlet weak var saveButton: UIButton!
     
     
     //Views
@@ -53,6 +57,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var splitTwoView: UIView!
     @IBOutlet weak var splitThreeView: UIView!
     @IBOutlet weak var splitFourPlusView: UIView!
+    
+    let notification = CWStatusBarNotification()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,9 +90,19 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
         navigationItem.title = "typps"
         
+        //customize status bar notification
+        self.notification.notificationLabelBackgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+        self.notification.notificationLabelTextColor = UIColor.whiteColor()
+        self.notification.notificationAnimationInStyle = CWNotificationAnimationStyle.Top
+        self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyle.Top
+        
         //add rounded edges to restaurantImageView
         restaurantImageView.layer.cornerRadius = 5
         restaurantImageView.clipsToBounds = true
+        welcomeViewRestaurantImageView.layer.cornerRadius = 5
+        welcomeViewRestaurantImageView.clipsToBounds = true
+        
+        saveButton.layer.cornerRadius = 17
         
         //set totalBillAmountPlaceholder
         totalBillAmountTextField.text = "$"
@@ -104,6 +120,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         if (totalBillAmountTextField.text == "$") {
             welcomeView.hidden = false
+            self.view.endEditing(true)
         }
         
         if (totalBillAmountTextField.text != "$") {
@@ -112,6 +129,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func welcomeViewTapped(sender: UITapGestureRecognizer) {
+        //hide decimal pad
+        self.view.endEditing(true)
+    }
+    
+    @IBAction func tipViewTapped(sender: UITapGestureRecognizer) {
         //hide decimal pad
         self.view.endEditing(true)
     }
@@ -173,23 +195,61 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     @IBAction func splitTwoViewTapped(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
-        splitTwoImageView.image = UIImage(named: "two_selected")
+        
+        if (splitBillMode) {
+            splitTwoImageView.image = UIImage(named: "two")
+            splitBillMode = false
+        } else {
+            splitTwoImageView.image = UIImage(named: "two_selected")
+            splitBillMode = true
+        }
+        
         
     }
     
     @IBAction func splitThreeViewTapped(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
-        splitThreeImageView.image = UIImage(named: "three_selected")
+        
+        if (splitBillMode) {
+            splitThreeImageView.image = UIImage(named: "three")
+            splitBillMode = false
+        } else {
+            splitThreeImageView.image = UIImage(named: "three_selected")
+            splitBillMode = true
+        }
     }
     
     @IBAction func splitFourPlusViewTapped(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
-        splitFourPlusImageView.image = UIImage(named: "four_selected")
+        
+        if (splitBillMode) {
+            splitFourPlusImageView.image = UIImage(named: "four")
+            splitBillMode = false
+        } else {
+            splitFourPlusImageView.image = UIImage(named: "four_selected")
+            splitBillMode = true
+        }
     }
     
     @IBAction func splitFourPlusViewLongTap(sender: UILongPressGestureRecognizer) {
         self.view.endEditing(true)
         splitFourPlusImageView.image = UIImage(named: "six_selected")
+    }
+    
+    @IBAction func saveButtonPressed(sender: AnyObject) {
+        self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
+    }
+    
+    @IBAction func openRestaurantInYelp(sender: AnyObject) {
+        self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
+    }
+    
+    @IBAction func historyNavigationBarButtonPressed(sender: AnyObject) {
+        self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
+    }
+    
+    @IBAction func settingsNavigationBarButtonPressed(sender: AnyObject) {
+        self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
     }
     
     func tracingLocation(currentLocation: CLLocation) {
@@ -219,13 +279,19 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             }
             
             if (self.nearbyBusinesses != nil) {
+                
+                if (self.nearbyBusinesses.count == 1) {
+                    self.resultsCountLabel.hidden = true
+                } else {
+                    self.resultsCountLabel.text = String("\(self.nearbyBusinesses.count) possible matches")
+                }
+                
                 for business in self.nearbyBusinesses {
                     self.restaurantImageView.setImageWithURL(business.imageURL!)
                     self.welcomeViewRestaurantImageView.setImageWithURL(business.imageURL!)
                     self.restaurantNameLabel.text = business.name
                     self.welcomeViewRestaurantNameLabel.text = business.name
                     print("\(business.name) is \(business.distance) mi away from current location")
-                    self.resultsCountLabel.text = String(self.nearbyBusinesses.count)
                 }
                 // Hide HUD once network request comes back (must be done on main UI thread)
                 MBProgressHUD.hideHUDForView(self.view, animated: true)

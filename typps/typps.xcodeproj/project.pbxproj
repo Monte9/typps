@@ -16,6 +16,8 @@
 		ECF65F9A1D2B93570082F5FF /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF65F991D2B93570082F5FF /* LocationService.swift */; };
 		ECF65F9C1D2B9BA60082F5FF /* YelpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF65F9B1D2B9BA60082F5FF /* YelpClient.swift */; };
 		ECF65F9E1D2B9DCD0082F5FF /* YelpBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF65F9D1D2B9DCD0082F5FF /* YelpBusiness.swift */; };
+		ECF65FC11D2FAACC0082F5FF /* CWStatusBarNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF65FC01D2FAACC0082F5FF /* CWStatusBarNotification.swift */; };
+		ECF65FC31D2FAB0E0082F5FF /* CWStatusBarNotificationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF65FC21D2FAB0E0082F5FF /* CWStatusBarNotificationUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		ECF65F991D2B93570082F5FF /* LocationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		ECF65F9B1D2B9BA60082F5FF /* YelpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpClient.swift; sourceTree = "<group>"; };
 		ECF65F9D1D2B9DCD0082F5FF /* YelpBusiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpBusiness.swift; sourceTree = "<group>"; };
+		ECF65FC01D2FAACC0082F5FF /* CWStatusBarNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CWStatusBarNotification.swift; sourceTree = "<group>"; };
+		ECF65FC21D2FAB0E0082F5FF /* CWStatusBarNotificationUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CWStatusBarNotificationUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,8 @@
 			isa = PBXGroup;
 			children = (
 				ECF65F991D2B93570082F5FF /* LocationService.swift */,
+				ECF65FC01D2FAACC0082F5FF /* CWStatusBarNotification.swift */,
+				ECF65FC21D2FAB0E0082F5FF /* CWStatusBarNotificationUtils.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -264,7 +270,9 @@
 				ECF65F8A1D2B91340082F5FF /* ViewController.swift in Sources */,
 				ECF65F9E1D2B9DCD0082F5FF /* YelpBusiness.swift in Sources */,
 				ECF65F9A1D2B93570082F5FF /* LocationService.swift in Sources */,
+				ECF65FC11D2FAACC0082F5FF /* CWStatusBarNotification.swift in Sources */,
 				ECF65F881D2B91340082F5FF /* AppDelegate.swift in Sources */,
+				ECF65FC31D2FAB0E0082F5FF /* CWStatusBarNotificationUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
