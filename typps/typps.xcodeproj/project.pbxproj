@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		8733D61382FBEE37F77B8818 /* Pods_typps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901B8538047CC1311C537668 /* Pods_typps.framework */; };
+		EC61B0FA1D30A7710060F0A9 /* Check.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC61B0F91D30A7710060F0A9 /* Check.swift */; };
+		EC61B0FC1D30B6D50060F0A9 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC61B0FB1D30B6D50060F0A9 /* Settings.swift */; };
+		EC61B0FE1D317B9F0060F0A9 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC61B0FD1D317B9F0060F0A9 /* HistoryViewController.swift */; };
+		EC61B1001D317BB90060F0A9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC61B0FF1D317BB90060F0A9 /* SettingsViewController.swift */; };
 		ECF65F881D2B91340082F5FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF65F871D2B91340082F5FF /* AppDelegate.swift */; };
 		ECF65F8A1D2B91340082F5FF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF65F891D2B91340082F5FF /* ViewController.swift */; };
 		ECF65F8D1D2B91340082F5FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ECF65F8B1D2B91340082F5FF /* Main.storyboard */; };
@@ -24,6 +28,10 @@
 		3F239CBEBF132ED06823345E /* Pods-typps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-typps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-typps/Pods-typps.debug.xcconfig"; sourceTree = "<group>"; };
 		46990292A8694E18DA8649C8 /* Pods-typps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-typps.release.xcconfig"; path = "Pods/Target Support Files/Pods-typps/Pods-typps.release.xcconfig"; sourceTree = "<group>"; };
 		901B8538047CC1311C537668 /* Pods_typps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_typps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC61B0F91D30A7710060F0A9 /* Check.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Check.swift; sourceTree = "<group>"; };
+		EC61B0FB1D30B6D50060F0A9 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		EC61B0FD1D317B9F0060F0A9 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
+		EC61B0FF1D317BB90060F0A9 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ECF65F841D2B91340082F5FF /* typps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = typps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECF65F871D2B91340082F5FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ECF65F891D2B91340082F5FF /* ViewController.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; usesTabs = 0; };
@@ -98,6 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				ECF65F9D1D2B9DCD0082F5FF /* YelpBusiness.swift */,
+				EC61B0F91D30A7710060F0A9 /* Check.swift */,
+				EC61B0FB1D30B6D50060F0A9 /* Settings.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -113,6 +123,8 @@
 			isa = PBXGroup;
 			children = (
 				ECF65F891D2B91340082F5FF /* ViewController.swift */,
+				EC61B0FD1D317B9F0060F0A9 /* HistoryViewController.swift */,
+				EC61B0FF1D317BB90060F0A9 /* SettingsViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -268,9 +280,13 @@
 			files = (
 				ECF65F9C1D2B9BA60082F5FF /* YelpClient.swift in Sources */,
 				ECF65F8A1D2B91340082F5FF /* ViewController.swift in Sources */,
+				EC61B1001D317BB90060F0A9 /* SettingsViewController.swift in Sources */,
 				ECF65F9E1D2B9DCD0082F5FF /* YelpBusiness.swift in Sources */,
+				EC61B0FE1D317B9F0060F0A9 /* HistoryViewController.swift in Sources */,
 				ECF65F9A1D2B93570082F5FF /* LocationService.swift in Sources */,
+				EC61B0FA1D30A7710060F0A9 /* Check.swift in Sources */,
 				ECF65FC11D2FAACC0082F5FF /* CWStatusBarNotification.swift in Sources */,
+				EC61B0FC1D30B6D50060F0A9 /* Settings.swift in Sources */,
 				ECF65F881D2B91340082F5FF /* AppDelegate.swift in Sources */,
 				ECF65FC31D2FAB0E0082F5FF /* CWStatusBarNotificationUtils.swift in Sources */,
 			);

@@ -10,9 +10,15 @@ import UIKit
 import CoreLocation
 import AudioToolbox
 import MBProgressHUD
+import RealmSwift
+import Realm
 
 class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate {
     
+    // instance of Realm object
+    let realmObject = try! Realm()
+    
+    //current formatter for different currencies
     var currencyFormatter: NSNumberFormatter?
     
     //tip percent variables
@@ -23,6 +29,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var tipPercentTapStart: Int = 20
     
     var totalBillAmount: Float = 0
+    var totalCheckAmount: Float = 0
+    
+    var business: YelpBusiness?
     
     //tip label position variables
     var tipLabelCenter: CGFloat = 220
@@ -34,7 +43,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var minDistance: String?
     
     //split bill variables
-    var splitBillMode = false
+    var splitBillMode : Bool = false
+    var partySize = 1
+    
+    //status bar notification
+    let notification = CWStatusBarNotification()
     
     //Outlets
     @IBOutlet weak var totalBillAmountTextField: UITextField!
@@ -44,7 +57,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var welcomeViewRestaurantNameLabel: UILabel!
     @IBOutlet weak var restaurantImageView: UIImageView!
     @IBOutlet weak var restaurantNameLabel: UILabel!
-    @IBOutlet weak var restaurantDistanceLabel: UILabel!
     @IBOutlet weak var resultsCountLabel: UILabel!
     @IBOutlet weak var splitTwoImageView: UIImageView!
     @IBOutlet weak var splitThreeImageView: UIImageView!
@@ -61,22 +73,47 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var splitThreeView: UIView!
     @IBOutlet weak var splitFourPlusView: UIView!
     
-    let notification = CWStatusBarNotification()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Delegate for billAmountInput textField
         totalBillAmountTextField.delegate = self
         
         // Delegate for LocationService
         LocationService.sharedInstance.delegate = self
         
+        //show loading indicator
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
+       // print(Realm.Configuration.defaultConfiguration.fileURL!)
+        
     }
     
     override func viewWillAppear(animated: Bool) {
+        
         //Fetch current location and find current restaurant/bar
         LocationService.sharedInstance.startUpdatingLocation()
+        
+        let settings = realmObject.objects(Settings)
+        if settings.first == nil {
+            let newSettings = Settings()
+            newSettings.isTaxEnabled = false
+            newSettings.partySize = 1
+            newSettings.tipPercent = 20
+            
+            //write the settings object to db for persistence
+            try! realmObject.write() {
+                realmObject.add(newSettings)
+                print("Settings created.. check db for details")
+            }
+        } else {
+            print("Found settings")
+            print(settings)
+            self.tipPercent = (settings.first?.tipPercent)!
+            self.isTaxEnabled = (settings.first?.isTaxEnabled)!
+            self.partySize = (settings.first?.partySize)!
+        }
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -90,8 +127,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         navigationBar!.translucent = true
         
         //set navigation bar title with color
-        navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
         navigationItem.title = "typps"
+        navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
         
         //customize status bar notification
         self.notification.notificationLabelBackgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
@@ -105,6 +142,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         welcomeViewRestaurantImageView.layer.cornerRadius = 5
         welcomeViewRestaurantImageView.clipsToBounds = true
         
+        // add corner radius to saveButton
         saveButton.layer.cornerRadius = 17
         
         //set totalBillAmountPlaceholder
@@ -138,7 +176,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         }
     }
     
-    func updateTotalBillAmount(var total:Float) {
+    func updateTotalBillAmount(total:Float) {
+        self.totalCheckAmount = total
         self.totalBillAmountLabel.text = "pay    $\(total)"
     }
     
@@ -198,6 +237,13 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             tipAmountLabel.text = String(tipPercent) + " %"
             updateTotalBillAmount(totalBillAmount + totalBillAmount * Float( Float(tipPercent) / 100 ))
             
+            //update the tipPercent on the settings Object for persistence
+            let settings = realmObject.objects(Settings.self)
+            try! realmObject.write {
+                settings.first?.setValue(tipPercent, forKeyPath: "tipPercent")
+                print("Tip amount updated")
+            }
+
             //set the tipAmountLabel center based on pan gesture
             self.tipLabelCenter = self.tipLabelCenterStart + translation.x
             if (self.tipLabelCenter > self.tipLabelCenterMax) {
@@ -220,7 +266,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             splitTwoImageView.image = UIImage(named: "two_selected")
             splitBillMode = true
         }
-        
         
     }
     
@@ -254,7 +299,23 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func saveButtonPressed(sender: AnyObject) {
-        self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
+        self.notification.displayNotificationWithMessage("Check saved!", forDuration: 2.0)
+        let check = Check()
+        check.restaurantName = restaurantNameLabel.text!
+        check.imageURL = String(business!.imageURL!)
+        check.createdAt = NSDate()
+        check.inputBillAmount = totalBillAmount
+        check.totalTipAmount = tipPercent
+        check.isTaxIncluded = isTaxEnabled
+        check.partySize = 1
+        check.finalCheckAmount = totalCheckAmount
+        
+        //write the check object to db for persistence
+        try! realmObject.write() {
+            realmObject.add(check)
+            print("Check saved.. check db for details")
+        }
+        
     }
     
     @IBAction func openRestaurantInYelp(sender: AnyObject) {
@@ -288,6 +349,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     if (business.distance <= self.minDistance) {
                         self.nearbyBusinesses.insert(business, atIndex: 0)
                         self.minDistance = business.distance!
+                        self.business = business
                     }
                 }
             }
