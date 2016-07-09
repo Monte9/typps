@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import RealmSwift
+import Realm
 
 class HistoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        didOpenSecondaryView = true
         // Do any additional setup after loading the view.
     }
     

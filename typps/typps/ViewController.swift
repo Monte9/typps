@@ -13,6 +13,8 @@ import MBProgressHUD
 import RealmSwift
 import Realm
 
+var didOpenSecondaryView: Bool?
+
 class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate {
     
     // instance of Realm object
@@ -85,7 +87,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         //show loading indicator
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
-       // print(Realm.Configuration.defaultConfiguration.fileURL!)
+       print(Realm.Configuration.defaultConfiguration.fileURL!)
         
     }
     
@@ -95,6 +97,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         LocationService.sharedInstance.startUpdatingLocation()
         
         let settings = realmObject.objects(Settings)
+        
         if settings.first == nil {
             let newSettings = Settings()
             newSettings.isTaxEnabled = false
@@ -108,7 +111,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             }
         } else {
             print("Found settings")
-            print(settings)
+            
             self.tipPercent = (settings.first?.tipPercent)!
             self.isTaxEnabled = (settings.first?.isTaxEnabled)!
             self.partySize = (settings.first?.partySize)!
@@ -145,12 +148,25 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         // add corner radius to saveButton
         saveButton.layer.cornerRadius = 17
         
-        //set totalBillAmountPlaceholder
-        totalBillAmountTextField.text = "$"
-        welcomeView.hidden = false
+        if (didOpenSecondaryView == true) {
+            if (totalBillAmountTextField.text != "$" && totalBillAmountTextField.text != "") {
+                welcomeView.hidden = true
+                
+                if let total = self.totalBillAmountTextField.text {
+                    let index: String.Index = total.startIndex.advancedBy(1)
+                    totalBillAmount = Float(total.substringFromIndex(index))!
+                    self.totalBillAmountLabel.text = "pay    $\(totalBillAmount)"
+                    self.taxHintLabel.text = "(off)"
+                    self.tipAmountLabel.text = String(tipPercent) + " %"
+                    
+                }
+            }
+        } else {
+            //set totalBillAmountPlaceholder
+            totalBillAmountTextField.text = "$"
+            welcomeView.hidden = false
+        }
         
-        taxHintLabel.text = "(off)"
-        tipAmountLabel.text = String(tipPercent) + " %"
     }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
@@ -237,13 +253,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             tipAmountLabel.text = String(tipPercent) + " %"
             updateTotalBillAmount(totalBillAmount + totalBillAmount * Float( Float(tipPercent) / 100 ))
             
-            //update the tipPercent on the settings Object for persistence
-            let settings = realmObject.objects(Settings.self)
-            try! realmObject.write {
-                settings.first?.setValue(tipPercent, forKeyPath: "tipPercent")
-                print("Tip amount updated")
-            }
-
             //set the tipAmountLabel center based on pan gesture
             self.tipLabelCenter = self.tipLabelCenterStart + translation.x
             if (self.tipLabelCenter > self.tipLabelCenterMax) {
@@ -331,7 +340,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func tracingLocation(currentLocation: CLLocation) {
-        print("Starting yelp search with params: [food, \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)]")
+       // print("Starting yelp search with params: [food, \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)]")
         startYelpSearch("food", latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
         LocationService.sharedInstance.stopUpdatingLocation()
     }
@@ -366,11 +375,13 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 }
                 
                 for business in self.nearbyBusinesses {
-                    self.restaurantImageView.setImageWithURL(business.imageURL!)
-                    self.welcomeViewRestaurantImageView.setImageWithURL(business.imageURL!)
+                    if let imageURL = business.imageURL {
+                        self.restaurantImageView.setImageWithURL(imageURL)
+                        self.welcomeViewRestaurantImageView.setImageWithURL(imageURL)
+                    }
                     self.restaurantNameLabel.text = business.name
                     self.welcomeViewRestaurantNameLabel.text = business.name
-                    print("\(business.name) is \(business.distance) mi away from current location")
+                    //print("\(business.name) is \(business.distance) mi away from current location")
                 }
                 // Hide HUD once network request comes back (must be done on main UI thread)
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
