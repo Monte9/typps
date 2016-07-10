@@ -8,12 +8,18 @@
 
 import UIKit
 import CoreLocation
-import AudioToolbox
 import MBProgressHUD
 import RealmSwift
 import Realm
+import AudioToolbox
 
 var didOpenSecondaryView: Bool?
+
+extension Float {
+    func format(f: String) -> String {
+        return String(format: "%\(f)f", self)
+    }
+}
 
 class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate {
     
@@ -46,7 +52,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     //split bill variables
     var splitBillMode : Bool = false
-    var partySize = 1
+    var partySize: Int?
+    var currentPartySize: Int?
+    var sizeArray: [String] = ["four", "five", "six", "seven", "eight", "nine"]
+    
     
     //status bar notification
     let notification = CWStatusBarNotification()
@@ -103,6 +112,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             newSettings.isTaxEnabled = false
             newSettings.partySize = 1
             newSettings.tipPercent = 20
+            newSettings.currentPartySize = 1
             
             //write the settings object to db for persistence
             try! realmObject.write() {
@@ -115,6 +125,12 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.tipPercent = (settings.first?.tipPercent)!
             self.isTaxEnabled = (settings.first?.isTaxEnabled)!
             self.partySize = (settings.first?.partySize)!
+            self.currentPartySize = (settings.first?.currentPartySize)!
+            if settingsCancelled == true {
+                setPartySize(currentPartySize!)
+            } else {
+                setPartySize(partySize!)
+            }
         }
         
     }
@@ -158,7 +174,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     self.totalBillAmountLabel.text = "pay    $\(totalBillAmount)"
                     self.taxHintLabel.text = "(off)"
                     self.tipAmountLabel.text = String(tipPercent) + " %"
-                    
                 }
             }
         } else {
@@ -167,6 +182,42 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             welcomeView.hidden = false
         }
         
+    }
+    
+    func setPartySize(partySize: Int) {
+        
+        splitTwoImageView.image = UIImage(named: "two")
+        splitThreeImageView.image = UIImage(named: "three")
+        splitFourPlusImageView.image = UIImage(named: "four")
+        
+        switch partySize {
+        case 2:
+            splitTwoImageView.image = UIImage(named: "two_selected")
+            splitBillMode = true
+        case 3:
+            splitThreeImageView.image = UIImage(named: "three_selected")
+            splitBillMode = true
+        case 4:
+            splitFourPlusImageView.image = UIImage(named: "four_selected")
+            splitBillMode = true
+        case 5:
+            splitFourPlusImageView.image = UIImage(named: "five_selected")
+            splitBillMode = true
+        case 6:
+            splitFourPlusImageView.image = UIImage(named: "six_selected")
+            splitBillMode = true
+        case 7:
+            splitFourPlusImageView.image = UIImage(named: "seven_selected")
+            splitBillMode = true
+        case 8:
+            splitFourPlusImageView.image = UIImage(named: "eight_selected")
+            splitBillMode = true
+        case 9:
+            splitFourPlusImageView.image = UIImage(named: "nine_selected")
+            splitBillMode = true
+        default:
+            print("OOps")
+        }
     }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
@@ -187,7 +238,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             if let total = self.totalBillAmountTextField.text {
                 let index: String.Index = total.startIndex.advancedBy(1)
                 totalBillAmount = Float(total.substringFromIndex(index))!
-                self.totalBillAmountLabel.text = "pay    $\(totalBillAmount)"
+                updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
             }
         }
     }
@@ -213,15 +264,17 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         isTaxEnabled = !isTaxEnabled
         
         if (isTaxEnabled) {
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             taxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             taxHintLabel.text = "(tax included)"
             taxView.layer.cornerRadius = 60
-            updateTotalBillAmount(totalBillAmount + totalBillAmount * 0.0875)
+            let tempTotalBillAmount = totalBillAmount + Float(totalBillAmount * 0.0875)
+            updateTotalBillAmount(tempTotalBillAmount + (tempTotalBillAmount * Float(tipPercent) / 100 ))
         } else {
             taxView.backgroundColor = UIColor(red: 117/255, green: 124/255, blue: 121/255, alpha: 1)
             taxHintLabel.text = "(off)"
             taxView.layer.cornerRadius = 0
-            updateTotalBillAmount(totalBillAmount - (totalBillAmount * 0.0875))
+            updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
         }
     }
     
@@ -239,8 +292,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.tipPercentTapStart = self.tipPercent;
             self.tipLabelCenterStart = self.tipAmountLabel.center.x
             
-           // AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-            
         } else if (sender.state == UIGestureRecognizerState.Changed) {
             
             //set the tipAmountLabel text based on pan gesture
@@ -251,7 +302,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 self.tipPercent = self.tipPercentMin;
             }
             tipAmountLabel.text = String(tipPercent) + " %"
-            updateTotalBillAmount(totalBillAmount + totalBillAmount * Float( Float(tipPercent) / 100 ))
+            updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
             
             //set the tipAmountLabel center based on pan gesture
             self.tipLabelCenter = self.tipLabelCenterStart + translation.x
@@ -268,37 +319,92 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBAction func splitTwoViewTapped(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
         
-        if (splitBillMode) {
+        let settings = realmObject.objects(Settings)
+        
+        if settings.first?.currentPartySize == 2 {
             splitTwoImageView.image = UIImage(named: "two")
             splitBillMode = false
+            
+            //write the currentPartySize to the settings object to db for persistence
+            try! realmObject.write() {
+                settings.first?.setValue(1, forKeyPath: "currentPartySize")
+                print("currentPartySize updated.. check db for details")
+            }
         } else {
+            splitThreeImageView.image = UIImage(named: "three")
+            splitFourPlusImageView.image = UIImage(named: "four")
+            
             splitTwoImageView.image = UIImage(named: "two_selected")
             splitBillMode = true
+            
+            //write the currentPartySize to the settings object to db for persistence
+            try! realmObject.write() {
+                settings.first?.setValue(2, forKeyPath: "currentPartySize")
+                print("currentPartySize updated.. check db for details")
+            }
+            self.currentPartySize = 2
         }
-        
     }
     
     @IBAction func splitThreeViewTapped(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
         
-        if (splitBillMode) {
+        let settings = realmObject.objects(Settings)
+        
+        if settings.first?.currentPartySize == 3 {
             splitThreeImageView.image = UIImage(named: "three")
             splitBillMode = false
+            
+            //write the currentPartySize to the settings object to db for persistence
+            try! realmObject.write() {
+                settings.first?.setValue(1, forKeyPath: "currentPartySize")
+                print("currentPartySize updated.. check db for details")
+            }
         } else {
+            splitTwoImageView.image = UIImage(named: "two")
+            splitFourPlusImageView.image = UIImage(named: "four")
+
             splitThreeImageView.image = UIImage(named: "three_selected")
-            splitBillMode = true
+            splitBillMode = false
+            
+            //write the currentPartySize to the settings object to db for persistence
+            try! realmObject.write() {
+                settings.first?.setValue(3, forKeyPath: "currentPartySize")
+                print("currentPartySize updated.. check db for details")
+            }
+            
+            self.currentPartySize = 3
         }
     }
     
     @IBAction func splitFourPlusViewTapped(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
         
-        if (splitBillMode) {
+        let settings = realmObject.objects(Settings)
+        
+        if settings.first?.currentPartySize == 4 {
             splitFourPlusImageView.image = UIImage(named: "four")
             splitBillMode = false
+            
+            //write the currentPartySize to the settings object to db for persistence
+            try! realmObject.write() {
+                settings.first?.setValue(1, forKeyPath: "currentPartySize")
+                print("currentPartySize updated.. check db for details")
+            }
         } else {
+            splitTwoImageView.image = UIImage(named: "two")
+            splitThreeImageView.image = UIImage(named: "three")
+
             splitFourPlusImageView.image = UIImage(named: "four_selected")
             splitBillMode = true
+            
+            //write the currentPartySize to the settings object to db for persistence
+            try! realmObject.write() {
+                settings.first?.setValue(4, forKeyPath: "currentPartySize")
+                print("currentPartySize updated.. check db for details")
+            }
+            
+            self.currentPartySize = 4
         }
     }
     
@@ -316,7 +422,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         check.inputBillAmount = totalBillAmount
         check.totalTipAmount = tipPercent
         check.isTaxIncluded = isTaxEnabled
-        check.partySize = 1
+        check.partySize = partySize!
         check.finalCheckAmount = totalCheckAmount
         
         //write the check object to db for persistence

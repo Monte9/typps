@@ -14,5 +14,6 @@ class Settings: Object {
     dynamic var isTaxEnabled = false
     dynamic var tipPercent = 20
     dynamic var partySize = 1
+    dynamic var currentPartySize = 1
     
 }

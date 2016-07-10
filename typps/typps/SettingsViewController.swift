@@ -9,6 +9,9 @@
 import UIKit
 import RealmSwift
 import Realm
+import AudioToolbox
+
+var settingsCancelled: Bool?
 
 class SettingsViewController: UIViewController {
     
@@ -18,6 +21,7 @@ class SettingsViewController: UIViewController {
     var isTaxEnabled: Bool?
     var partySize: Int?
     var tipPercent: Int?
+    var currentPartySize: Int?
     
     var tipPercentTapStart: Int?
     var tipPercentMax = 30
@@ -66,6 +70,7 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func cancelBarButtonPressed(sender: AnyObject) {
+        settingsCancelled = true
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -76,8 +81,10 @@ class SettingsViewController: UIViewController {
         try! realmObject.write {
             settings.first?.setValue(false, forKeyPath: "isTaxEnabled")
             settings.first?.setValue(partySize, forKeyPath: "partySize")
+            settings.first?.setValue(partySize, forKeyPath: "currentPartySize")
             settings.first?.setValue(tipPercent, forKeyPath: "tipPercent")
             print("Settings updated")
+            settingsCancelled = false
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
@@ -134,6 +141,7 @@ class SettingsViewController: UIViewController {
     
     @IBAction func taxIncludedTapGesture(sender: UITapGestureRecognizer) {
         
+        
         if (isTaxEnabled == true) {
             UIView.animateWithDuration(0.5, animations: {
                 self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x - 120
@@ -145,6 +153,7 @@ class SettingsViewController: UIViewController {
                     self.isTaxEnabled = false
             })
         } else {
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             UIView.animateWithDuration(0.5, animations: {
                 self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x + 120
                 }, completion: {
