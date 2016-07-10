@@ -96,7 +96,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         //show loading indicator
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
-       print(Realm.Configuration.defaultConfiguration.fileURL!)
+       //print(Realm.Configuration.defaultConfiguration.fileURL!)
         
     }
     
@@ -171,7 +171,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 if let total = self.totalBillAmountTextField.text {
                     let index: String.Index = total.startIndex.advancedBy(1)
                     totalBillAmount = Float(total.substringFromIndex(index))!
-                    self.totalBillAmountLabel.text = "pay    $\(totalBillAmount)"
+                    updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
                     self.taxHintLabel.text = "(off)"
                     self.tipAmountLabel.text = String(tipPercent) + " %"
                 }
@@ -237,8 +237,12 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             
             if let total = self.totalBillAmountTextField.text {
                 let index: String.Index = total.startIndex.advancedBy(1)
-                totalBillAmount = Float(total.substringFromIndex(index))!
-                updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
+                
+                if let totalBillAmount = Float(total.substringFromIndex(index)) {
+                    updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
+                } else {
+                    print("error")
+                }
             }
         }
     }

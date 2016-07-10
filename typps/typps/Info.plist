@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Please allow location access for optimal app usage</string>
+	<string>Please allow location access to enable all features</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Please allow location access for optimal app usage</string>
+	<string>Please allow location access to enable all features</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
