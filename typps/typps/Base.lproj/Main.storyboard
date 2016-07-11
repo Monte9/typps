@@ -68,10 +68,6 @@
                                             <constraint firstAttribute="height" constant="60" id="OMM-vw-kHl"/>
                                             <constraint firstAttribute="width" constant="60" id="ck3-MM-3Ej"/>
                                         </constraints>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="Cdr-gw-dvT" appends="YES" id="v6a-2X-duk"/>
-                                            <outletCollection property="gestureRecognizers" destination="MNs-sv-2xC" appends="YES" id="VdX-m5-b7E"/>
-                                        </connections>
                                     </view>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="three" translatesAutoresizingMaskIntoConstraints="NO" id="aP8-fJ-zJG">
                                         <rect key="frame" x="140" y="25" width="40" height="40"/>
@@ -407,13 +403,11 @@
                 <tapGestureRecognizer id="Cdr-gw-dvT">
                     <connections>
                         <action selector="splitFourPlusViewTapped:" destination="BYZ-38-t0r" id="8rJ-dm-Mhi"/>
-                        <outlet property="delegate" destination="AyF-5s-Wnx" id="nQl-gl-El6"/>
                     </connections>
                 </tapGestureRecognizer>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="MNs-sv-2xC">
                     <connections>
                         <action selector="splitFourPlusViewLongTap:" destination="BYZ-38-t0r" id="I2x-hW-myS"/>
-                        <outlet property="delegate" destination="AyF-5s-Wnx" id="Ovw-X2-WYi"/>
                     </connections>
                 </pongPressGestureRecognizer>
                 <tapGestureRecognizer id="9Jk-s4-uvO">

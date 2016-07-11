@@ -21,7 +21,7 @@ extension Float {
     }
 }
 
-class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate {
+class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     // instance of Realm object
     let realmObject = try! Realm()
@@ -54,9 +54,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var splitBillMode : Bool = false
     var partySize: Int?
     var currentPartySize: Int?
-    var sizeArray: [String] = ["four", "five", "six", "seven", "eight", "nine"]
+    var fourPlusPartySize: Int?
+    var partySizeDictionary: [Int:String] = [4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"]
     
-    
+
     //status bar notification
     let notification = CWStatusBarNotification()
     
@@ -98,6 +99,23 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
        //print(Realm.Configuration.defaultConfiguration.fileURL!)
         
+        //add gesture recognizers for single and double tap
+        var singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewTapped))
+        singleTap.numberOfTapsRequired = 1
+        self.splitFourPlusView.addGestureRecognizer(singleTap)
+        
+        var doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewDoubleTap))
+        doubleTap.numberOfTapsRequired = 2
+        self.splitFourPlusView.addGestureRecognizer(doubleTap)
+        
+        singleTap.requireGestureRecognizerToFail(doubleTap)
+        
+        singleTap.delegate = self
+        doubleTap.delegate = self
+    }
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -233,7 +251,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         if (totalBillAmountTextField.text != "$") {
             welcomeView.hidden = true
-            print(self.totalBillAmountTextField.text)
             
             if let total = self.totalBillAmountTextField.text {
                 let index: String.Index = total.startIndex.advancedBy(1)
@@ -384,11 +401,36 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBAction func splitFourPlusViewTapped(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
         
+        if (fourPlusPartySize < 4 || fourPlusPartySize >= 9) {
+            fourPlusPartySize = 3
+        }
+        
+        
+        if let size: String = partySizeDictionary[fourPlusPartySize! + 1]! {
+            fourPlusPartySize = fourPlusPartySize! + 1
+            splitFourPlusImageView.image = UIImage(named: size)
+            
+            let settings = realmObject.objects(Settings)
+            
+            //write the currentPartySize to the settings object to db for persistence
+            try! realmObject.write() {
+                settings.first?.setValue(1, forKeyPath: "currentPartySize")
+                print("currentPartySize updated.. check db for details")
+            }
+        }
+        
+    }
+    
+    @IBAction func splitFourPlusViewDoubleTap(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+        
         let settings = realmObject.objects(Settings)
         
-        if settings.first?.currentPartySize == 4 {
-            splitFourPlusImageView.image = UIImage(named: "four")
-            splitBillMode = false
+        if settings.first?.currentPartySize == fourPlusPartySize {
+            if let size: String = partySizeDictionary[fourPlusPartySize!]! {
+                splitFourPlusImageView.image = UIImage(named: size)
+                splitBillMode = true
+            }
             
             //write the currentPartySize to the settings object to db for persistence
             try! realmObject.write() {
@@ -398,23 +440,20 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         } else {
             splitTwoImageView.image = UIImage(named: "two")
             splitThreeImageView.image = UIImage(named: "three")
-
-            splitFourPlusImageView.image = UIImage(named: "four_selected")
-            splitBillMode = true
+            
+            if let size: String = partySizeDictionary[fourPlusPartySize!]! {
+                splitFourPlusImageView.image = UIImage(named: size + "_selected")
+                splitBillMode = true
+            }
             
             //write the currentPartySize to the settings object to db for persistence
             try! realmObject.write() {
-                settings.first?.setValue(4, forKeyPath: "currentPartySize")
+                settings.first?.setValue(fourPlusPartySize!, forKeyPath: "currentPartySize")
                 print("currentPartySize updated.. check db for details")
             }
             
-            self.currentPartySize = 4
+            self.currentPartySize = fourPlusPartySize!
         }
-    }
-    
-    @IBAction func splitFourPlusViewLongTap(sender: UILongPressGestureRecognizer) {
-        self.view.endEditing(true)
-        splitFourPlusImageView.image = UIImage(named: "six_selected")
     }
     
     @IBAction func saveButtonPressed(sender: AnyObject) {
