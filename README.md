@@ -1,40 +1,51 @@
 # *typps*: Tip Calculator + Restaurant Logger
 
-**typps** is a Smart Tip Calculator application for iOS submitted as the pre-work requirement for [CodePath iOS Bootcamp](http://codepath.com/iosbootcamp).
+**typps** is a Tip Calculator + Restaurant Logger app for iOS submitted as the pre-work requirement for [CodePath iOS Bootcamp](http://codepath.com/iosbootcamp).
 
 It does more than just calculate tips... It is capable of knowing the restaurant you are dining at based on your current location and also allows you to save each check to build your dining history for review later on. 
 
 Submitted by: **Monte Thakkar**
 
-Time spent: **1+** hours spent in total
+Time spent: **30+ passionate** hours spent in total
 
 ## User Stories
 
 The following **required** functionality is complete:
-* [ ] User can enter a bill amount, choose a tip percentage, and see the tip and total values.
-* [ ] Settings page to change the default tip percentage.
-
-The following **optional** features are implemented:
-* [ ] UI animations
-* [ ] Remembering the bill amount across app restarts (if <10mins)
-* [ ] Using locale-specific currency and currency thousands separators.
-* [ ] Making sure the keyboard is always visible and the bill amount is always the first responder. This way the user doesn't have to tap anywhere to use this app. Just launch the app and start typing.
+* [x] User can enter a bill amount, choose a tip percentage, and see the tip and total values.
+* [x] Settings page to change the default tip percentage.
 
 The following **additional** features are implemented:
+* [x] UI animations for saving checks and toggle tax included in settings
+* [x] Remembering the bill amount across app restarts (using Realm)
+* [x] Saving checks with information such as total bill amount, party size etc (using Realm)
+* [x] Using Yelp API to get current restaurant/bar from lat & long of user's current location
+* [x] Pan & Tap gesture recognizers for simple and intuitive controls
+* [x] Allows inclusion/exclusion of taxes in tip calculation
+* [x] Using 'kSystemSoundID_Vibrate' from class 'AudioToolbox' for more interactive UX
+* [x] Supports party size up to 9 people
 
-- [ ] List anything else that you can get done to improve the app functionality!
+Coming soon:
+* [ ] Using locale-specific currency and currency thousands separators.
+* [ ] Making sure the keyboard is always visible and the bill amount is always the first responder. This way the user doesn't have to tap anywhere to use this app. Just launch the app and start typing.
+* [ ] History view to review all your saved checks
+* [ ] Improved Yelp location search to produce more accurate restaurant results for current location
 
 ## Video Walkthrough 
 
-Here's a walkthrough of implemented user stories:
+Here's a working demo of the app:
 
-*coming soon*
+![typps walkthrough](typps.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+This app was fairly straighforward to implement. 
+
+I focused on two main areas while building this app:
+
+1. Minimalistic design: trying to keep the UI as clean and simple as possible. The app uses mostly only two colors with up to 75% of the views filled up with white space.
+2. Intuitive UX: Using pan and tap gestures almost everywhere to receive input to eliminate the use of keyboards. This makes the app's user experience more consistent and interactive. 
 
 ## License
 
