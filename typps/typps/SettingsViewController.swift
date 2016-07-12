@@ -66,7 +66,17 @@ class SettingsViewController: UIViewController {
         
         partySizeFontSize = CGFloat(50 * partySize!)
         self.partySizeLabel.font = self.partySizeLabel.font.fontWithSize(partySizeFontSize!)
-        //setTaxIncludeView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        taxIncludedView.superview!.setNeedsLayout()
+        taxIncludedView.superview!.layoutIfNeeded()
+        
+        // Now modify bottomView's frame here
+        
+        setTaxIncludeView()
     }
     
     @IBAction func cancelBarButtonPressed(sender: AnyObject) {
@@ -79,7 +89,7 @@ class SettingsViewController: UIViewController {
         //save settings Object for persistence
         let settings = realmObject.objects(Settings.self)
         try! realmObject.write {
-            settings.first?.setValue(false, forKeyPath: "isTaxEnabled")
+            settings.first?.setValue(isTaxEnabled, forKeyPath: "isTaxEnabled")
             settings.first?.setValue(partySize, forKeyPath: "partySize")
             settings.first?.setValue(partySize, forKeyPath: "currentPartySize")
             settings.first?.setValue(tipPercent, forKeyPath: "tipPercent")
@@ -141,7 +151,6 @@ class SettingsViewController: UIViewController {
     
     @IBAction func taxIncludedTapGesture(sender: UITapGestureRecognizer) {
         
-        
         if (isTaxEnabled == true) {
             UIView.animateWithDuration(0.5, animations: {
                 self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x - 120
@@ -170,10 +179,10 @@ class SettingsViewController: UIViewController {
         if (isTaxEnabled == true) {
             self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x + 120
             self.taxIncludedView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
-            self.taxIncludedView.layer.cornerRadius = 15
+            self.taxIncludedView.layer.cornerRadius = 30
             self.taxIncludedLabel.text = "on"
         } else {
-            self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x - 120
+            self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x
             self.taxIncludedView.backgroundColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1)
             self.taxIncludedView.layer.cornerRadius = 0
             self.taxIncludedLabel.text = "off"

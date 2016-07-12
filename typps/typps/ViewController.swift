@@ -195,6 +195,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             }
             self.taxHintLabel.text = "(off)"
             self.tipAmountLabel.text = String(tipPercent) + " %"
+            setTaxView()
         }
         
     }
@@ -263,7 +264,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                         updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
                     }
                 } else {
-                    print("error")
+                    self.notification.displayNotificationWithMessage("invalid entry!", forDuration: 1.0)
                 }
             }
         }
@@ -289,8 +290,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         self.view.endEditing(true)
         isTaxEnabled = !isTaxEnabled
         
-        print(totalBillAmount)
-        
+        setTaxView()
+    }
+    
+    func setTaxView() {
         if (isTaxEnabled) {
             AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             taxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)

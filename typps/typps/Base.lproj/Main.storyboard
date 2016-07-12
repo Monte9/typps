@@ -479,7 +479,7 @@
                                             <constraint firstAttribute="width" constant="10" id="ELQ-Ta-6vV"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JZU-bf-8sV">
+                                    <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JZU-bf-8sV">
                                         <rect key="frame" x="49" y="30" width="60" height="60"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="off" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LMj-P2-lXu">
@@ -507,9 +507,9 @@
                                 <constraints>
                                     <constraint firstItem="yIB-ml-jAA" firstAttribute="top" secondItem="4ON-uo-6uX" secondAttribute="top" id="6tx-1m-ADM"/>
                                     <constraint firstItem="m8l-DI-LaG" firstAttribute="centerY" secondItem="4ON-uo-6uX" secondAttribute="centerY" id="EnU-8H-9rZ"/>
+                                    <constraint firstItem="m8l-DI-LaG" firstAttribute="leading" secondItem="JZU-bf-8sV" secondAttribute="trailing" constant="26" id="JuN-iQ-gww"/>
+                                    <constraint firstItem="JZU-bf-8sV" firstAttribute="top" secondItem="yIB-ml-jAA" secondAttribute="bottom" constant="2" id="Sgl-tF-L7I"/>
                                     <constraint firstItem="yIB-ml-jAA" firstAttribute="centerX" secondItem="4ON-uo-6uX" secondAttribute="centerX" id="ffy-rR-dTx"/>
-                                    <constraint firstItem="m8l-DI-LaG" firstAttribute="leading" secondItem="JZU-bf-8sV" secondAttribute="trailing" constant="26" id="m9W-dM-uO3"/>
-                                    <constraint firstItem="JZU-bf-8sV" firstAttribute="top" secondItem="yIB-ml-jAA" secondAttribute="bottom" constant="2" id="tT0-pj-DRI"/>
                                     <constraint firstAttribute="height" constant="90" id="y4O-f3-XAc"/>
                                     <constraint firstItem="m8l-DI-LaG" firstAttribute="centerX" secondItem="4ON-uo-6uX" secondAttribute="centerX" id="yK6-6B-IqO"/>
                                 </constraints>
