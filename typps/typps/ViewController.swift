@@ -70,7 +70,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var splitFourPlusImageView: UIImageView!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var totalBillAmountLabel: UILabel!
-    
+    @IBOutlet weak var splitTotalLabel: UILabel!
     
     //Views
     @IBOutlet weak var welcomeView: UIView!
@@ -285,7 +285,20 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     func updateTotalBillAmount(total:Float) {
         self.totalCheckAmount = total
-        self.totalBillAmountLabel.text = "each pays $\(Float(total / Float(currentPartySize!)))"
+        
+        if (checkTotalViewHeight > 50 && currentPartySize > 1) {
+            if (checkTotalViewHeight > 50) {
+                self.splitTotalLabel.hidden = false
+                self.splitTotalLabel.text = "total $\(total)"
+                self.totalBillAmountLabel.text = "$\(Float(total / Float(currentPartySize!))) each"
+            } else {
+                self.splitTotalLabel.hidden = true
+                self.totalBillAmountLabel.text = "$\(Float(total / Float(currentPartySize!))) each"
+            }
+        } else if (currentPartySize == 1) {
+            self.splitTotalLabel.hidden = true
+            self.totalBillAmountLabel.text = "total $\(total)"
+        }
     }
     
     @IBAction func welcomeViewTapped(sender: UITapGestureRecognizer) {
@@ -442,6 +455,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         }
         
         if let size: String = partySizeDictionary[fourPlusPartySize! + 1]! {
+            splitThreeImageView.image = UIImage(named: "three")
+            splitFourPlusImageView.image = UIImage(named: "four")
+            
             fourPlusPartySize = fourPlusPartySize! + 1
             splitFourPlusImageView.image = UIImage(named: size)
             

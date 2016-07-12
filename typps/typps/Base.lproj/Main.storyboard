@@ -169,7 +169,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fwd-Gu-czo">
                                 <rect key="frame" x="0.0" y="415" width="320" height="33"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="pay    $27.22" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="L3T-Xo-Ncn">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZtV-Il-bml">
+                                        <rect key="frame" x="8" y="6" width="304" height="27"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-MediumItalic" family="Avenir Next" pointSize="25"/>
+                                        <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="$27.22 each" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="L3T-Xo-Ncn">
                                         <rect key="frame" x="8" y="0.0" width="267" height="33"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="40"/>
                                         <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -179,10 +185,10 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="L3T-Xo-Ncn" secondAttribute="bottom" id="DPF-yG-7bh"/>
-                                    <constraint firstAttribute="bottom" secondItem="L3T-Xo-Ncn" secondAttribute="bottom" id="PE6-Mu-Rll"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZtV-Il-bml" secondAttribute="trailing" constant="8" id="M9a-eV-kPS"/>
                                     <constraint firstItem="L3T-Xo-Ncn" firstAttribute="leading" secondItem="Fwd-Gu-czo" secondAttribute="leading" constant="8" id="PQN-r8-yCy"/>
-                                    <constraint firstItem="L3T-Xo-Ncn" firstAttribute="centerY" secondItem="Fwd-Gu-czo" secondAttribute="centerY" id="p1e-1z-EhW"/>
-                                    <constraint firstItem="L3T-Xo-Ncn" firstAttribute="top" secondItem="Fwd-Gu-czo" secondAttribute="top" id="pjd-eS-FDH"/>
+                                    <constraint firstItem="ZtV-Il-bml" firstAttribute="leading" secondItem="Fwd-Gu-czo" secondAttribute="leading" constant="8" id="W2p-9Z-ZzY"/>
+                                    <constraint firstItem="ZtV-Il-bml" firstAttribute="top" secondItem="Fwd-Gu-czo" secondAttribute="top" constant="6" id="cIS-hA-SlS"/>
                                     <constraint firstAttribute="trailing" secondItem="L3T-Xo-Ncn" secondAttribute="trailing" constant="45" id="u41-74-BDK"/>
                                 </constraints>
                             </view>
@@ -361,6 +367,7 @@
                         <outlet property="splitFourPlusView" destination="AyF-5s-Wnx" id="dqk-AH-hsR"/>
                         <outlet property="splitThreeImageView" destination="aP8-fJ-zJG" id="F3R-kJ-DuA"/>
                         <outlet property="splitThreeView" destination="yJd-RC-ZZ1" id="x5V-cs-edu"/>
+                        <outlet property="splitTotalLabel" destination="ZtV-Il-bml" id="b2U-kh-oh2"/>
                         <outlet property="splitTwoImageView" destination="oeO-si-i3s" id="BPO-nM-cnf"/>
                         <outlet property="splitTwoView" destination="tZg-Wa-VPZ" id="Esa-Zx-psD"/>
                         <outlet property="taxHintLabel" destination="4rT-j6-8Au" id="h06-8B-yVs"/>
