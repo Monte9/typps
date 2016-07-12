@@ -52,6 +52,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var fourPlusPartySize: Int?
     var partySizeDictionary: [Int:String] = [4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"]
     
+    
+    @IBOutlet var mainView: UIView!
 
     //status bar notification
     let notification = CWStatusBarNotification()
@@ -71,6 +73,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var totalBillAmountLabel: UILabel!
     @IBOutlet weak var splitTotalLabel: UILabel!
+    @IBOutlet weak var hiddenMessageLabel: UILabel!
     
     //Views
     @IBOutlet weak var welcomeView: UIView!
@@ -80,6 +83,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var splitThreeView: UIView!
     @IBOutlet weak var splitFourPlusView: UIView!
     @IBOutlet weak var totalCheckAmountView: UIView!
+    @IBOutlet weak var splitView: UIView!
+    
+    
+    @IBOutlet weak var yelpButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -203,6 +210,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         }
         
         checkTotalViewHeight = totalCheckAmountView.frame.size.height
+        hiddenMessageLabel.hidden = true
     }
     
     func setPartySize(partySize: Int) {
@@ -286,18 +294,27 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     func updateTotalBillAmount(total:Float) {
         self.totalCheckAmount = total
         
-        if (checkTotalViewHeight > 50 && currentPartySize > 1) {
+        if (currentPartySize > 1) {
             if (checkTotalViewHeight > 50) {
                 self.splitTotalLabel.hidden = false
                 self.splitTotalLabel.text = "total $\(total)"
                 self.totalBillAmountLabel.text = "$\(Float(total / Float(currentPartySize!))) each"
+                self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(40))
             } else {
                 self.splitTotalLabel.hidden = true
                 self.totalBillAmountLabel.text = "$\(Float(total / Float(currentPartySize!))) each"
+                self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(25))
             }
         } else if (currentPartySize == 1) {
-            self.splitTotalLabel.hidden = true
-            self.totalBillAmountLabel.text = "total $\(total)"
+            if (checkTotalViewHeight < 50) {
+                self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(25))
+                self.splitTotalLabel.hidden = true
+                self.totalBillAmountLabel.text = "total $\(total)"
+            } else {
+                self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(40))
+                self.splitTotalLabel.hidden = true
+                self.totalBillAmountLabel.text = "total $\(total)"
+            }
         }
     }
     
@@ -514,21 +531,42 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func saveButtonPressed(sender: AnyObject) {
-        self.notification.displayNotificationWithMessage("Check saved!", forDuration: 2.0)
-        let check = Check()
-        check.restaurantName = restaurantNameLabel.text!
-        check.imageURL = String(business!.imageURL!)
-        check.createdAt = NSDate()
-        check.inputBillAmount = totalBillAmount
-        check.totalTipAmount = tipPercent
-        check.isTaxIncluded = isTaxEnabled
-        check.partySize = partySize!
-        check.finalCheckAmount = totalCheckAmount
+//        self.notification.displayNotificationWithMessage("Check saved!", forDuration: 2.0)
+//        let check = Check()
+//        check.restaurantName = restaurantNameLabel.text!
+//        check.imageURL = String(business!.imageURL!)
+//        check.createdAt = NSDate()
+//        check.inputBillAmount = totalBillAmount
+//        check.totalTipAmount = tipPercent
+//        check.isTaxIncluded = isTaxEnabled
+//        check.partySize = partySize!
+//        check.finalCheckAmount = totalCheckAmount
+//        
+//        //write the check object to db for persistence
+//        try! realmObject.write() {
+//            realmObject.add(check)
+//            print("Check saved.. check db for details")
+//        }
         
-        //write the check object to db for persistence
-        try! realmObject.write() {
-            realmObject.add(check)
-            print("Check saved.. check db for details")
+        UIView.animateWithDuration(0.5, animations: {
+            self.mainView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+            self.restaurantImageView.hidden = true
+            self.taxView.hidden = true
+            self.splitView.hidden = true
+            self.hiddenMessageLabel.hidden = false
+            self.yelpButton.hidden = true
+            self.saveButton.hidden = true
+        }) { (true) in
+            UIView.animateWithDuration(1.5, animations: {
+                self.mainView.backgroundColor = UIColor.whiteColor()
+                }, completion: { (true) in
+                self.restaurantImageView.hidden = false
+                self.taxView.hidden = false
+                self.splitView.hidden = false
+                self.hiddenMessageLabel.hidden = true
+                self.yelpButton.hidden = false
+                self.saveButton.hidden = false
+            })
         }
         
     }
@@ -538,10 +576,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func historyNavigationBarButtonPressed(sender: AnyObject) {
-        self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
-    }
-    
-    @IBAction func settingsNavigationBarButtonPressed(sender: AnyObject) {
         self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
     }
     
