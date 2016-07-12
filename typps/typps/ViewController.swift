@@ -148,11 +148,12 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.tipPercent = (settings.first?.tipPercent)!
             self.isTaxEnabled = (settings.first?.isTaxEnabled)!
             self.partySize = (settings.first?.partySize)!
-            self.currentPartySize = (settings.first?.currentPartySize)!
             
             if settingsCancelled == true {
+                self.currentPartySize = (settings.first?.currentPartySize)!
                 setPartySize(currentPartySize!)
             } else {
+                self.currentPartySize = (settings.first?.currentPartySize)!
                 setPartySize(partySize!)
             }
         }
@@ -590,7 +591,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func startYelpSearch(term: String, latitude: NSNumber?, longitude: NSNumber?) {
-        YelpBusiness.searchWithTerm("", latitude: latitude, longitude: longitude, sort: .Distance, categories: [], deals: false, offset: nil, limit: 5) { (businesses: [YelpBusiness]!, error: NSError!) -> Void in
+        YelpBusiness.searchWithTerm("", latitude: 37.786691, longitude: -122.407758, sort: .Distance, categories: [], deals: false, offset: nil, limit: 5) { (businesses: [YelpBusiness]!, error: NSError!) -> Void in
             
             if (businesses != nil) {
                 self.minDistance = businesses.first?.distance
@@ -621,7 +622,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     }
                     self.restaurantNameLabel.text = business.name
                     self.welcomeViewRestaurantNameLabel.text = business.name
-                    //print("\(business.name) is \(business.distance) mi away from current location")
+                    print("\(business.name) is \(business.distance) mi away from current location")
                 }
                 // Hide HUD once network request comes back (must be done on main UI thread)
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
