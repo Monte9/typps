@@ -15,12 +15,6 @@ import AudioToolbox
 
 var didOpenSecondaryView: Bool?
 
-extension Float {
-    func format(f: String) -> String {
-        return String(format: "%\(f)f", self)
-    }
-}
-
 class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     // instance of Realm object
@@ -144,6 +138,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.isTaxEnabled = (settings.first?.isTaxEnabled)!
             self.partySize = (settings.first?.partySize)!
             self.currentPartySize = (settings.first?.currentPartySize)!
+            
             if settingsCancelled == true {
                 setPartySize(currentPartySize!)
             } else {
@@ -185,19 +180,21 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         if (didOpenSecondaryView == true) {
             if (totalBillAmountTextField.text != "$" && totalBillAmountTextField.text != "") {
                 welcomeView.hidden = true
-                
-                if let total = self.totalBillAmountTextField.text {
-                    let index: String.Index = total.startIndex.advancedBy(1)
-                    totalBillAmount = Float(total.substringFromIndex(index))!
-                    updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
-                    self.taxHintLabel.text = "(off)"
-                    self.tipAmountLabel.text = String(tipPercent) + " %"
-                }
             }
         } else {
             //set totalBillAmountPlaceholder
             totalBillAmountTextField.text = "$"
             welcomeView.hidden = false
+        }
+        
+        
+        if let total = self.totalBillAmountTextField.text {
+            let index: String.Index = total.startIndex.advancedBy(1)
+            if let totalBillAmount = Float(total.substringFromIndex(index)) {
+                updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
+            }
+            self.taxHintLabel.text = "(off)"
+            self.tipAmountLabel.text = String(tipPercent) + " %"
         }
         
     }
@@ -234,7 +231,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             splitFourPlusImageView.image = UIImage(named: "nine_selected")
             splitBillMode = true
         default:
-            print("OOps")
+            print("party size is 1")
         }
     }
     
@@ -256,7 +253,15 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 let index: String.Index = total.startIndex.advancedBy(1)
                 
                 if let totalBillAmount = Float(total.substringFromIndex(index)) {
-                    updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
+                    self.totalBillAmount = totalBillAmount
+                    
+                    if isTaxEnabled {
+                        let tempTotalBillAmount = totalBillAmount + Float(totalBillAmount * 0.0875)
+                        
+                        updateTotalBillAmount(tempTotalBillAmount + (tempTotalBillAmount * Float(tipPercent) / 100 ))
+                    } else {
+                        updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
+                    }
                 } else {
                     print("error")
                 }
@@ -284,13 +289,17 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         self.view.endEditing(true)
         isTaxEnabled = !isTaxEnabled
         
+        print(totalBillAmount)
+        
         if (isTaxEnabled) {
             AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             taxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             taxHintLabel.text = "(tax included)"
             taxView.layer.cornerRadius = 60
-            let tempTotalBillAmount = totalBillAmount + Float(totalBillAmount * 0.0875)
-            updateTotalBillAmount(tempTotalBillAmount + (tempTotalBillAmount * Float(tipPercent) / 100 ))
+            
+            let tempTotalBillAmount = Int(totalBillAmount + Float(totalBillAmount * 0.0875))
+            
+            updateTotalBillAmount(Float(tempTotalBillAmount + (tempTotalBillAmount * Int(tipPercent) / 100 )))
         } else {
             taxView.backgroundColor = UIColor(red: 117/255, green: 124/255, blue: 121/255, alpha: 1)
             taxHintLabel.text = "(off)"
@@ -323,7 +332,14 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 self.tipPercent = self.tipPercentMin;
             }
             tipAmountLabel.text = String(tipPercent) + " %"
-            updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
+            
+            if isTaxEnabled {
+                let tempTotalBillAmount = Int(totalBillAmount + Float(totalBillAmount * 0.0875))
+                
+                updateTotalBillAmount(Float(tempTotalBillAmount + (tempTotalBillAmount * Int(tipPercent) / 100 )))
+            } else {
+                updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
+            }
             
             //set the tipAmountLabel center based on pan gesture
             self.tipLabelCenter = self.tipLabelCenterStart + translation.x
