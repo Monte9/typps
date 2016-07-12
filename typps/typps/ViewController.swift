@@ -32,6 +32,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     var totalBillAmount: Float = 0
     var totalCheckAmount: Float = 0
+    var checkTotalViewHeight: CGFloat?
     
     var business: YelpBusiness?
     
@@ -78,6 +79,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var splitTwoView: UIView!
     @IBOutlet weak var splitThreeView: UIView!
     @IBOutlet weak var splitFourPlusView: UIView!
+    @IBOutlet weak var totalCheckAmountView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,6 +108,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         singleTap.delegate = self
         doubleTap.delegate = self
+        
+        
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -198,6 +202,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             setTaxView()
         }
         
+        checkTotalViewHeight = totalCheckAmountView.frame.size.height
     }
     
     func setPartySize(partySize: Int) {
@@ -210,27 +215,35 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         case 2:
             splitTwoImageView.image = UIImage(named: "two_selected")
             splitBillMode = true
+            currentPartySize = 2
         case 3:
             splitThreeImageView.image = UIImage(named: "three_selected")
             splitBillMode = true
+            currentPartySize = 3
         case 4:
             splitFourPlusImageView.image = UIImage(named: "four_selected")
             splitBillMode = true
+            currentPartySize = 4
         case 5:
             splitFourPlusImageView.image = UIImage(named: "five_selected")
             splitBillMode = true
+            currentPartySize = 5
         case 6:
             splitFourPlusImageView.image = UIImage(named: "six_selected")
             splitBillMode = true
+            currentPartySize = 6
         case 7:
             splitFourPlusImageView.image = UIImage(named: "seven_selected")
             splitBillMode = true
+            currentPartySize = 7
         case 8:
             splitFourPlusImageView.image = UIImage(named: "eight_selected")
             splitBillMode = true
+            currentPartySize = 8
         case 9:
             splitFourPlusImageView.image = UIImage(named: "nine_selected")
             splitBillMode = true
+            currentPartySize = 9
         default:
             print("party size is 1")
         }
@@ -272,7 +285,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     func updateTotalBillAmount(total:Float) {
         self.totalCheckAmount = total
-        self.totalBillAmountLabel.text = "pay    $\(total)"
+        self.totalBillAmountLabel.text = "each pays $\(Float(total / Float(currentPartySize!)))"
     }
     
     @IBAction func welcomeViewTapped(sender: UITapGestureRecognizer) {
@@ -370,6 +383,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 settings.first?.setValue(1, forKeyPath: "currentPartySize")
                 print("currentPartySize updated.. check db for details")
             }
+            self.currentPartySize = 1
         } else {
             splitThreeImageView.image = UIImage(named: "three")
             splitFourPlusImageView.image = UIImage(named: "four")
@@ -384,6 +398,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             }
             self.currentPartySize = 2
         }
+        updateTotalBillAmount(totalCheckAmount)
     }
     
     @IBAction func splitThreeViewTapped(sender: UITapGestureRecognizer) {
@@ -400,6 +415,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 settings.first?.setValue(1, forKeyPath: "currentPartySize")
                 print("currentPartySize updated.. check db for details")
             }
+            self.currentPartySize = 1
         } else {
             splitTwoImageView.image = UIImage(named: "two")
             splitFourPlusImageView.image = UIImage(named: "four")
@@ -415,6 +431,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             
             self.currentPartySize = 3
         }
+        updateTotalBillAmount(totalCheckAmount)
     }
     
     @IBAction func splitFourPlusViewTapped(sender: UITapGestureRecognizer) {
@@ -423,7 +440,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         if (fourPlusPartySize < 4 || fourPlusPartySize >= 9) {
             fourPlusPartySize = 3
         }
-        
         
         if let size: String = partySizeDictionary[fourPlusPartySize! + 1]! {
             fourPlusPartySize = fourPlusPartySize! + 1
@@ -436,6 +452,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 settings.first?.setValue(1, forKeyPath: "currentPartySize")
                 print("currentPartySize updated.. check db for details")
             }
+            currentPartySize = 1
+            updateTotalBillAmount(totalCheckAmount)
         }
         
     }
@@ -456,6 +474,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 settings.first?.setValue(1, forKeyPath: "currentPartySize")
                 print("currentPartySize updated.. check db for details")
             }
+            
+            currentPartySize = 1
+            updateTotalBillAmount(totalCheckAmount)
         } else {
             splitTwoImageView.image = UIImage(named: "two")
             splitThreeImageView.image = UIImage(named: "three")
@@ -472,6 +493,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             }
             
             self.currentPartySize = fourPlusPartySize!
+            updateTotalBillAmount(totalCheckAmount)
         }
     }
     

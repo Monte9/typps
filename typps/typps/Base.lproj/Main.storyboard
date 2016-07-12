@@ -342,7 +342,6 @@
                             <color key="tintColor" red="0.10196078431372549" green="0.73725490196078436" blue="0.61176470588235299" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="historyNavigationBarButtonPressed:" destination="BYZ-38-t0r" id="561-sp-zv2"/>
-                                <segue destination="gXC-FB-Wct" kind="modal" id="Hp6-TY-8e8"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="settings" id="x5t-Vl-jpn">
@@ -370,6 +369,7 @@
                         <outlet property="tipView" destination="jHF-YB-Qg4" id="bAF-my-HQ9"/>
                         <outlet property="totalBillAmountLabel" destination="L3T-Xo-Ncn" id="G0V-Dm-swm"/>
                         <outlet property="totalBillAmountTextField" destination="27w-yf-lFo" id="3aB-zs-nbp"/>
+                        <outlet property="totalCheckAmountView" destination="Fwd-Gu-czo" id="Quw-jh-rpU"/>
                         <outlet property="welcomeView" destination="0A4-U0-z5g" id="H0J-yJ-pfZ"/>
                         <outlet property="welcomeViewRestaurantImageView" destination="7Vh-0V-gRQ" id="zoB-pW-H2T"/>
                         <outlet property="welcomeViewRestaurantNameLabel" destination="Jeh-Bd-QIe" id="glt-dG-Trf"/>
