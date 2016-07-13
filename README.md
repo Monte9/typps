@@ -15,6 +15,7 @@ The following **required** functionality is complete:
 * [x] Settings page to change the default tip percentage.
 
 The following **additional** features are implemented:
+* [x] History view to review all your saved checks
 * [x] UI animations for saving checks and toggle tax included in settings
 * [x] Remembering the bill amount across app restarts (using Realm)
 * [x] Saving checks with information such as total bill amount, party size etc (using Realm)
@@ -27,7 +28,6 @@ The following **additional** features are implemented:
 Coming soon:
 * [ ] Using locale-specific currency and currency thousands separators.
 * [ ] Making sure the keyboard is always visible and the bill amount is always the first responder. This way the user doesn't have to tap anywhere to use this app. Just launch the app and start typing.
-* [ ] History view to review all your saved checks
 * [ ] Improved Yelp location search to produce more accurate restaurant results for current location
 
 ## Video Walkthrough 
@@ -35,6 +35,8 @@ Coming soon:
 Here's a working demo of the app:
 
 ![typps walkthrough](typps.gif)
+
+![typps check history feature](typps_checkHistory.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
