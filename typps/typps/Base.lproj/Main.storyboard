@@ -356,6 +356,7 @@
                             <color key="tintColor" red="0.10196078431372549" green="0.73725490196078436" blue="0.61176470588235299" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="historyNavigationBarButtonPressed:" destination="BYZ-38-t0r" id="561-sp-zv2"/>
+                                <segue destination="gXC-FB-Wct" kind="modal" id="29K-Wi-ANw"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="settings" id="x5t-Vl-jpn">
@@ -447,22 +448,92 @@
         <scene sceneID="lOR-cH-coQ">
             <objects>
                 <viewController id="fd2-F4-H7R" customClass="HistoryViewController" customModule="typps" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ziq-zj-FGN"/>
-                        <viewControllerLayoutGuide type="bottom" id="EmS-Xa-MUe"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="0yr-Y4-c0c">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="134" sectionHeaderHeight="28" sectionFooterHeight="28" id="lzQ-lE-Y2w">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CheckCell" rowHeight="134" id="ABP-WD-7k7" customClass="CheckCell" customModule="typps" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="320" height="134"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ABP-WD-7k7" id="PDq-cS-rA7">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="133.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g0H-H9-YQd">
+                                            <rect key="frame" x="8" y="8" width="304" height="117.5"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CaB-4b-O2L">
+                                                    <rect key="frame" x="15" y="14" width="90" height="90"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="90" id="9Cu-yT-Tub"/>
+                                                        <constraint firstAttribute="width" constant="90" id="JAn-3G-N8c"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chaat House" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ubn-nE-Xo2">
+                                                    <rect key="frame" x="113" y="14" width="183" height="25"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
+                                                    <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="07/10/16, 06:45" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nfz-Ka-SVe">
+                                                    <rect key="frame" x="113" y="87" width="183" height="17"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="12"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$9999 for 5 people" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDB-hA-d1G">
+                                                    <rect key="frame" x="113" y="57" width="183" height="22"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
+                                                    <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="mDB-hA-d1G" secondAttribute="trailing" constant="8" id="9gM-ds-9S0"/>
+                                                <constraint firstItem="Nfz-Ka-SVe" firstAttribute="top" secondItem="mDB-hA-d1G" secondAttribute="bottom" constant="8" id="B80-RA-pF2"/>
+                                                <constraint firstItem="Ubn-nE-Xo2" firstAttribute="leading" secondItem="CaB-4b-O2L" secondAttribute="trailing" constant="8" id="CgR-uR-w4p"/>
+                                                <constraint firstItem="Ubn-nE-Xo2" firstAttribute="top" secondItem="CaB-4b-O2L" secondAttribute="top" id="DWo-5h-RLf"/>
+                                                <constraint firstAttribute="trailing" secondItem="Ubn-nE-Xo2" secondAttribute="trailing" constant="8" id="DvI-qo-zP4"/>
+                                                <constraint firstItem="Nfz-Ka-SVe" firstAttribute="bottom" secondItem="CaB-4b-O2L" secondAttribute="bottom" id="E7o-4N-40V"/>
+                                                <constraint firstItem="Nfz-Ka-SVe" firstAttribute="leading" secondItem="CaB-4b-O2L" secondAttribute="trailing" constant="8" id="OR8-Ac-hcX"/>
+                                                <constraint firstAttribute="trailing" secondItem="Nfz-Ka-SVe" secondAttribute="trailing" constant="8" id="dCu-eZ-EMO"/>
+                                                <constraint firstItem="CaB-4b-O2L" firstAttribute="leading" secondItem="g0H-H9-YQd" secondAttribute="leading" constant="15" id="hKQ-6K-mJU"/>
+                                                <constraint firstItem="mDB-hA-d1G" firstAttribute="leading" secondItem="CaB-4b-O2L" secondAttribute="trailing" constant="8" id="lDx-Bk-YV2"/>
+                                                <constraint firstItem="CaB-4b-O2L" firstAttribute="centerY" secondItem="g0H-H9-YQd" secondAttribute="centerY" id="lKc-h4-7Js"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="g0H-H9-YQd" secondAttribute="trailing" constant="8" id="6dw-h6-Ik8"/>
+                                        <constraint firstItem="g0H-H9-YQd" firstAttribute="leading" secondItem="PDq-cS-rA7" secondAttribute="leading" constant="8" id="Zf0-aF-Luf"/>
+                                        <constraint firstItem="g0H-H9-YQd" firstAttribute="top" secondItem="PDq-cS-rA7" secondAttribute="top" constant="8" id="vV1-x6-42f"/>
+                                        <constraint firstAttribute="bottom" secondItem="g0H-H9-YQd" secondAttribute="bottom" constant="8" id="yMe-dL-WFN"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="checkAmountAndPartySizeLabel" destination="mDB-hA-d1G" id="QKE-BH-ljX"/>
+                                    <outlet property="containerView" destination="g0H-H9-YQd" id="c91-S2-y6Y"/>
+                                    <outlet property="dateLabel" destination="Nfz-Ka-SVe" id="EVT-xn-x0s"/>
+                                    <outlet property="restaurantImageView" destination="CaB-4b-O2L" id="6Yn-Ay-3NH"/>
+                                    <outlet property="restaurantNameLabel" destination="Ubn-nE-Xo2" id="Ona-pv-DWY"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                    </tableView>
                     <navigationItem key="navigationItem" id="C6C-aP-S7P">
                         <barButtonItem key="leftBarButtonItem" image="close" id="jCJ-oW-k7v">
                             <connections>
                                 <action selector="closeBarButtonPressed:" destination="fd2-F4-H7R" id="aFr-7a-TCR"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="stats" id="XPP-5W-lw9"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="lzQ-lE-Y2w" id="ArB-Q5-cnH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="srB-Vy-aFS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -616,11 +687,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="zCw-hI-0wD">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="9DA-KC-DoF">
+                            <color key="tintColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="cancelBarButtonPressed:" destination="j5a-a3-KCf" id="P8Y-2d-Oig"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="Fgt-rW-HwH">
+                            <color key="tintColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="saveSettings:" destination="j5a-a3-KCf" id="6TW-LL-JAf"/>
                             </connections>
@@ -715,9 +788,10 @@
         <image name="four" width="40" height="40"/>
         <image name="history" width="22" height="22"/>
         <image name="settings" width="22" height="22"/>
+        <image name="stats" width="22" height="22"/>
         <image name="three" width="40" height="40"/>
         <image name="two" width="40" height="40"/>
         <image name="yelp" width="207" height="118"/>
     </resources>
-    <color key="tintColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
 </document>

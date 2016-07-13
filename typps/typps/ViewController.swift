@@ -100,7 +100,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         //show loading indicator
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
-       //print(Realm.Configuration.defaultConfiguration.fileURL!)
+       print(Realm.Configuration.defaultConfiguration.fileURL!)
         
         //add gesture recognizers for single and double tap
         var singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewTapped))
@@ -498,7 +498,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         let settings = realmObject.objects(Settings)
         
         if settings.first?.currentPartySize == fourPlusPartySize {
-            if let size: String = partySizeDictionary[fourPlusPartySize!]! {
+            if let size: String = partySizeDictionary[fourPlusPartySize!] {
                 splitFourPlusImageView.image = UIImage(named: size)
                 splitBillMode = true
             }
@@ -532,23 +532,26 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func saveButtonPressed(sender: AnyObject) {
-//        self.notification.displayNotificationWithMessage("Check saved!", forDuration: 2.0)
-//        let check = Check()
-//        check.restaurantName = restaurantNameLabel.text!
-//        check.imageURL = String(business!.imageURL!)
-//        check.createdAt = NSDate()
-//        check.inputBillAmount = totalBillAmount
-//        check.totalTipAmount = tipPercent
-//        check.isTaxIncluded = isTaxEnabled
-//        check.partySize = partySize!
-//        check.finalCheckAmount = totalCheckAmount
-//        
-//        //write the check object to db for persistence
-//        try! realmObject.write() {
-//            realmObject.add(check)
-//            print("Check saved.. check db for details")
-//        }
+        self.notification.displayNotificationWithMessage("Check saved!", forDuration: 2.0)
+        let check = Check()
+        check.restaurantName = restaurantNameLabel.text!
+        check.imageURL = String(business!.imageURL!)
+        check.createdAt = NSDate()
+        check.inputBillAmount = totalBillAmount
+        check.totalTipAmount = tipPercent
+        check.isTaxIncluded = isTaxEnabled
+        check.partySize = currentPartySize!
+        check.finalCheckAmount = totalCheckAmount
         
+        //write the check object to db for persistence
+        try! realmObject.write() {
+            realmObject.add(check)
+            print("Check saved.. check db for details")
+            checkSavedAnimation()
+        }
+    }
+    
+    func checkSavedAnimation() {
         UIView.animateWithDuration(0.5, animations: {
             self.mainView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             self.restaurantImageView.hidden = true
@@ -561,15 +564,14 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             UIView.animateWithDuration(1.5, animations: {
                 self.mainView.backgroundColor = UIColor.whiteColor()
                 }, completion: { (true) in
-                self.restaurantImageView.hidden = false
-                self.taxView.hidden = false
-                self.splitView.hidden = false
-                self.hiddenMessageLabel.hidden = true
-                self.yelpButton.hidden = false
-                self.saveButton.hidden = false
+                    self.restaurantImageView.hidden = false
+                    self.taxView.hidden = false
+                    self.splitView.hidden = false
+                    self.hiddenMessageLabel.hidden = true
+                    self.yelpButton.hidden = false
+                    self.saveButton.hidden = false
             })
         }
-        
     }
     
     @IBAction func openRestaurantInYelp(sender: AnyObject) {
@@ -577,7 +579,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func historyNavigationBarButtonPressed(sender: AnyObject) {
-        self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
+      //  self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
     }
     
     func tracingLocation(currentLocation: CLLocation) {
@@ -591,7 +593,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func startYelpSearch(term: String, latitude: NSNumber?, longitude: NSNumber?) {
-        YelpBusiness.searchWithTerm("", latitude: 37.786691, longitude: -122.407758, sort: .Distance, categories: [], deals: false, offset: nil, limit: 5) { (businesses: [YelpBusiness]!, error: NSError!) -> Void in
+        YelpBusiness.searchWithTerm("", latitude: latitude, longitude: longitude, sort: .Distance, categories: [], deals: false, offset: nil, limit: 5) { (businesses: [YelpBusiness]!, error: NSError!) -> Void in
             
             if (businesses != nil) {
                 self.minDistance = businesses.first?.distance

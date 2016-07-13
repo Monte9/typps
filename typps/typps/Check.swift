@@ -20,9 +20,4 @@ class Check: Object {
     dynamic var partySize = 0
     dynamic var finalCheckAmount: Float = 0
     
-// Specify properties to ignore (Realm won't persist these)
-    
-//  override static func ignoredProperties() -> [String] {
-//    return []
-//  }
 }
