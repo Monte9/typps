@@ -47,14 +47,13 @@ class SettingsViewController: UIViewController {
         //Customize the navigation bar title and color
         let navigationBar = self.navigationController?.navigationBar
         
-        //make navigation bar transparent
-        navigationBar!.setBackgroundImage(UIImage(), forBarMetrics: .Default)
-        navigationBar!.shadowImage = UIImage()
-        navigationBar!.translucent = true
-        
-        //set navigation bar title with color
+        //set navigation bar color and title
         navigationItem.title = "settings"
-        navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
+        navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
+        navigationBar?.barTintColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationBar?.translucent = false
         
         let settings = realmObject.objects(Settings)
         self.tipPercent = (settings.first?.tipPercent)!
@@ -178,12 +177,12 @@ class SettingsViewController: UIViewController {
     func setTaxIncludeView() {
         if (isTaxEnabled == true) {
             self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x + 120
-            self.taxIncludedView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+            self.taxIncludedView.backgroundColor = UIColor.whiteColor()
             self.taxIncludedView.layer.cornerRadius = 30
             self.taxIncludedLabel.text = "on"
         } else {
             self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x
-            self.taxIncludedView.backgroundColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1)
+            self.taxIncludedView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
             self.taxIncludedView.layer.cornerRadius = 0
             self.taxIncludedLabel.text = "off"
         }

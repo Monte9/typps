@@ -103,11 +103,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
        print(Realm.Configuration.defaultConfiguration.fileURL!)
         
         //add gesture recognizers for single and double tap
-        var singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewTapped))
+        let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewTapped))
         singleTap.numberOfTapsRequired = 1
         self.splitFourPlusView.addGestureRecognizer(singleTap)
         
-        var doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewDoubleTap))
+        let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewDoubleTap))
         doubleTap.numberOfTapsRequired = 2
         self.splitFourPlusView.addGestureRecognizer(doubleTap)
         
@@ -532,7 +532,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func saveButtonPressed(sender: AnyObject) {
-        self.notification.displayNotificationWithMessage("Check saved!", forDuration: 2.0)
         let check = Check()
         check.restaurantName = restaurantNameLabel.text!
         check.imageURL = String(business!.imageURL!)

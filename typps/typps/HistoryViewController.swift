@@ -10,10 +10,9 @@ import UIKit
 import RealmSwift
 import Realm
 
-class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CheckCellDelegate {
 
     @IBOutlet var tableView: UITableView!
-    
     
     // instance of Realm object
     let realmObject = try! Realm()
@@ -34,6 +33,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         formatter.dateStyle = NSDateFormatterStyle.LongStyle
         formatter.timeStyle = .MediumStyle
+    
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -64,16 +64,32 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.restaurantNameLabel?.text = check.restaurantName
         cell.checkAmountAndPartySizeLabel.text = "$\(check.finalCheckAmount) for \(check.partySize) people"
         cell.dateLabel.text = formatter.stringFromDate(check.createdAt)
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.buttonDelegate = self
         
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+    }
     
+    //delegate methods for the ArticleCellDelegate
+    func deleteCheck (checkCell: CheckCell!) {
+        let index = tableView.indexPathForCell(checkCell)
+        
+        let check = checks[(index?.row)!]
+        
+        // Delete an object with a transaction
+        try! realmObject.write {
+            realmObject.delete(check)
+        }
+        
+        tableView.reloadData()
+    }
     
     @IBAction func closeBarButtonPressed(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    
     
 }
