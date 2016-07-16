@@ -10,6 +10,7 @@ import UIKit
 
 //delegate methods for CheckCell
 protocol CheckCellDelegate: class {
+    func showDeleteCheckButton(checkCell: CheckCell!)
     func deleteCheck(checkCell: CheckCell!)
 }
 
@@ -22,8 +23,6 @@ class CheckCell: UITableViewCell {
     
     @IBOutlet weak var trashView: UIView!
     @IBOutlet weak var containerView: UIView!
-    
-    var hideTrashButton: Bool? = true
     
     var buttonDelegate: CheckCellDelegate?
 
@@ -46,8 +45,6 @@ class CheckCell: UITableViewCell {
         
         doubleTapToShowDeleteButton.delegate = self
         tapGestureForDeleteButton.delegate = self
-        
-        trashView.hidden = hideTrashButton!
     }
     
     override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -55,8 +52,7 @@ class CheckCell: UITableViewCell {
     }
 
     func showdeleteCheckButton() {
-        hideTrashButton = !(hideTrashButton!)
-        self.trashView.hidden = hideTrashButton!
+        buttonDelegate?.showDeleteCheckButton(self)
     }
     
     func deleteCheckButtonPressed() {

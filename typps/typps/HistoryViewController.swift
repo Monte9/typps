@@ -66,6 +66,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.dateLabel.text = formatter.stringFromDate(check.createdAt)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.buttonDelegate = self
+        cell.trashView.hidden = check.hideTrashButton
         
         return cell
     }
@@ -83,6 +84,20 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         // Delete an object with a transaction
         try! realmObject.write {
             realmObject.delete(check)
+        }
+        
+        tableView.reloadData()
+    }
+    
+    func showDeleteCheckButton(checkCell: CheckCell!) {
+        let index = tableView.indexPathForCell(checkCell)
+        
+        let check = checks[(index?.row)!]
+        
+        var trashButtonFlag = check.hideTrashButton
+        
+        try! realmObject.write {
+            check.setValue(!trashButtonFlag, forKey: "hideTrashButton")
         }
         
         tableView.reloadData()

@@ -19,5 +19,6 @@ class Check: Object {
     dynamic var isTaxIncluded = false
     dynamic var partySize = 0
     dynamic var finalCheckAmount: Float = 0
+    dynamic var hideTrashButton = true
     
 }
