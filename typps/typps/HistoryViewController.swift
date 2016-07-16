@@ -10,6 +10,21 @@ import UIKit
 import RealmSwift
 import Realm
 
+class TableViewHelper {
+    class func EmptyMessage(message:String, viewController:HistoryViewController) {
+        let messageLabel = UILabel(frame: CGRectMake(0,0,viewController.view.bounds.size.width, viewController.view.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textColor = UIColor.whiteColor()
+        messageLabel.numberOfLines = 0;
+        messageLabel.textAlignment = .Center;
+        messageLabel.font = UIFont(name: "Avenir-Heavy", size: 30)
+        messageLabel.sizeToFit()
+        
+        viewController.tableView.backgroundView = messageLabel;
+        viewController.tableView.separatorStyle = .None;
+    }
+}
+
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CheckCellDelegate {
 
     @IBOutlet var tableView: UITableView!
@@ -54,7 +69,12 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (checks?.count)!
+        if checks?.count > 0 {
+            return checks.count
+        } else {
+            TableViewHelper.EmptyMessage("Save checks to view them here.", viewController: self)
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
