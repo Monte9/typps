@@ -182,7 +182,7 @@ class SettingsViewController: UIViewController {
             self.taxIncludedLabel.text = "on"
         } else {
             self.taxIncludedView.layer.position.x = self.taxIncludedView.layer.position.x
-            self.taxIncludedView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+            self.taxIncludedView.backgroundColor = UIColor.whiteColor()
             self.taxIncludedView.layer.cornerRadius = 0
             self.taxIncludedLabel.text = "off"
         }

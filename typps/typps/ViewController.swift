@@ -55,9 +55,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     @IBOutlet var mainView: UIView!
 
-    //status bar notification
-    let notification = CWStatusBarNotification()
-    
     //Outlets
     @IBOutlet weak var totalBillAmountTextField: UITextField!
     @IBOutlet weak var taxHintLabel: UILabel!
@@ -174,12 +171,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         navigationItem.title = "typps"
         navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
         
-        //customize status bar notification
-        self.notification.notificationLabelBackgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
-        self.notification.notificationLabelTextColor = UIColor.whiteColor()
-        self.notification.notificationAnimationInStyle = CWNotificationAnimationStyle.Top
-        self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyle.Top
-        
         //add rounded edges to restaurantImageView
         restaurantImageView.layer.cornerRadius = 5
         restaurantImageView.clipsToBounds = true
@@ -286,7 +277,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                         updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
                     }
                 } else {
-                    self.notification.displayNotificationWithMessage("invalid entry!", forDuration: 1.0)
+                    notification.displayNotificationWithMessage("invalid entry!", forDuration: 1.0)
                 }
             }
         }
@@ -555,6 +546,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.mainView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             self.restaurantImageView.hidden = true
             self.taxView.hidden = true
+            self.tipView.hidden = true
             self.splitView.hidden = true
             self.hiddenMessageLabel.hidden = false
             self.yelpButton.hidden = true
@@ -566,6 +558,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     self.restaurantImageView.hidden = false
                     self.taxView.hidden = false
                     self.splitView.hidden = false
+                    self.tipView.hidden = false
                     self.hiddenMessageLabel.hidden = true
                     self.yelpButton.hidden = false
                     self.saveButton.hidden = false
@@ -574,11 +567,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func openRestaurantInYelp(sender: AnyObject) {
-        self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
+        notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
     }
     
     @IBAction func historyNavigationBarButtonPressed(sender: AnyObject) {
-      //  self.notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
+      //  notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
     }
     
     func tracingLocation(currentLocation: CLLocation) {

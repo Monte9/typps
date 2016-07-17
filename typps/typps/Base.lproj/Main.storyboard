@@ -29,6 +29,7 @@
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="27w-yf-lFo">
                                         <rect key="frame" x="10" y="5" width="300" height="130"/>
+                                        <color key="tintColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="100"/>
                                         <textInputTraits key="textInputTraits" keyboardType="decimalPad" keyboardAppearance="light"/>
@@ -516,7 +517,7 @@
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="4M8-5t-Ghg" secondAttribute="trailing" id="7T3-dy-Mbu"/>
                                                 <constraint firstItem="4M8-5t-Ghg" firstAttribute="leading" secondItem="qqV-q4-RRF" secondAttribute="leading" constant="18" id="BR6-4f-ElZ"/>
@@ -552,7 +553,11 @@
                                 <action selector="closeBarButtonPressed:" destination="fd2-F4-H7R" id="aFr-7a-TCR"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="stats" id="XPP-5W-lw9"/>
+                        <barButtonItem key="rightBarButtonItem" image="stats" id="XPP-5W-lw9">
+                            <connections>
+                                <action selector="displayStatsButton:" destination="fd2-F4-H7R" id="Wqp-ct-oN4"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="lzQ-lE-Y2w" id="ArB-Q5-cnH"/>
@@ -601,7 +606,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstItem="LMj-P2-lXu" firstAttribute="centerY" secondItem="JZU-bf-8sV" secondAttribute="centerY" id="4RS-NU-DeC"/>

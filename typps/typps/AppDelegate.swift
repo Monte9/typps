@@ -8,12 +8,22 @@
 
 import UIKit
 
+//status bar notification
+let notification = CWStatusBarNotification()
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        //customize status bar notification
+        notification.notificationLabelBackgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+        notification.notificationLabelTextColor = UIColor.whiteColor()
+        notification.notificationAnimationInStyle = CWNotificationAnimationStyle.Top
+        notification.notificationAnimationOutStyle = CWNotificationAnimationStyle.Top
+
         // Override point for customization after application launch.
         return true
     }

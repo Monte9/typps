@@ -48,7 +48,12 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         formatter.dateStyle = NSDateFormatterStyle.LongStyle
         formatter.timeStyle = .MediumStyle
-    
+        
+        didOpenSecondaryView = true
+        
+        //customize status bar notification
+        notification.notificationLabelBackgroundColor = UIColor.whiteColor()
+        notification.notificationLabelTextColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -106,6 +111,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             realmObject.delete(check)
         }
         
+        notification.displayNotificationWithMessage("check deleted.", forDuration: 1.0)
+        
         tableView.reloadData()
     }
     
@@ -114,7 +121,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         let check = checks[(index?.row)!]
         
-        var trashButtonFlag = check.hideTrashButton
+        let trashButtonFlag = check.hideTrashButton
         
         try! realmObject.write {
             check.setValue(!trashButtonFlag, forKey: "hideTrashButton")
@@ -122,6 +129,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         tableView.reloadData()
     }
+    
+    @IBAction func displayStatsButton(sender: AnyObject) {
+        notification.displayNotificationWithMessage("stats coming soon.", forDuration: 1.0)
+    }
+    
     
     @IBAction func closeBarButtonPressed(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
