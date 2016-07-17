@@ -284,17 +284,17 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func updateTotalBillAmount(total:Float) {
-        self.totalCheckAmount = total
+        self.totalCheckAmount = ceil(total)
         
         if (currentPartySize > 1) {
             if (checkTotalViewHeight > 50) {
                 self.splitTotalLabel.hidden = false
                 self.splitTotalLabel.text = "total $\(total)"
-                self.totalBillAmountLabel.text = "$\(Float(total / Float(currentPartySize!))) each"
+                self.totalBillAmountLabel.text = "$\(ceil(total / Float(currentPartySize!))) each"
                 self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(40))
             } else {
                 self.splitTotalLabel.hidden = true
-                self.totalBillAmountLabel.text = "$\(Float(total / Float(currentPartySize!))) each"
+                self.totalBillAmountLabel.text = "$\(ceil(total / Float(currentPartySize!))) each"
                 self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(25))
             }
         } else if (currentPartySize == 1) {
