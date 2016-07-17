@@ -63,7 +63,7 @@ class SettingsViewController: UIViewController {
         tipPercentLabel.text = String(tipPercent!) + " %"
         partySizeLabel.text = String(partySize!)
         
-        partySizeFontSize = CGFloat(50 * partySize!)
+        partySizeFontSize = CGFloat(45 * partySize!)
         self.partySizeLabel.font = self.partySizeLabel.font.fontWithSize(partySizeFontSize!)
     }
     
