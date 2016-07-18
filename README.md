@@ -1,12 +1,12 @@
-# *typps*: Tip Calculator + Restaurant Logger
+# *tyypps*: Tip Calculator + Restaurant Logger
 
-**typps** is a Tip Calculator + Restaurant Logger app for iOS submitted as the pre-work requirement for [CodePath iOS Bootcamp](http://codepath.com/iosbootcamp).
+**tyypps** is a Tip Calculator + Restaurant Logger app for iOS submitted as the pre-work requirement for [CodePath iOS Bootcamp](http://codepath.com/iosbootcamp).
 
 It does more than just calculate tips... It is capable of knowing the restaurant you are dining at based on your current location and also allows you to save each check to build your dining history for review later on. 
 
 Submitted by: **Monte Thakkar**
 
-Time spent: **30+ passionate** hours spent in total
+Time spent: **40+ passionate** hours spent in total
 
 ## User Stories
 
@@ -16,7 +16,7 @@ The following **required** functionality is complete:
 
 The following **additional** features are implemented:
 * [x] History view to review all your saved checks
-* [x] UI animations for saving checks and toggle tax included in settings
+* [x] UI animations for saving checks and toggle tax-included in settings
 * [x] Remembering the bill amount across app restarts (using Realm)
 * [x] Saving checks with information such as total bill amount, party size etc (using Realm)
 * [x] Using Yelp API to get current restaurant/bar from lat & long of user's current location
@@ -27,24 +27,19 @@ The following **additional** features are implemented:
 
 Coming soon:
 * [ ] Using locale-specific currency and currency thousands separators.
-* [ ] Making sure the keyboard is always visible and the bill amount is always the first responder. This way the user doesn't have to tap anywhere to use this app. Just launch the app and start typing.
 * [ ] Improved Yelp location search to produce more accurate restaurant results for current location
 
 ## Video Walkthrough 
 
 Here's a working demo of the app:
 
-![typps walkthrough](typps.gif)
-
-![typps check history feature](typps_checkHistory.gif)
+![tyypps walkthrough](tyypps.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-This app was fairly straighforward to implement. 
-
-I focused on two main areas while building this app:
+This app was fairly straighforward to implement. I focused on two main areas while building this app:
 
 1. Minimalistic design: trying to keep the UI as clean and simple as possible. The app uses mostly only two colors with up to 75% of the views filled up with white space.
 2. Intuitive UX: Using pan and tap gestures almost everywhere to receive input to eliminate the use of keyboards. This makes the app's user experience more consistent and interactive. 
