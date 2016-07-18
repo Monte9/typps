@@ -8,6 +8,10 @@ Submitted by: **Monte Thakkar**
 
 Time spent: **40+ passionate** hours spent in total
 
+Status: Beta-testing via TestFlight. Request invites by sending email to **helloomonte@gmail.com**
+
+App Store submission: **July 30th, 2016**
+
 ## User Stories
 
 The following **required** functionality is complete:
