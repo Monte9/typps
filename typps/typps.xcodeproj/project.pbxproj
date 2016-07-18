@@ -196,7 +196,7 @@
 				TargetAttributes = {
 					ECF65F831D2B91340082F5FF = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = C3V4QQ3VFL;
+						DevelopmentTeam = B65QRQ98UJ;
 					};
 				};
 			};
@@ -416,7 +416,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = typps/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.montethakkar.typps;
+				PRODUCT_BUNDLE_IDENTIFIER = com.manthanbharatthakkar.typps.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -431,7 +431,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = typps/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.montethakkar.typps;
+				PRODUCT_BUNDLE_IDENTIFIER = com.manthanbharatthakkar.typps.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
