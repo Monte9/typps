@@ -50,39 +50,51 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var partySize: Int?
     var currentPartySize: Int?
     var fourPlusPartySize: Int?
-    var partySizeDictionary: [Int:String] = [4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"]
+    var partySizeDictionary: [Int:String] = [1: "pika", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"]
+    var partySizeDescriptionDictionary: [Int:String] = [1: "How was the food?", 2: "Is it a date?", 3: "Who's the third wheel?", 4: "Like a pack of friends", 5: "The five horsemen!", 6: "666", 7: "Seven 11", 8: "Eight sounds fun", 9: "That's too many"]
+    var selectedPartySizeDescriptionDictionary: [Int:String] = [1: "I am here for you!", 2: "OMG MOM! It's a date!!", 3: "No comments", 4: "Hope you had a good time!", 5: "Hope you had a good time!", 6: "Hope you had a good time!", 7: "Hope you had a good time!", 8: "Hope you had a good time!", 9: "Hope you had a good time!"]
     
-    
+    //Main UIView
     @IBOutlet var mainView: UIView!
-
+    
+    //Controls View -> Tip, tax, party size, total check
+    @IBOutlet weak var controlsView: UIView!
+    
+    //Views within controlsView
+    @IBOutlet weak var taxView: UIView!
+    @IBOutlet weak var partySizeView: UIView!
+    @IBOutlet weak var tipView: UIView!
+    
+    
+    //Outlets within controlsView
+    @IBOutlet weak var taxLabel: UILabel!
+    @IBOutlet weak var partySizeImageView: UIImageView!
+    @IBOutlet weak var partySizeDescriptionLabel: UILabel!
+    @IBOutlet weak var tipAmountLabel: UILabel!
+    @IBOutlet weak var tipPercentLabel: UILabel!
+    @IBOutlet weak var TipNameLabel: UILabel!
+    
+    //Gesture recognizers for controlsView
+    @IBOutlet var setTipAmountPanGesture: UIPanGestureRecognizer!
+    @IBOutlet var tipViewTapGesture: UITapGestureRecognizer!
+    
+    
+    //Variables for controlsView actions
+    var firstTouchForTaxView: Bool = true
+    
+    
     //Outlets
     @IBOutlet weak var totalBillAmountTextField: UITextField!
-    @IBOutlet weak var taxHintLabel: UILabel!
-    @IBOutlet weak var tipAmountLabel: UILabel!
     @IBOutlet weak var welcomeViewRestaurantImageView: UIImageView!
     @IBOutlet weak var welcomeViewRestaurantNameLabel: UILabel!
     @IBOutlet weak var restaurantImageView: UIImageView!
     @IBOutlet weak var restaurantNameLabel: UILabel!
     @IBOutlet weak var resultsCountLabel: UILabel!
-    @IBOutlet weak var splitTwoImageView: UIImageView!
-    @IBOutlet weak var splitThreeImageView: UIImageView!
-    @IBOutlet weak var splitFourPlusImageView: UIImageView!
     @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var totalBillAmountLabel: UILabel!
-    @IBOutlet weak var splitTotalLabel: UILabel!
     @IBOutlet weak var hiddenMessageLabel: UILabel!
     
     //Views
     @IBOutlet weak var welcomeView: UIView!
-    @IBOutlet weak var taxView: UIView!
-    @IBOutlet weak var tipView: UIView!
-    @IBOutlet weak var splitTwoView: UIView!
-    @IBOutlet weak var splitThreeView: UIView!
-    @IBOutlet weak var splitFourPlusView: UIView!
-    @IBOutlet weak var totalCheckAmountView: UIView!
-    @IBOutlet weak var splitView: UIView!
-    
-    
     @IBOutlet weak var yelpButton: UIButton!
     
     override func viewDidLoad() {
@@ -97,23 +109,24 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         //show loading indicator
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
-       print(Realm.Configuration.defaultConfiguration.fileURL!)
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
         
         //add gesture recognizers for single and double tap
-        let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewTapped))
-        singleTap.numberOfTapsRequired = 1
-        self.splitFourPlusView.addGestureRecognizer(singleTap)
+        let togglePartySizeTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.togglePartySizeTapGesture))
+        togglePartySizeTapGesture.numberOfTapsRequired = 1
+        self.partySizeView.addGestureRecognizer(togglePartySizeTapGesture)
         
-        let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.splitFourPlusViewDoubleTap))
-        doubleTap.numberOfTapsRequired = 2
-        self.splitFourPlusView.addGestureRecognizer(doubleTap)
+        let selectPartySizeDoubleTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.selectPartySizeDoubleTapGesture))
+        selectPartySizeDoubleTapGesture.numberOfTapsRequired = 2
+        self.partySizeView.addGestureRecognizer(selectPartySizeDoubleTapGesture)
         
-        singleTap.requireGestureRecognizerToFail(doubleTap)
+        togglePartySizeTapGesture.delegate = self
+        selectPartySizeDoubleTapGesture.delegate = self
+        setTipAmountPanGesture.delegate = self
+        tipViewTapGesture.delegate = self
         
-        singleTap.delegate = self
-        doubleTap.delegate = self
-        
-        
+        //single and double tap in partySizeImageView
+        togglePartySizeTapGesture.requireGestureRecognizerToFail(selectPartySizeDoubleTapGesture)
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -146,13 +159,12 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.isTaxEnabled = (settings.first?.isTaxEnabled)!
             self.partySize = (settings.first?.partySize)!
             
-            if settingsCancelled == true {
-                self.currentPartySize = (settings.first?.currentPartySize)!
-                setPartySize(currentPartySize!)
-            } else {
-                self.currentPartySize = (settings.first?.currentPartySize)!
-                setPartySize(partySize!)
-            }
+//            if settingsCancelled == true {
+//                self.currentPartySize = (settings.first?.currentPartySize)!
+//            } else {
+//                self.currentPartySize = (settings.first?.currentPartySize)!
+//            }
+            self.currentPartySize = 1
         }
         
     }
@@ -190,63 +202,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             welcomeView.hidden = false
         }
         
-        
-        if let total = self.totalBillAmountTextField.text {
-            let index: String.Index = total.startIndex.advancedBy(1)
-            if let totalBillAmount = Float(total.substringFromIndex(index)) {
-                updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
-            }
-            self.taxHintLabel.text = "(off)"
-            self.tipAmountLabel.text = String(tipPercent) + " %"
-            setTaxView()
-        }
-        
-        checkTotalViewHeight = totalCheckAmountView.frame.size.height
         hiddenMessageLabel.hidden = true
-    }
-    
-    func setPartySize(partySize: Int) {
-        
-        splitTwoImageView.image = UIImage(named: "two")
-        splitThreeImageView.image = UIImage(named: "three")
-        splitFourPlusImageView.image = UIImage(named: "four")
-        
-        switch partySize {
-        case 2:
-            splitTwoImageView.image = UIImage(named: "two_selected")
-            splitBillMode = true
-            currentPartySize = 2
-        case 3:
-            splitThreeImageView.image = UIImage(named: "three_selected")
-            splitBillMode = true
-            currentPartySize = 3
-        case 4:
-            splitFourPlusImageView.image = UIImage(named: "four_selected")
-            splitBillMode = true
-            currentPartySize = 4
-        case 5:
-            splitFourPlusImageView.image = UIImage(named: "five_selected")
-            splitBillMode = true
-            currentPartySize = 5
-        case 6:
-            splitFourPlusImageView.image = UIImage(named: "six_selected")
-            splitBillMode = true
-            currentPartySize = 6
-        case 7:
-            splitFourPlusImageView.image = UIImage(named: "seven_selected")
-            splitBillMode = true
-            currentPartySize = 7
-        case 8:
-            splitFourPlusImageView.image = UIImage(named: "eight_selected")
-            splitBillMode = true
-            currentPartySize = 8
-        case 9:
-            splitFourPlusImageView.image = UIImage(named: "nine_selected")
-            splitBillMode = true
-            currentPartySize = 9
-        default:
-            print("party size is 1")
-        }
     }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
@@ -285,241 +241,95 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     func updateTotalBillAmount(total:Float) {
         self.totalCheckAmount = ceil(total)
-        
-        if (currentPartySize > 1) {
-            if (checkTotalViewHeight > 50) {
-                self.splitTotalLabel.hidden = false
-                self.splitTotalLabel.text = "total $\(total)"
-                self.totalBillAmountLabel.text = "$\(ceil(total / Float(currentPartySize!))) each"
-                self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(40))
-            } else {
-                self.splitTotalLabel.hidden = true
-                self.totalBillAmountLabel.text = "$\(ceil(total / Float(currentPartySize!))) each"
-                self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(25))
-            }
-        } else if (currentPartySize == 1) {
-            if (checkTotalViewHeight < 50) {
-                self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(25))
-                self.splitTotalLabel.hidden = true
-                self.totalBillAmountLabel.text = "total $\(total)"
-            } else {
-                self.totalBillAmountLabel.font = self.totalBillAmountLabel.font.fontWithSize(CGFloat(40))
-                self.splitTotalLabel.hidden = true
-                self.totalBillAmountLabel.text = "total $\(total)"
-            }
-        }
+        //TO DO
     }
+    
+    @IBAction func taxViewTapGesture(sender: UITapGestureRecognizer) {
+        if (firstTouchForTaxView) {
+            self.taxLabel.text = "Tax ON (8.75% tax included in tip)"
+        } else {
+            self.taxLabel.text = "Tax OFF"
+        }
+        
+        //toggle first touch for tax view
+        firstTouchForTaxView = !firstTouchForTaxView
+    }
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        let touchLocation = touch.locationInView(self.partySizeView)
+        return !CGRectContainsPoint(self.partySizeDescriptionLabel.frame, touchLocation)
+    }
+    
+    @IBAction func togglePartySizeTapGesture(sender: UITapGestureRecognizer) {
+        
+        var nextPartySize = self.currentPartySize! + 1
+        
+        if (nextPartySize > 9) {
+            nextPartySize = 1
+        }
+        
+        let partySizeImageName: String = partySizeDictionary[nextPartySize]!
+        self.partySizeImageView.image = UIImage(named: partySizeImageName)
+        
+        let partySizeDescription: String = partySizeDescriptionDictionary[nextPartySize]!
+        self.partySizeDescriptionLabel.text = partySizeDescription
+        
+        //save the partySize
+        currentPartySize! = nextPartySize
+    }
+    
+    @IBAction func selectPartySizeDoubleTapGesture(sender: UITapGestureRecognizer) {
+        let partySizeImageName: String = partySizeDictionary[self.currentPartySize!]!
+        let selectedPartySizeImageName = partySizeImageName + "_selected"
+        
+        if (firstTouchForTaxView) {
+            self.partySizeImageView.image = UIImage(named: selectedPartySizeImageName)
+            
+            let selectedPartySizeDescription: String = selectedPartySizeDescriptionDictionary[self.currentPartySize!]!
+            self.partySizeDescriptionLabel.text = selectedPartySizeDescription
+        } else {
+            self.partySizeImageView.image = UIImage(named: partySizeImageName)
+            
+            let partySizeDescription: String = partySizeDescriptionDictionary[self.currentPartySize!]!
+            self.partySizeDescriptionLabel.text = partySizeDescription
+        }
+        
+        //toggle first touch for tax view
+        firstTouchForTaxView = !firstTouchForTaxView
+    }
+    
+    @IBAction func setTipAmountPanGesture(sender: UIPanGestureRecognizer) {
+        var point = sender.locationInView(view)
+        var velocity = sender.velocityInView(view)
+        var translation = sender.translationInView(view)
+        
+        if sender.state == UIGestureRecognizerState.Began {
+            print("Gesture began")
+        } else if sender.state == UIGestureRecognizerState.Changed {
+            print("Gesture is changing")
+        } else if sender.state == UIGestureRecognizerState.Ended {
+            print("Gesture ended")
+        }
+
+    }
+    
+    @IBAction func tipViewTapGesture(sender: UITapGestureRecognizer) {
+        print("TOUCH caught")
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @IBAction func welcomeViewTapped(sender: UITapGestureRecognizer) {
         //hide decimal pad
         self.view.endEditing(true)
-    }
-    
-    @IBAction func tipViewTapped(sender: UITapGestureRecognizer) {
-        //hide decimal pad
-        self.view.endEditing(true)
-    }
-    
-    
-    @IBAction func taxViewTapped(sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-        isTaxEnabled = !isTaxEnabled
-        
-        setTaxView()
-    }
-    
-    func setTaxView() {
-        if (isTaxEnabled) {
-            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-            taxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
-            taxHintLabel.text = "(tax included)"
-            taxView.layer.cornerRadius = 60
-            
-            let tempTotalBillAmount = Int(totalBillAmount + Float(totalBillAmount * 0.0875))
-            
-            updateTotalBillAmount(Float(tempTotalBillAmount + (tempTotalBillAmount * Int(tipPercent) / 100 )))
-        } else {
-            taxView.backgroundColor = UIColor(red: 117/255, green: 124/255, blue: 121/255, alpha: 1)
-            taxHintLabel.text = "(off)"
-            taxView.layer.cornerRadius = 0
-            updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
-        }
-    }
-    
-    @IBAction func setTipAmountWithPan(sender: UIPanGestureRecognizer) {
-        self.view.endEditing(true)
-        
-        let translation: CGPoint = sender.translationInView(self.view)
-        
-        let parentView = sender.view
-        tipLabelCenterMax = (parentView?.frame.width)! - 64
-        tipLabelCenterMin = 64
-
-        if (sender.state == UIGestureRecognizerState.Began) {
-            
-            self.tipPercentTapStart = self.tipPercent;
-            self.tipLabelCenterStart = self.tipAmountLabel.center.x
-            
-        } else if (sender.state == UIGestureRecognizerState.Changed) {
-            
-            //set the tipAmountLabel text based on pan gesture
-            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 7))
-            if (self.tipPercent > self.tipPercentMax) {
-                self.tipPercent = self.tipPercentMax;
-            } else if (self.tipPercent < self.tipPercentMin) {
-                self.tipPercent = self.tipPercentMin;
-            }
-            tipAmountLabel.text = String(tipPercent) + " %"
-            
-            if isTaxEnabled {
-                let tempTotalBillAmount = Int(totalBillAmount + Float(totalBillAmount * 0.0875))
-                
-                updateTotalBillAmount(Float(tempTotalBillAmount + (tempTotalBillAmount * Int(tipPercent) / 100 )))
-            } else {
-                updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
-            }
-            
-            //set the tipAmountLabel center based on pan gesture
-            self.tipLabelCenter = self.tipLabelCenterStart + translation.x
-            if (self.tipLabelCenter > self.tipLabelCenterMax) {
-                self.tipLabelCenter = self.tipLabelCenterMax;
-            } else if (self.tipLabelCenter < self.tipLabelCenterMin) {
-                self.tipLabelCenter = self.tipLabelCenterMin;
-            }
-            self.tipAmountLabel.center.x = self.tipLabelCenter
-
-        }
-    }
-    
-    @IBAction func splitTwoViewTapped(sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-        
-        let settings = realmObject.objects(Settings)
-        
-        if settings.first?.currentPartySize == 2 {
-            splitTwoImageView.image = UIImage(named: "two")
-            splitBillMode = false
-            
-            //write the currentPartySize to the settings object to db for persistence
-            try! realmObject.write() {
-                settings.first?.setValue(1, forKeyPath: "currentPartySize")
-                print("currentPartySize updated.. check db for details")
-            }
-            self.currentPartySize = 1
-        } else {
-            splitThreeImageView.image = UIImage(named: "three")
-            splitFourPlusImageView.image = UIImage(named: "four")
-            
-            splitTwoImageView.image = UIImage(named: "two_selected")
-            splitBillMode = true
-            
-            //write the currentPartySize to the settings object to db for persistence
-            try! realmObject.write() {
-                settings.first?.setValue(2, forKeyPath: "currentPartySize")
-                print("currentPartySize updated.. check db for details")
-            }
-            self.currentPartySize = 2
-        }
-        updateTotalBillAmount(totalCheckAmount)
-    }
-    
-    @IBAction func splitThreeViewTapped(sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-        
-        let settings = realmObject.objects(Settings)
-        
-        if settings.first?.currentPartySize == 3 {
-            splitThreeImageView.image = UIImage(named: "three")
-            splitBillMode = false
-            
-            //write the currentPartySize to the settings object to db for persistence
-            try! realmObject.write() {
-                settings.first?.setValue(1, forKeyPath: "currentPartySize")
-                print("currentPartySize updated.. check db for details")
-            }
-            self.currentPartySize = 1
-        } else {
-            splitTwoImageView.image = UIImage(named: "two")
-            splitFourPlusImageView.image = UIImage(named: "four")
-
-            splitThreeImageView.image = UIImage(named: "three_selected")
-            splitBillMode = false
-            
-            //write the currentPartySize to the settings object to db for persistence
-            try! realmObject.write() {
-                settings.first?.setValue(3, forKeyPath: "currentPartySize")
-                print("currentPartySize updated.. check db for details")
-            }
-            
-            self.currentPartySize = 3
-        }
-        updateTotalBillAmount(totalCheckAmount)
-    }
-    
-    @IBAction func splitFourPlusViewTapped(sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-        
-        if (fourPlusPartySize < 4 || fourPlusPartySize >= 9) {
-            fourPlusPartySize = 3
-        }
-        
-        if let size: String = partySizeDictionary[fourPlusPartySize! + 1]! {
-            splitThreeImageView.image = UIImage(named: "three")
-            splitFourPlusImageView.image = UIImage(named: "four")
-            
-            fourPlusPartySize = fourPlusPartySize! + 1
-            splitFourPlusImageView.image = UIImage(named: size)
-            
-            let settings = realmObject.objects(Settings)
-            
-            //write the currentPartySize to the settings object to db for persistence
-            try! realmObject.write() {
-                settings.first?.setValue(1, forKeyPath: "currentPartySize")
-                print("currentPartySize updated.. check db for details")
-            }
-            currentPartySize = 1
-            updateTotalBillAmount(totalCheckAmount)
-        }
-        
-    }
-    
-    @IBAction func splitFourPlusViewDoubleTap(sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-        
-        let settings = realmObject.objects(Settings)
-        
-        if settings.first?.currentPartySize == fourPlusPartySize {
-            if let size: String = partySizeDictionary[fourPlusPartySize!] {
-                splitFourPlusImageView.image = UIImage(named: size)
-                splitBillMode = true
-            }
-            
-            //write the currentPartySize to the settings object to db for persistence
-            try! realmObject.write() {
-                settings.first?.setValue(1, forKeyPath: "currentPartySize")
-                print("currentPartySize updated.. check db for details")
-            }
-            
-            currentPartySize = 1
-            updateTotalBillAmount(totalCheckAmount)
-        } else {
-            splitTwoImageView.image = UIImage(named: "two")
-            splitThreeImageView.image = UIImage(named: "three")
-            
-            if let size: String = partySizeDictionary[fourPlusPartySize!]! {
-                splitFourPlusImageView.image = UIImage(named: size + "_selected")
-                splitBillMode = true
-            }
-            
-            //write the currentPartySize to the settings object to db for persistence
-            try! realmObject.write() {
-                settings.first?.setValue(fourPlusPartySize!, forKeyPath: "currentPartySize")
-                print("currentPartySize updated.. check db for details")
-            }
-            
-            self.currentPartySize = fourPlusPartySize!
-            updateTotalBillAmount(totalCheckAmount)
-        }
     }
     
     @IBAction func saveButtonPressed(sender: AnyObject) {
@@ -545,9 +355,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         UIView.animateWithDuration(0.5, animations: {
             self.mainView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             self.restaurantImageView.hidden = true
-            self.taxView.hidden = true
-            self.tipView.hidden = true
-            self.splitView.hidden = true
             self.hiddenMessageLabel.hidden = false
             self.yelpButton.hidden = true
             self.saveButton.hidden = true
@@ -556,9 +363,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 self.mainView.backgroundColor = UIColor.whiteColor()
                 }, completion: { (true) in
                     self.restaurantImageView.hidden = false
-                    self.taxView.hidden = false
-                    self.splitView.hidden = false
-                    self.tipView.hidden = false
                     self.hiddenMessageLabel.hidden = true
                     self.yelpButton.hidden = false
                     self.saveButton.hidden = false
