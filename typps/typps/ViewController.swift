@@ -12,6 +12,7 @@ import MBProgressHUD
 import RealmSwift
 import Realm
 import AudioToolbox
+import SnapKit
 
 var didOpenSecondaryView: Bool?
 
@@ -127,6 +128,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         //single and double tap in partySizeImageView
         togglePartySizeTapGesture.requireGestureRecognizerToFail(selectPartySizeDoubleTapGesture)
+        
+        //setup labels for the TipView
+        self.setupTipViewLabels()
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -303,20 +307,113 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         var velocity = sender.velocityInView(view)
         var translation = sender.translationInView(view)
         
+        let parentView = sender.view
+        tipLabelCenterMax = (parentView?.frame.width)! - 75
+        tipLabelCenterMin = 100
+        
+        var ticks = (parentView?.frame.width)! - 175
+        
         if sender.state == UIGestureRecognizerState.Began {
-            print("Gesture began")
+            self.tipPercentTapStart = self.tipPercent;
+            self.tipLabelCenterStart = self.tipAmountLabel.center.x
+            beginAnimatingTipView(self.view)
         } else if sender.state == UIGestureRecognizerState.Changed {
-            print("Gesture is changing")
+            //set the tipAmountLabel text based on pan gesture
+            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 12))
+            if (self.tipPercent > self.tipPercentMax) {
+                self.tipPercent = self.tipPercentMax;
+            } else if (self.tipPercent < self.tipPercentMin) {
+                self.tipPercent = self.tipPercentMin;
+            }
+            
+            tipAmountLabel.text = String(tipPercent)
+            
+            //set the tipAmountLabel center based on pan gesture
+            self.tipLabelCenter = self.tipLabelCenterStart + translation.x
+            if (self.tipLabelCenter > self.tipLabelCenterMax) {
+                self.tipLabelCenter = self.tipLabelCenterMax;
+            } else if (self.tipLabelCenter < self.tipLabelCenterMin) {
+                self.tipLabelCenter = self.tipLabelCenterMin;
+            }
+            
+            self.tipAmountLabel.center.x = self.tipLabelCenter
+            
         } else if sender.state == UIGestureRecognizerState.Ended {
-            print("Gesture ended")
+            endAnimatingTipView(self.view)
         }
 
     }
     
     @IBAction func tipViewTapGesture(sender: UITapGestureRecognizer) {
-        print("TOUCH caught")
+        let superview = self.view
+        
+        if (firstTouchForTaxView) {
+            
+            beginAnimatingTipView(superview)
+            
+//            self.tipAmountLabel.snp_updateConstraints(closure: { (make) in
+//                make.centerX.equalTo(superview)
+//                return
+//            })
+//            
+//            self.TipNameLabel.snp_updateConstraints { (make) in
+//                make.left.equalTo(superview.snp_left).offset(20)
+//                return
+//            }
+//            self.tipPercentLabel.snp_updateConstraints { (make) in
+//                make.right.equalTo(superview.snp_right).offset(-20)
+//                return
+//            }
+        } else {
+            endAnimatingTipView(superview)
+        
+            
+//            self.tipAmountLabel.snp_updateConstraints { (make) in
+//                make.centerX.equalTo(superview)
+//                return
+//            }
+//            self.TipNameLabel.snp_updateConstraints { (make) in
+//                make.left.equalTo(superview.snp_left).offset(100)
+//                return
+//            }
+//            self.tipPercentLabel.snp_updateConstraints { (make) in
+//                make.right.equalTo(superview.snp_right).offset(-100)
+//                return
+//            }
+        }
+        
+        firstTouchForTaxView = !firstTouchForTaxView
     }
     
+    func beginAnimatingTipView(superview: UIView) {
+        UIView.animateWithDuration(0.3, animations: {
+            self.tipAmountLabel.center.x = superview.center.x
+            self.tipPercentLabel.center.x = superview.frame.width - 30
+            self.TipNameLabel.center.x = 50
+        })
+    }
+    
+    func endAnimatingTipView(superview: UIView) {
+        UIView.animateWithDuration(0.5, animations: {
+            self.tipAmountLabel.center.x = superview.center.x
+            self.tipPercentLabel.center.x = superview.center.x + 45
+            self.TipNameLabel.center.x = superview.center.x - 60
+        })
+    }
+    
+    func setupTipViewLabels() {
+        let superview = self.view
+        
+        self.tipAmountLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview)
+        }
+        self.TipNameLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(-60)
+        }
+        self.tipPercentLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(45)
+        }
+    }
     
     
     
