@@ -11,6 +11,9 @@ import UIKit
 //status bar notification
 let notification = CWStatusBarNotification()
 
+//get screen width and height
+let screenSize: CGRect = UIScreen.mainScreen().bounds
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     

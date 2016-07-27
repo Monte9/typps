@@ -100,6 +100,7 @@
 				ECF65FBD1D2E04910082F5FF /* Controllers */,
 				ECF65FBC1D2E048A0082F5FF /* Views */,
 				ECF65FBB1D2E04670082F5FF /* Models */,
+				ECF65FBF1D2E04B50082F5FF /* API Clients */,
 				ECF65FBE1D2E04A00082F5FF /* Supporting Files */,
 			);
 			path = typps;
@@ -140,7 +141,6 @@
 				ECF65FC21D2FAB0E0082F5FF /* CWStatusBarNotificationUtils.swift */,
 				ECF65F991D2B93570082F5FF /* LocationService.swift */,
 				ECC32A7E1D361FEB00974644 /* PathDynamicModal.swift */,
-				ECF65FBF1D2E04B50082F5FF /* API Clients */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

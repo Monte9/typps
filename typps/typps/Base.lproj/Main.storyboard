@@ -93,8 +93,20 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XG1-8V-YCS">
                                 <rect key="frame" x="0.0" y="204" width="320" height="60"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tip %" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wtr-Tj-CZo">
-                                        <rect key="frame" x="109" y="2" width="102" height="55"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bfG-Bc-jJr">
+                                        <rect key="frame" x="184" y="2" width="34" height="55"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="40"/>
+                                        <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lzr-ks-3nx">
+                                        <rect key="frame" x="137" y="2" width="47" height="55"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="40"/>
+                                        <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tip" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wtr-Tj-CZo">
+                                        <rect key="frame" x="74" y="2" width="58" height="55"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="40"/>
                                         <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -103,12 +115,17 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstItem="wtr-Tj-CZo" firstAttribute="centerY" secondItem="XG1-8V-YCS" secondAttribute="centerY" id="owx-LC-k0T"/>
-                                    <constraint firstItem="wtr-Tj-CZo" firstAttribute="centerX" secondItem="XG1-8V-YCS" secondAttribute="centerX" id="tXM-Er-pps"/>
+                                    <constraint firstItem="lzr-ks-3nx" firstAttribute="centerX" secondItem="XG1-8V-YCS" secondAttribute="centerX" id="MIX-vX-QBY"/>
+                                    <constraint firstItem="bfG-Bc-jJr" firstAttribute="centerY" secondItem="XG1-8V-YCS" secondAttribute="centerY" id="Pd3-Zb-qVB"/>
+                                    <constraint firstItem="lzr-ks-3nx" firstAttribute="leading" secondItem="wtr-Tj-CZo" secondAttribute="trailing" constant="5" id="Pfp-zj-UWd"/>
+                                    <constraint firstItem="bfG-Bc-jJr" firstAttribute="leading" secondItem="lzr-ks-3nx" secondAttribute="trailing" id="UIS-So-Mca"/>
+                                    <constraint firstItem="wtr-Tj-CZo" firstAttribute="centerY" secondItem="XG1-8V-YCS" secondAttribute="centerY" id="VQG-jl-P3O"/>
+                                    <constraint firstItem="lzr-ks-3nx" firstAttribute="centerY" secondItem="XG1-8V-YCS" secondAttribute="centerY" id="YEd-D1-XpU"/>
                                     <constraint firstAttribute="height" constant="60" id="tfs-xb-djd"/>
                                 </constraints>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="21V-kz-xiu" appends="YES" id="dyr-KS-FZC"/>
+                                    <outletCollection property="gestureRecognizers" destination="Ic6-14-bbC" appends="YES" id="brg-TB-Gnu"/>
+                                    <outletCollection property="gestureRecognizers" destination="Vu2-Ta-ctC" appends="YES" id="Oj6-oh-X0f"/>
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c8R-MA-eae">
@@ -282,8 +299,12 @@
                         <outlet property="resultsCountLabel" destination="EcH-Lb-Z3T" id="67u-b2-8Yh"/>
                         <outlet property="saveButton" destination="YOO-zA-1Uj" id="FUm-kM-PCJ"/>
                         <outlet property="splitTotalLabel" destination="ZtV-Il-bml" id="b2U-kh-oh2"/>
+                        <outlet property="tipAmountLabel" destination="lzr-ks-3nx" id="Djo-KM-0MP"/>
+                        <outlet property="tipLabel" destination="wtr-Tj-CZo" id="aVo-b0-TV3"/>
+                        <outlet property="tipPanGesture" destination="Ic6-14-bbC" id="oui-ra-yg7"/>
+                        <outlet property="tipPercentLabel" destination="bfG-Bc-jJr" id="DFA-uV-87J"/>
+                        <outlet property="tipTapGesture" destination="Vu2-Ta-ctC" id="iXd-CY-Noz"/>
                         <outlet property="tipView" destination="XG1-8V-YCS" id="sIW-h2-Eg0"/>
-                        <outlet property="tipViewLabel" destination="wtr-Tj-CZo" id="fJz-oA-dDl"/>
                         <outlet property="totalBillAmountLabel" destination="L3T-Xo-Ncn" id="G0V-Dm-swm"/>
                         <outlet property="totalBillAmountTextField" destination="27w-yf-lFo" id="3aB-zs-nbp"/>
                         <outlet property="totalCheckAmountView" destination="Fwd-Gu-czo" id="Quw-jh-rpU"/>
@@ -330,15 +351,16 @@
                         <outlet property="delegate" destination="0A4-U0-z5g" id="3YU-ay-oHe"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="Ic6-14-bbC">
+                    <connections>
+                        <action selector="setTipAmountPanGesture:" destination="BYZ-38-t0r" id="J0j-rd-huY"/>
+                        <outlet property="delegate" destination="XG1-8V-YCS" id="uVk-bF-ONt"/>
+                    </connections>
+                </panGestureRecognizer>
                 <tapGestureRecognizer id="Vu2-Ta-ctC">
                     <connections>
                         <action selector="tipViewTapped:" destination="BYZ-38-t0r" id="Q6U-BB-OWV"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="21V-kz-xiu">
-                    <connections>
-                        <action selector="tipViewTapped:" destination="BYZ-38-t0r" id="kEt-XD-ZLx"/>
-                        <outlet property="delegate" destination="XG1-8V-YCS" id="vg9-0n-xJH"/>
+                        <outlet property="delegate" destination="XG1-8V-YCS" id="A6h-nf-uVQ"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

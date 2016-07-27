@@ -36,11 +36,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     var business: YelpBusiness?
     
-    //tip label position variables
-    var tipLabelCenter: CGFloat = 220
-    var tipLabelCenterMax: CGFloat = 0
-    var tipLabelCenterMin: CGFloat = 0
-    var tipLabelCenterStart: CGFloat = 0
+    //tip amount label position variables
+    var tipAmountLabelCenter: CGFloat = 220
+    var tipAmountLabelCenterMax: CGFloat = 0
+    var tipAmountLabelCenterMin: CGFloat = 0
+    var tipAmountLabelCenterStart: CGFloat = 0
     
     var nearbyBusinesses: [YelpBusiness]! = [YelpBusiness]()
     var minDistance: String?
@@ -52,6 +52,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var fourPlusPartySize: Int?
     var partySizeDictionary: [Int:String] = [4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"]
     
+    let screenWidth = screenSize.width
+    let screenHeight = screenSize.height
     
     @IBOutlet var mainView: UIView!
 
@@ -67,6 +69,16 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var splitTotalLabel: UILabel!
     @IBOutlet weak var hiddenMessageLabel: UILabel!
     
+    //Tip View
+    @IBOutlet weak var tipLabel: UILabel!
+    @IBOutlet weak var tipAmountLabel: UILabel!
+    @IBOutlet weak var tipPercentLabel: UILabel!
+    @IBOutlet var tipPanGesture: UIPanGestureRecognizer!
+    @IBOutlet var tipTapGesture: UITapGestureRecognizer!
+    var tipLabelOrigin: CGFloat?
+    var tipPercentLabelOrigin: CGFloat?
+    var tipAmountLabelOrigin: CGFloat?
+    
     //Views
     @IBOutlet weak var welcomeView: UIView!
     @IBOutlet weak var totalCheckAmountView: UIView!
@@ -74,39 +86,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var yelpButton: UIButton!
     
     @IBOutlet weak var tipView: UIView!
-    @IBOutlet weak var tipViewLabel: UILabel!
     
     var firstTouch = true
-    
-    @IBAction func tipViewTapped(sender: UITapGestureRecognizer) {
-        
-        if (firstTouch) {
-            UIView.animateWithDuration(0.5, animations: {
-                self.tipViewLabel.center.x = self.tipViewLabel.center.x - 100
-                }, completion: {
-                    (value: Bool) in
-                    print("DONE")
-            })
-        } else {
-            UIView.animateWithDuration(0.5, animations: {
-                self.tipViewLabel.center.x = self.tipViewLabel.center.x + 100
-                }, completion: {
-                    (value: Bool) in
-                    print("DONE")
-            })
-        }
-        
-       firstTouch = !firstTouch
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,12 +101,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         //show loading indicator
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
-       print(Realm.Configuration.defaultConfiguration.fileURL!)
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
         
-    }
-    
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        tipPanGesture.delegate = self
+        tipTapGesture.delegate = self
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -162,7 +142,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 //setPartySize(partySize!)
             }
         }
-        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -198,7 +177,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             welcomeView.hidden = false
         }
         
-        
         if let total = self.totalBillAmountTextField.text {
             let index: String.Index = total.startIndex.advancedBy(1)
             if let totalBillAmount = Float(total.substringFromIndex(index)) {
@@ -209,9 +187,97 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         //checkTotalViewHeight = totalCheckAmountView.frame.size.height
         hiddenMessageLabel.hidden = true
+        
+        self.tipAmountLabel.hidden = false
+        self.tipPercentLabel.hidden = false
+        self.tipLabel.hidden = false
+        
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        tipLabel.superview!.setNeedsLayout()
+        tipLabel.superview!.layoutIfNeeded()
+        tipPercentLabel.superview?.setNeedsLayout()
+        tipPercentLabel.superview?.layoutIfNeeded()
+        
+        // Now modify bottomView's frame here
+        //self.tipAmountLabel.hidden = true
+        tipLabelOrigin = self.tipLabel.center.x
+        //self.tipLabel.center.x = self.tipLabel.center.x + 27
+        tipPercentLabelOrigin = self.tipPercentLabel.center.x
+        //self.tipPercentLabel.center.x = self.tipPercentLabel.center.x - 20
+        self.tipAmountLabelOrigin = self.tipAmountLabel.center.x
+    }
     
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    @IBAction func tipViewTapped(sender: UITapGestureRecognizer) {
+        print(firstTouch)
+        if (firstTouch) {
+            UIView.animateWithDuration(0.5, animations: {
+                self.tipLabel.center.x = 50
+                self.tipPercentLabel.center.x = self.screenWidth - 37
+                }, completion: {
+                    (value: Bool) in
+                    self.tipAmountLabel.hidden = false
+            })
+        } else {
+            print("herE?")
+            UIView.animateWithDuration(0.5, animations: {
+                self.tipLabel.center.x = self.tipLabelOrigin!
+                self.tipPercentLabel.center.x = self.tipPercentLabelOrigin!
+                self.tipAmountLabel.center.x = self.tipAmountLabelOrigin!
+                }, completion: {
+                    (value: Bool) in
+            })
+        }
+        firstTouch = !firstTouch
+    }
+    
+    @IBAction func setTipAmountPanGesture(sender: UIPanGestureRecognizer) {
+        self.view.endEditing(true)
+        
+        let translation: CGPoint = sender.translationInView(self.view)
+        
+        tipAmountLabelCenterMax = self.screenWidth - 80
+        tipAmountLabelCenterMin = 105
+        
+        if (sender.state == UIGestureRecognizerState.Began) {
+            self.tipPercentTapStart = self.tipPercent;
+            self.tipAmountLabelCenterStart = self.tipAmountLabel.center.x
+        } else if (sender.state == UIGestureRecognizerState.Changed) {
+            
+            self.tipLabel.center.x = 50
+            self.tipPercentLabel.center.x = self.screenWidth - 37            
+            
+            //set the tipAmountLabel text based on pan gesture
+            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 10))
+            if (self.tipPercent > self.tipPercentMax) {
+                self.tipPercent = self.tipPercentMax;
+            } else if (self.tipPercent < self.tipPercentMin) {
+                self.tipPercent = self.tipPercentMin;
+            }
+            
+            //set the tipAmountLabel center based on pan gesture
+            self.tipAmountLabelCenter = self.tipAmountLabelCenterStart + translation.x
+            if (self.tipAmountLabelCenter > self.tipAmountLabelCenterMax) {
+                self.tipAmountLabelCenter = self.tipAmountLabelCenterMax;
+            } else if (self.tipAmountLabelCenter < self.tipAmountLabelCenterMin) {
+                self.tipAmountLabelCenter = self.tipAmountLabelCenterMin;
+            }
+            self.tipAmountLabel.center.x = self.tipAmountLabelCenter
+            self.tipAmountLabel.text = String(tipPercent)
+//            // Extract attributes
+//            let attributes = (tipAmountLabel.attributedText)!.attributesAtIndex(0, effectiveRange: nil)
+//            tipAmountLabel.attributedText = NSAttributedString(string: String(tipPercent), attributes: attributes)
+        } else if (sender.state == UIGestureRecognizerState.Ended) {
+            firstTouch = false
+        }
+    }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
         if (totalBillAmountTextField.text == "") {
