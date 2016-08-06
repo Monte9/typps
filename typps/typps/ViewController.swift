@@ -52,8 +52,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var currentPartySize: Int?
     var fourPlusPartySize: Int?
     var partySizeDictionary: [Int:String] = [1: "pika", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"]
-    var partySizeDescriptionDictionary: [Int:String] = [1: "How was the food?", 2: "Is it a date?", 3: "Who's the third wheel?", 4: "Like a pack of friends", 5: "The five horsemen!", 6: "666", 7: "Seven 11", 8: "Eight sounds fun", 9: "That's too many"]
-    var selectedPartySizeDescriptionDictionary: [Int:String] = [1: "I am here for you!", 2: "OMG MOM! It's a date!!", 3: "No comments", 4: "Hope you had a good time!", 5: "Hope you had a good time!", 6: "Hope you had a good time!", 7: "Hope you had a good time!", 8: "Hope you had a good time!", 9: "Hope you had a good time!"]
+    var selectedPartySizeDescriptionDictionary: [Int:String] = [1: "I am here for you!", 2: "Is it a date?", 3: "Who's the third wheel?", 4: "Like a pack of friends", 5: "The five horsemen", 6: "1..2..3..4..5..6", 7: "Seven 11", 8: "Eight sounds fun", 9: "That's too many"]
     
     //Main UIView
     @IBOutlet var mainView: UIView!
@@ -65,6 +64,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var taxView: UIView!
     @IBOutlet weak var partySizeView: UIView!
     @IBOutlet weak var tipView: UIView!
+    @IBOutlet weak var buttonTaxView: UIView!
+    @IBOutlet weak var totalCheckAmountView: UIView!
     
     
     //Outlets within controlsView
@@ -74,6 +75,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var tipAmountLabel: UILabel!
     @IBOutlet weak var tipPercentLabel: UILabel!
     @IBOutlet weak var TipNameLabel: UILabel!
+    @IBOutlet weak var totalCheckAmountLabel: UILabel!
+    @IBOutlet weak var eachPersonCheckAmountLabel: UILabel!
+    
+    
     
     //Gesture recognizers for controlsView
     @IBOutlet var setTipAmountPanGesture: UIPanGestureRecognizer!
@@ -82,7 +87,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     //Variables for controlsView actions
     var firstTouchForTaxView: Bool = true
-    
+    var firstTouchForTipView: Bool = true
+    var firstTouchForPartySizeView: Bool = true
+    var reRender: Bool = true
     
     //Outlets
     @IBOutlet weak var totalBillAmountTextField: UITextField!
@@ -168,7 +175,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
 //            } else {
 //                self.currentPartySize = (settings.first?.currentPartySize)!
 //            }
-            self.currentPartySize = 1
+            self.currentPartySize = partySize
         }
         
     }
@@ -207,6 +214,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         }
         
         hiddenMessageLabel.hidden = true
+        eachPersonCheckAmountLabel.hidden = true
     }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
@@ -245,14 +253,37 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     func updateTotalBillAmount(total:Float) {
         self.totalCheckAmount = ceil(total)
-        //TO DO
+        
+        var finalAmount = total
+     
+        if (isTaxEnabled) {
+            finalAmount = total + (total * 0.0875)
+        } else {
+            finalAmount = total
+        }
+        
+        self.eachPersonCheckAmountLabel.text = "$\(ceil(finalAmount/Float(partySize!))) each"
+        self.totalCheckAmountLabel.text = "total $\(finalAmount)"
     }
     
     @IBAction func taxViewTapGesture(sender: UITapGestureRecognizer) {
+        //hide decimal pad
+        self.view.endEditing(true)
+        
         if (firstTouchForTaxView) {
-            self.taxLabel.text = "Tax ON (8.75% tax included in tip)"
+            self.taxLabel.text = "Tax ON"
+            self.taxLabel.textColor = UIColor.whiteColor()
+            self.buttonTaxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha:
+                1)
+            self.buttonTaxView.layer.cornerRadius = 10
+            isTaxEnabled = true
+            self.updateTotalBillAmount(self.totalCheckAmount)
         } else {
             self.taxLabel.text = "Tax OFF"
+            self.taxLabel.textColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+            self.buttonTaxView.backgroundColor = UIColor.whiteColor()
+            isTaxEnabled = false
+            self.updateTotalBillAmount(self.totalCheckAmount)
         }
         
         //toggle first touch for tax view
@@ -265,6 +296,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     @IBAction func togglePartySizeTapGesture(sender: UITapGestureRecognizer) {
+        //hide decimal pad
+        self.view.endEditing(true)
         
         var nextPartySize = self.currentPartySize! + 1
         
@@ -275,18 +308,29 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         let partySizeImageName: String = partySizeDictionary[nextPartySize]!
         self.partySizeImageView.image = UIImage(named: partySizeImageName)
         
-        let partySizeDescription: String = partySizeDescriptionDictionary[nextPartySize]!
-        self.partySizeDescriptionLabel.text = partySizeDescription
+        self.partySizeDescriptionLabel.text = "Select Party Size"
         
         //save the partySize
         currentPartySize! = nextPartySize
+        
+        if (splitBillMode == true && partySize != 1) {
+            endAnimatingTotalCheckAmountLabel()
+        }
+        
+        splitBillMode = false
+        firstTouchForPartySizeView = false
     }
     
     @IBAction func selectPartySizeDoubleTapGesture(sender: UITapGestureRecognizer) {
+        //hide decimal pad
+        self.view.endEditing(true)
+        
+        firstTouchForPartySizeView = true
+        
         let partySizeImageName: String = partySizeDictionary[self.currentPartySize!]!
         let selectedPartySizeImageName = partySizeImageName + "_selected"
         
-        if (firstTouchForTaxView) {
+        if (firstTouchForPartySizeView) {
             self.partySizeImageView.image = UIImage(named: selectedPartySizeImageName)
             
             let selectedPartySizeDescription: String = selectedPartySizeDescriptionDictionary[self.currentPartySize!]!
@@ -294,38 +338,48 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         } else {
             self.partySizeImageView.image = UIImage(named: partySizeImageName)
             
-            let partySizeDescription: String = partySizeDescriptionDictionary[self.currentPartySize!]!
-            self.partySizeDescriptionLabel.text = partySizeDescription
+            self.partySizeDescriptionLabel.text = "Select Party Size"
         }
         
-        //toggle first touch for tax view
-        firstTouchForTaxView = !firstTouchForTaxView
+        if (splitBillMode == false && currentPartySize! != 1) {
+            beginAnimatingTotalCheckAmountLabel()
+        }
+        
+        partySize = currentPartySize
+        splitBillMode = true
     }
     
     @IBAction func setTipAmountPanGesture(sender: UIPanGestureRecognizer) {
+        //hide decimal pad
+        self.view.endEditing(true)
+        
         var point = sender.locationInView(view)
         var velocity = sender.velocityInView(view)
         var translation = sender.translationInView(view)
         
         let parentView = sender.view
-        tipLabelCenterMax = (parentView?.frame.width)! - 75
-        tipLabelCenterMin = 100
+        tipLabelCenterMax = (parentView?.frame.width)! - 95
+        tipLabelCenterMin = 110
         
         var ticks = (parentView?.frame.width)! - 175
         
         if sender.state == UIGestureRecognizerState.Began {
             self.tipPercentTapStart = self.tipPercent;
+            
             self.tipLabelCenterStart = self.tipAmountLabel.center.x
-            beginAnimatingTipView(self.view)
+            
+            if (firstTouchForTipView) {
+                beginAnimatingTipView(self.view)
+            }
         } else if sender.state == UIGestureRecognizerState.Changed {
             //set the tipAmountLabel text based on pan gesture
-            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 12))
+            self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 9))
             if (self.tipPercent > self.tipPercentMax) {
                 self.tipPercent = self.tipPercentMax;
             } else if (self.tipPercent < self.tipPercentMin) {
                 self.tipPercent = self.tipPercentMin;
             }
-            
+            firstTouchForTipView = false
             tipAmountLabel.text = String(tipPercent)
             
             //set the tipAmountLabel center based on pan gesture
@@ -340,81 +394,118 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             
         } else if sender.state == UIGestureRecognizerState.Ended {
             endAnimatingTipView(self.view)
+            firstTouchForTipView = true
         }
-
+        updateTotalBillAmount(totalBillAmount * Float(Float(tipPercent)/100) + totalBillAmount)
     }
     
     @IBAction func tipViewTapGesture(sender: UITapGestureRecognizer) {
+        //hide decimal pad
+        self.view.endEditing(true)
+        
         let superview = self.view
         
-        if (firstTouchForTaxView) {
-            
+        if (firstTouchForTipView) {
             beginAnimatingTipView(superview)
-            
-//            self.tipAmountLabel.snp_updateConstraints(closure: { (make) in
-//                make.centerX.equalTo(superview)
-//                return
-//            })
-//            
-//            self.TipNameLabel.snp_updateConstraints { (make) in
-//                make.left.equalTo(superview.snp_left).offset(20)
-//                return
-//            }
-//            self.tipPercentLabel.snp_updateConstraints { (make) in
-//                make.right.equalTo(superview.snp_right).offset(-20)
-//                return
-//            }
         } else {
             endAnimatingTipView(superview)
-        
-            
-//            self.tipAmountLabel.snp_updateConstraints { (make) in
-//                make.centerX.equalTo(superview)
-//                return
-//            }
-//            self.TipNameLabel.snp_updateConstraints { (make) in
-//                make.left.equalTo(superview.snp_left).offset(100)
-//                return
-//            }
-//            self.tipPercentLabel.snp_updateConstraints { (make) in
-//                make.right.equalTo(superview.snp_right).offset(-100)
-//                return
-//            }
         }
         
-        firstTouchForTaxView = !firstTouchForTaxView
+        firstTouchForTipView = !firstTouchForTipView
     }
     
     func beginAnimatingTipView(superview: UIView) {
+        let availableDistance = tipLabelCenterMax - tipLabelCenterMin
+        
+        let displacement = CGFloat(tipPercent - 20) * (availableDistance/30)
+        
         UIView.animateWithDuration(0.3, animations: {
-            self.tipAmountLabel.center.x = superview.center.x
+            self.tipAmountLabel.center.x = superview.center.x + CGFloat(displacement)
             self.tipPercentLabel.center.x = superview.frame.width - 30
             self.TipNameLabel.center.x = 50
+            
+            //change font size
+            self.TipNameLabel.transform = CGAffineTransformScale(self.TipNameLabel.transform, self.getTransformScale(50, newFontSize: 65), self.getTransformScale(50.0, newFontSize: 65))
+            self.tipPercentLabel.transform = CGAffineTransformScale(self.tipPercentLabel.transform, self.getTransformScale(50, newFontSize: 65), self.getTransformScale(50.0, newFontSize: 65))
+            self.tipAmountLabel.transform = CGAffineTransformScale(self.tipAmountLabel.transform, self.getTransformScale(50, newFontSize: 32.5), self.getTransformScale(50.0, newFontSize: 32.5))
         })
+    }
+    
+    func getTransformScale(oldFontSize: Float, newFontSize: Float) -> CGFloat {
+        let oldFont = oldFontSize
+        let newFont = newFontSize
+        
+        let labelScale = oldFontSize / newFontSize
+        return CGFloat(labelScale)
     }
     
     func endAnimatingTipView(superview: UIView) {
         UIView.animateWithDuration(0.5, animations: {
-            self.tipAmountLabel.center.x = superview.center.x
-            self.tipPercentLabel.center.x = superview.center.x + 45
-            self.TipNameLabel.center.x = superview.center.x - 60
+            //change font size
+            self.TipNameLabel.transform = CGAffineTransformScale(self.TipNameLabel.transform, self.getTransformScale(65, newFontSize: 50), self.getTransformScale(65, newFontSize: 50))
+            self.tipPercentLabel.transform = CGAffineTransformScale(self.tipPercentLabel.transform, self.getTransformScale(65, newFontSize: 50), self.getTransformScale(65, newFontSize: 50))
+            self.tipAmountLabel.transform = CGAffineTransformScale(self.tipAmountLabel.transform, self.getTransformScale(32.5, newFontSize: 50), self.getTransformScale(32.5, newFontSize: 50))
+            
+            self.tipAmountLabel.center.x = superview.center.x + 17
+            self.tipPercentLabel.center.x = superview.center.x + 72
+            self.TipNameLabel.center.x = superview.center.x - 57.5
         })
     }
     
     func setupTipViewLabels() {
         let superview = self.view
         
+        //change font size
+        self.TipNameLabel.font = self.TipNameLabel.font.fontWithSize(50)
+        self.tipPercentLabel.font = self.tipPercentLabel.font.fontWithSize(50)
+        self.tipAmountLabel.font = self.tipAmountLabel.font.fontWithSize(50)
+        
         self.tipAmountLabel.snp_remakeConstraints { (make) in
-            make.centerX.equalTo(superview)
+            make.centerX.equalTo(superview).offset(17)
         }
         self.TipNameLabel.snp_remakeConstraints { (make) in
-            make.centerX.equalTo(superview).offset(-60)
+            make.centerX.equalTo(superview).offset(-57.5)
         }
         self.tipPercentLabel.snp_remakeConstraints { (make) in
-            make.centerX.equalTo(superview).offset(45)
+            make.centerX.equalTo(superview).offset(72)
         }
     }
     
+    func beginAnimatingTotalCheckAmountLabel() {
+        let parentView = self.totalCheckAmountView
+        
+        if (reRender == true) {
+            UIView.animateWithDuration(0.5, animations: {
+                //change font size
+                self.totalCheckAmountLabel.transform = CGAffineTransformScale(self.totalCheckAmountLabel.transform, self.getTransformScale(30, newFontSize: 60), self.getTransformScale(30, newFontSize: 60))
+                
+                self.totalCheckAmountLabel.center.x = 70
+                self.totalCheckAmountLabel.center.y = 20
+                self.updateTotalBillAmount(self.totalCheckAmount)
+                
+            }) { (true) in
+                self.eachPersonCheckAmountLabel.hidden = false
+            }
+        reRender = false
+        }
+        
+    }
+    
+    func endAnimatingTotalCheckAmountLabel() {
+        let parentView = self.totalCheckAmountView
+        
+        UIView.animateWithDuration(0.5, animations: {
+            //change font size
+            self.totalCheckAmountLabel.transform = CGAffineTransformScale(self.totalCheckAmountLabel.transform, self.getTransformScale(60, newFontSize: 30), self.getTransformScale(60, newFontSize: 30))
+            
+            self.totalCheckAmountLabel.center.x = parentView.frame.width / 2
+            self.totalCheckAmountLabel.center.y = 70
+            
+            self.eachPersonCheckAmountLabel.hidden = true
+        })
+        
+        reRender = true
+    }
     
     
     

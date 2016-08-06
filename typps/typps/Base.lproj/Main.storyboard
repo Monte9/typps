@@ -31,20 +31,20 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="97.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eaC-Qe-IVf">
-                                                <rect key="frame" x="184" y="23" width="33" height="52"/>
-                                                <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="37.5"/>
+                                                <rect key="frame" x="210" y="14" width="44" height="69"/>
+                                                <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="50"/>
                                                 <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tip" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pmv-ce-g91">
-                                                <rect key="frame" x="75" y="23" width="55" height="52"/>
-                                                <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="37.5"/>
+                                                <rect key="frame" x="66" y="14" width="73" height="69"/>
+                                                <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="50"/>
                                                 <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="20" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yXm-zA-rb8">
-                                                <rect key="frame" x="138" y="23" width="45" height="52"/>
-                                                <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="37.5"/>
+                                                <rect key="frame" x="136" y="4" width="78" height="89"/>
+                                                <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="65"/>
                                                 <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -60,11 +60,31 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TQP-dW-g3a">
                                         <rect key="frame" x="0.0" y="226" width="320" height="18"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="total: $0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p6j-en-ofA">
+                                                <rect key="frame" x="60" y="-57" width="187" height="41"/>
+                                                <fontDescription key="fontDescription" name="AvenirNext-Heavy" family="Avenir Next" pointSize="30"/>
+                                                <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="$25 each" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tlw-wJ-hJ1">
+                                                <rect key="frame" x="66" y="-67" width="187" height="41"/>
+                                                <fontDescription key="fontDescription" name="AvenirNext-Heavy" family="Avenir Next" pointSize="30"/>
+                                                <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="p6j-en-ofA" firstAttribute="centerX" secondItem="TQP-dW-g3a" secondAttribute="centerX" id="ivK-1u-S7E"/>
+                                            <constraint firstItem="p6j-en-ofA" firstAttribute="centerY" secondItem="TQP-dW-g3a" secondAttribute="centerY" id="kiH-gH-xZP"/>
+                                            <constraint firstItem="Tlw-wJ-hJ1" firstAttribute="centerY" secondItem="TQP-dW-g3a" secondAttribute="centerY" id="qCv-53-F8s"/>
+                                            <constraint firstItem="Tlw-wJ-hJ1" firstAttribute="centerX" secondItem="TQP-dW-g3a" secondAttribute="centerX" id="szi-p4-YZf"/>
+                                        </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="onN-gU-ZfT">
                                         <rect key="frame" x="0.0" y="97" width="320" height="74"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How was the food?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FK0-XG-7sW">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Party Size" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FK0-XG-7sW">
                                                 <rect key="frame" x="8" y="17" width="239" height="39"/>
                                                 <fontDescription key="fontDescription" name="AvenirNext-Italic" family="Avenir Next" pointSize="28"/>
                                                 <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -97,18 +117,30 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2TU-hl-N9p">
                                         <rect key="frame" x="0.0" y="171" width="320" height="55"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tax OFF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DAw-Q6-LEF">
-                                                <rect key="frame" x="118.5" y="12" width="82" height="31"/>
-                                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="22"/>
-                                                <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="icn-cm-g3p">
+                                                <rect key="frame" x="113" y="10" width="95" height="35"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tax OFF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DAw-Q6-LEF">
+                                                        <rect key="frame" x="6" y="2" width="82" height="31"/>
+                                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="22"/>
+                                                        <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="DAw-Q6-LEF" firstAttribute="centerY" secondItem="icn-cm-g3p" secondAttribute="centerY" id="28i-jQ-Pzx"/>
+                                                    <constraint firstItem="DAw-Q6-LEF" firstAttribute="centerX" secondItem="icn-cm-g3p" secondAttribute="centerX" id="9nm-Yz-oNi"/>
+                                                    <constraint firstAttribute="width" constant="95" id="ChP-gc-veN"/>
+                                                    <constraint firstAttribute="height" constant="35" id="Grj-Ja-Jfj"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstItem="DAw-Q6-LEF" firstAttribute="centerY" secondItem="2TU-hl-N9p" secondAttribute="centerY" id="4zF-1b-GT9"/>
-                                            <constraint firstItem="DAw-Q6-LEF" firstAttribute="centerX" secondItem="2TU-hl-N9p" secondAttribute="centerX" id="8ez-kj-4Re"/>
                                             <constraint firstAttribute="height" constant="55" id="Jve-CW-yZ7"/>
+                                            <constraint firstItem="icn-cm-g3p" firstAttribute="centerX" secondItem="2TU-hl-N9p" secondAttribute="centerX" id="KyX-B3-z6c"/>
+                                            <constraint firstItem="icn-cm-g3p" firstAttribute="centerY" secondItem="2TU-hl-N9p" secondAttribute="centerY" id="Vt2-kh-Ie4"/>
                                         </constraints>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="2mP-Qc-gtG" appends="YES" id="NpN-tU-T2h"/>
@@ -317,7 +349,9 @@
                     </navigationItem>
                     <connections>
                         <outlet property="TipNameLabel" destination="pmv-ce-g91" id="nPy-rj-h7H"/>
+                        <outlet property="buttonTaxView" destination="icn-cm-g3p" id="De3-XT-eAC"/>
                         <outlet property="controlsView" destination="hMD-Zc-QnJ" id="3oh-y8-IMx"/>
+                        <outlet property="eachPersonCheckAmountLabel" destination="Tlw-wJ-hJ1" id="ZoQ-4W-9Cz"/>
                         <outlet property="hiddenMessageLabel" destination="l4I-yZ-GUf" id="svu-PB-A5R"/>
                         <outlet property="mainView" destination="8bC-Xf-vdC" id="iJu-a9-Wed"/>
                         <outlet property="partySizeDescriptionLabel" destination="FK0-XG-7sW" id="NsS-xJ-kla"/>
@@ -335,6 +369,8 @@
                         <outlet property="tipView" destination="EUL-Iu-0Lb" id="uLp-Gd-xmp"/>
                         <outlet property="tipViewTapGesture" destination="hzH-Cq-AVd" id="sSB-Xr-zrP"/>
                         <outlet property="totalBillAmountTextField" destination="27w-yf-lFo" id="3aB-zs-nbp"/>
+                        <outlet property="totalCheckAmountLabel" destination="p6j-en-ofA" id="U5S-q4-Om0"/>
+                        <outlet property="totalCheckAmountView" destination="TQP-dW-g3a" id="6A1-7t-dYi"/>
                         <outlet property="welcomeView" destination="0A4-U0-z5g" id="H0J-yJ-pfZ"/>
                         <outlet property="welcomeViewRestaurantImageView" destination="7Vh-0V-gRQ" id="zoB-pW-H2T"/>
                         <outlet property="welcomeViewRestaurantNameLabel" destination="Jeh-Bd-QIe" id="glt-dG-Trf"/>
