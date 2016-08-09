@@ -58,28 +58,22 @@
                                             <outletCollection property="gestureRecognizers" destination="hzH-Cq-AVd" appends="YES" id="wAR-aa-lxa"/>
                                         </connections>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TQP-dW-g3a">
-                                        <rect key="frame" x="0.0" y="226" width="320" height="18"/>
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TQP-dW-g3a">
+                                        <rect key="frame" x="0.0" y="55" width="320" height="189"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="total: $0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p6j-en-ofA">
-                                                <rect key="frame" x="60" y="-57" width="187" height="41"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="total: $1200000.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p6j-en-ofA">
+                                                <rect key="frame" x="8" y="114" width="304" height="41"/>
                                                 <fontDescription key="fontDescription" name="AvenirNext-Heavy" family="Avenir Next" pointSize="30"/>
                                                 <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="$25 each" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tlw-wJ-hJ1">
-                                                <rect key="frame" x="66" y="-67" width="187" height="41"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="$2500000 each" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tlw-wJ-hJ1">
+                                                <rect key="frame" x="8" y="104" width="304" height="41"/>
                                                 <fontDescription key="fontDescription" name="AvenirNext-Heavy" family="Avenir Next" pointSize="30"/>
                                                 <color key="textColor" red="0.1019607843" green="0.73725490199999999" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstItem="p6j-en-ofA" firstAttribute="centerX" secondItem="TQP-dW-g3a" secondAttribute="centerX" id="ivK-1u-S7E"/>
-                                            <constraint firstItem="p6j-en-ofA" firstAttribute="centerY" secondItem="TQP-dW-g3a" secondAttribute="centerY" id="kiH-gH-xZP"/>
-                                            <constraint firstItem="Tlw-wJ-hJ1" firstAttribute="centerY" secondItem="TQP-dW-g3a" secondAttribute="centerY" id="qCv-53-F8s"/>
-                                            <constraint firstItem="Tlw-wJ-hJ1" firstAttribute="centerX" secondItem="TQP-dW-g3a" secondAttribute="centerX" id="szi-p4-YZf"/>
-                                        </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="onN-gU-ZfT">
                                         <rect key="frame" x="0.0" y="97" width="320" height="74"/>

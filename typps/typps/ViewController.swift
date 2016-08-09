@@ -89,7 +89,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var firstTouchForTaxView: Bool = true
     var firstTouchForTipView: Bool = true
     var firstTouchForPartySizeView: Bool = true
-    var reRender: Bool = true
     
     //Outlets
     @IBOutlet weak var totalBillAmountTextField: UITextField!
@@ -262,7 +261,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             finalAmount = total
         }
         
-        self.eachPersonCheckAmountLabel.text = "$\(ceil(finalAmount/Float(partySize!))) each"
+        finalAmount = ceil(finalAmount)
+        
+        print(currentPartySize)
+        
+        self.eachPersonCheckAmountLabel.text = "$\(ceil(finalAmount/Float(currentPartySize!))) each"
         self.totalCheckAmountLabel.text = "total $\(finalAmount)"
     }
     
@@ -469,42 +472,49 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         self.tipPercentLabel.snp_remakeConstraints { (make) in
             make.centerX.equalTo(superview).offset(72)
         }
+        
+        self.totalCheckAmountLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(0)
+            make.centerY.equalTo(superview).offset(150)
+        }
+        
+        self.eachPersonCheckAmountLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(0)
+            make.centerY.equalTo(superview).offset(150)
+        }
+        
+        self.eachPersonCheckAmountLabel.hidden = true
     }
     
     func beginAnimatingTotalCheckAmountLabel() {
         let parentView = self.totalCheckAmountView
         
-        if (reRender == true) {
-            UIView.animateWithDuration(0.5, animations: {
-                //change font size
-                self.totalCheckAmountLabel.transform = CGAffineTransformScale(self.totalCheckAmountLabel.transform, self.getTransformScale(30, newFontSize: 60), self.getTransformScale(30, newFontSize: 60))
-                
-                self.totalCheckAmountLabel.center.x = 70
-                self.totalCheckAmountLabel.center.y = 20
-                self.updateTotalBillAmount(self.totalCheckAmount)
-                
-            }) { (true) in
-                self.eachPersonCheckAmountLabel.hidden = false
-            }
-        reRender = false
+        UIView.animateWithDuration(0.5, animations: {
+            //change font size
+            self.totalCheckAmountLabel.transform = CGAffineTransformScale(self.totalCheckAmountLabel.transform, self.getTransformScale(30, newFontSize: 60), self.getTransformScale(30, newFontSize: 60))
+            
+            self.totalCheckAmountLabel.center.x = 70
+            self.totalCheckAmountLabel.center.y = 20
+            self.updateTotalBillAmount(self.totalCheckAmount)
+            
+        }) { (true) in
+            self.eachPersonCheckAmountLabel.hidden = false
         }
-        
     }
     
     func endAnimatingTotalCheckAmountLabel() {
         let parentView = self.totalCheckAmountView
+        let superview = self.view
         
         UIView.animateWithDuration(0.5, animations: {
             //change font size
             self.totalCheckAmountLabel.transform = CGAffineTransformScale(self.totalCheckAmountLabel.transform, self.getTransformScale(60, newFontSize: 30), self.getTransformScale(60, newFontSize: 30))
             
-            self.totalCheckAmountLabel.center.x = parentView.frame.width / 2
-            self.totalCheckAmountLabel.center.y = 70
+            self.totalCheckAmountLabel.center.x = (parentView?.frame.width)! / 2
+            self.totalCheckAmountLabel.center.y = 40
             
             self.eachPersonCheckAmountLabel.hidden = true
         })
-        
-        reRender = true
     }
     
     
