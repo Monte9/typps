@@ -121,7 +121,6 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstItem="DAw-Q6-LEF" firstAttribute="centerY" secondItem="icn-cm-g3p" secondAttribute="centerY" id="28i-jQ-Pzx"/>
                                                     <constraint firstItem="DAw-Q6-LEF" firstAttribute="centerX" secondItem="icn-cm-g3p" secondAttribute="centerX" id="9nm-Yz-oNi"/>

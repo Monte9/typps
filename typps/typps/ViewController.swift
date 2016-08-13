@@ -263,8 +263,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         finalAmount = ceil(finalAmount)
         
-        print(currentPartySize)
-        
         self.eachPersonCheckAmountLabel.text = "$\(ceil(finalAmount/Float(currentPartySize!))) each"
         self.totalCheckAmountLabel.text = "total $\(finalAmount)"
     }
@@ -541,6 +539,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         check.partySize = currentPartySize!
         check.finalCheckAmount = totalCheckAmount
         
+        
         //write the check object to db for persistence
         try! realmObject.write() {
             realmObject.add(check)
@@ -555,7 +554,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.restaurantImageView.hidden = true
             self.hiddenMessageLabel.hidden = false
             self.yelpButton.hidden = true
+            self.partySizeDescriptionLabel.hidden = true
+            self.partySizeImageView.hidden = true
             self.saveButton.hidden = true
+            self.taxView.hidden = true
         }) { (true) in
             UIView.animateWithDuration(1.5, animations: {
                 self.mainView.backgroundColor = UIColor.whiteColor()
@@ -564,6 +566,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     self.hiddenMessageLabel.hidden = true
                     self.yelpButton.hidden = false
                     self.saveButton.hidden = false
+                    self.partySizeDescriptionLabel.hidden = false
+                    self.partySizeImageView.hidden = false
+                    self.taxView.hidden = false
             })
         }
     }
