@@ -259,13 +259,17 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     func updateTotalBillAmount(total:Float) {
         self.totalCheckAmount = ceil(total)
         
+        print(total)
+        
         var finalAmount = total
-     
+        
         if (isTaxEnabled) {
             finalAmount = total + (total * 0.0875)
         } else {
             finalAmount = total
         }
+        
+        print(finalAmount)
         
         finalAmount = ceil(finalAmount)
         
@@ -480,7 +484,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.taxLabel.textColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             self.buttonTaxView.backgroundColor = UIColor.whiteColor()
         }
-        
         updateTotalBillAmount(totalBillAmount * Float(Float(tipPercent)/100) + totalBillAmount)
     }
     
@@ -582,28 +585,28 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func checkSavedAnimation() {
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animateWithDuration(1.0, animations: {
             self.mainView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             self.restaurantImageView.hidden = true
-            self.hiddenMessageLabel.hidden = false
             self.yelpButton.hidden = true
-            self.partySizeDescriptionLabel.hidden = true
-            self.partySizeImageView.hidden = true
             self.saveButton.hidden = true
             self.taxView.hidden = true
         }) { (true) in
-            UIView.animateWithDuration(1.5, animations: {
-                self.mainView.backgroundColor = UIColor.whiteColor()
+            UIView.animateWithDuration(1.0, animations: {
+                self.hiddenMessageLabel.hidden = false
                 }, completion: { (true) in
-                    self.restaurantImageView.hidden = false
-                    self.hiddenMessageLabel.hidden = true
-                    self.yelpButton.hidden = false
-                    self.saveButton.hidden = false
-                    self.partySizeDescriptionLabel.hidden = false
-                    self.partySizeImageView.hidden = false
-                    self.taxView.hidden = false
+                    UIView.animateWithDuration(3, animations: {
+                        self.mainView.backgroundColor = UIColor.whiteColor()
+                        self.hiddenMessageLabel.alpha = 0.0
+                        }, completion: { (true) in
+                            self.restaurantImageView.hidden = false
+                            self.yelpButton.hidden = false
+                            self.saveButton.hidden = false
+                            self.taxView.hidden = false
+                    })
             })
         }
+        self.hiddenMessageLabel.alpha = 1.0
     }
     
     @IBAction func openRestaurantInYelp(sender: AnyObject) {
