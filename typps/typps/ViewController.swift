@@ -168,15 +168,17 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.tipPercent = (settings.first?.tipPercent)!
             self.isTaxEnabled = (settings.first?.isTaxEnabled)!
             self.partySize = (settings.first?.partySize)!
+            self.currentPartySize = partySize
             
 //            if settingsCancelled == true {
-//                self.currentPartySize = (settings.first?.currentPartySize)!
+//                self.currentPartySize = partySize
+//                print("current stays: \(currentPartySize)")
 //            } else {
-//                self.currentPartySize = (settings.first?.currentPartySize)!
+//                self.currentPartySize = partySize
+//                print("current set to new one: \(currentPartySize)")
 //            }
-            self.currentPartySize = partySize
         }
-        
+        setupLabelsFromSettings()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -214,6 +216,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         hiddenMessageLabel.hidden = true
         eachPersonCheckAmountLabel.hidden = true
+    }
+    
+    @IBAction func mainViewDismissKeyboard(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
@@ -453,8 +459,35 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         })
     }
     
+    func setupLabelsFromSettings() {
+//        self.tipPercent = (settings.first?.tipPercent)!
+//        self.isTaxEnabled = (settings.first?.isTaxEnabled)!
+//        self.partySize = (settings.first?.partySize)!
+//        self.currentPartySize = partySize
+        
+        print("setting up now..")
+        
+        tipAmountLabel.text = String(tipPercent)
+        
+        if (isTaxEnabled) {
+            self.taxLabel.text = "Tax ON"
+            self.taxLabel.textColor = UIColor.whiteColor()
+            self.buttonTaxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha:
+                1)
+            self.buttonTaxView.layer.cornerRadius = 10
+        } else {
+            self.taxLabel.text = "Tax OFF"
+            self.taxLabel.textColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+            self.buttonTaxView.backgroundColor = UIColor.whiteColor()
+        }
+        
+        updateTotalBillAmount(totalBillAmount * Float(Float(tipPercent)/100) + totalBillAmount)
+    }
+    
     func setupTipViewLabels() {
         let superview = self.view
+        
+        print("setup tip View labels")
         
         //change font size
         self.TipNameLabel.font = self.TipNameLabel.font.fontWithSize(50)

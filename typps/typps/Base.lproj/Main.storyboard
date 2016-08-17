@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="J3J-2R-BvS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="J3J-2R-BvS">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -101,9 +101,7 @@
                                             <constraint firstItem="65f-VK-tom" firstAttribute="leading" secondItem="FK0-XG-7sW" secondAttribute="trailing" constant="8" id="AJu-fj-bMd"/>
                                             <constraint firstAttribute="trailing" secondItem="65f-VK-tom" secondAttribute="trailing" constant="20" id="Ey7-Nz-EaE"/>
                                             <constraint firstItem="65f-VK-tom" firstAttribute="centerY" secondItem="onN-gU-ZfT" secondAttribute="centerY" id="F9T-2d-d35"/>
-                                            <constraint firstItem="65f-VK-tom" firstAttribute="top" secondItem="onN-gU-ZfT" secondAttribute="top" constant="14" id="KGC-od-e4f"/>
                                             <constraint firstItem="FK0-XG-7sW" firstAttribute="leading" secondItem="onN-gU-ZfT" secondAttribute="leading" constant="8" id="PL9-nx-1cL"/>
-                                            <constraint firstAttribute="bottom" secondItem="65f-VK-tom" secondAttribute="bottom" constant="15" id="RFS-jL-oW6"/>
                                             <constraint firstItem="FK0-XG-7sW" firstAttribute="centerY" secondItem="onN-gU-ZfT" secondAttribute="centerY" id="TSg-QE-L0A"/>
                                             <constraint firstAttribute="height" constant="74" id="i0E-Rm-iup"/>
                                         </constraints>
@@ -306,6 +304,7 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="hMD-Zc-QnJ" firstAttribute="top" secondItem="ZXU-S7-Yt0" secondAttribute="bottom" id="5Oy-ke-z8I"/>
                             <constraint firstAttribute="trailing" secondItem="hMD-Zc-QnJ" secondAttribute="trailing" id="6iT-lv-qTA"/>
@@ -324,6 +323,9 @@
                             <constraint firstItem="l4I-yZ-GUf" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pxd-as-dEc"/>
                             <constraint firstItem="ZXU-S7-Yt0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="wsd-37-YwC"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="xPS-Xp-Ixd" appends="YES" id="quU-QS-G8u"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="hMP-ms-RXO">
                         <barButtonItem key="leftBarButtonItem" image="history" id="4lc-BI-9Xb">
@@ -393,6 +395,12 @@
                     <connections>
                         <action selector="tipViewTapGesture:" destination="BYZ-38-t0r" id="Aeh-5D-Dz2"/>
                         <outlet property="delegate" destination="EUL-Iu-0Lb" id="258-ch-nyX"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="xPS-Xp-Ixd">
+                    <connections>
+                        <action selector="mainViewDismissKeyboard:" destination="BYZ-38-t0r" id="6T6-9F-URG"/>
+                        <outlet property="delegate" destination="8bC-Xf-vdC" id="NA8-Wd-bnv"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
