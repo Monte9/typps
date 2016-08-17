@@ -45,6 +45,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     var nearbyBusinesses: [YelpBusiness]! = [YelpBusiness]()
     var minDistance: String?
+    var locationError: Bool? = false
     
     //split bill variables
     var splitBillMode : Bool = false
@@ -99,6 +100,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var resultsCountLabel: UILabel!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var hiddenMessageLabel: UILabel!
+    @IBOutlet weak var loggerView: UIView!
+    @IBOutlet weak var enableLocationView: UIView!
     
     //Views
     @IBOutlet weak var welcomeView: UIView!
@@ -113,8 +116,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         // Delegate for LocationService
         LocationService.sharedInstance.delegate = self
         
-        //show loading indicator
-        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        LocationService.sharedInstance.startUpdatingLocation()
         
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
@@ -145,8 +147,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     override func viewWillAppear(animated: Bool) {
         
-        //Fetch current location and find current restaurant/bar
-        LocationService.sharedInstance.startUpdatingLocation()
+//        if (isLocationEnabled == true && locationError == true) {
+//            //Fetch current location and find current restaurant/bar
+//            LocationService.sharedInstance.startUpdatingLocation()
+//            locationError = false
+//        }
         
         let settings = realmObject.objects(Settings)
         
@@ -156,6 +161,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             newSettings.partySize = 1
             newSettings.tipPercent = 20
             newSettings.currentPartySize = 1
+            
+            self.tipPercent = 20
+            self.isTaxEnabled = false
+            self.partySize = 1
+            self.currentPartySize = partySize
             
             //write the settings object to db for persistence
             try! realmObject.write() {
@@ -259,8 +269,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     func updateTotalBillAmount(total:Float) {
         self.totalCheckAmount = ceil(total)
         
-        print(total)
-        
         var finalAmount = total
         
         if (isTaxEnabled) {
@@ -269,12 +277,20 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             finalAmount = total
         }
         
-        print(finalAmount)
-        
         finalAmount = ceil(finalAmount)
         
-        self.eachPersonCheckAmountLabel.text = "$\(ceil(finalAmount/Float(currentPartySize!))) each"
-        self.totalCheckAmountLabel.text = "total $\(finalAmount)"
+        if(currentPartySize == nil) {
+            currentPartySize = partySize
+        }
+        
+        if(finalAmount > 0) {
+            self.eachPersonCheckAmountLabel.text = "$\(ceil(finalAmount/Float(currentPartySize!))) each"
+            self.totalCheckAmountLabel.text = "total $\(finalAmount)"
+        } else {
+            self.eachPersonCheckAmountLabel.text = "$ 0 each"
+            self.totalCheckAmountLabel.text = "total $0"
+        }
+        
     }
     
     @IBAction func taxViewTapGesture(sender: UITapGestureRecognizer) {
@@ -596,6 +612,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.restaurantImageView.hidden = true
             self.yelpButton.hidden = true
             self.saveButton.hidden = true
+            self.partySizeDescriptionLabel.hidden = true
+            self.partySizeImageView.hidden = true
             self.taxView.hidden = true
         }) { (true) in
             UIView.animateWithDuration(1.0, animations: {
@@ -609,6 +627,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                             self.yelpButton.hidden = false
                             self.saveButton.hidden = false
                             self.taxView.hidden = false
+                            self.partySizeDescriptionLabel.hidden = false
+                            self.partySizeImageView.hidden = false
                     })
             })
         }
@@ -623,14 +643,27 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
       //  notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
     }
     
+    @IBAction func launchSettingsToEnableLocation(sender: UITapGestureRecognizer) {
+        UIApplication.sharedApplication().openURL(NSURL(string:"prefs:root=LOCATION_SERVICES")!)
+    }
+    
+    
     func tracingLocation(currentLocation: CLLocation) {
        // print("Starting yelp search with params: [food, \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)]")
+        
+        //show loading indicator
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        self.enableLocationView.hidden = true
+        self.loggerView.hidden = false
         startYelpSearch("food", latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
         LocationService.sharedInstance.stopUpdatingLocation()
     }
     
     func tracingLocationDidFailWithError(error: NSError) {
         print("Location produced error: \(error)")
+        self.locationError = true
+        self.loggerView.hidden = true
+        self.enableLocationView.hidden = false
     }
     
     func startYelpSearch(term: String, latitude: NSNumber?, longitude: NSNumber?) {
@@ -658,6 +691,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     self.resultsCountLabel.text = String("\(self.nearbyBusinesses.count) possible matches")
                 }
                 
+                print(self.nearbyBusinesses.count)
+                
                 for business in self.nearbyBusinesses {
                     if let imageURL = business.imageURL {
                         self.restaurantImageView.setImageWithURL(imageURL)
@@ -665,10 +700,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     }
                     self.restaurantNameLabel.text = business.name
                     self.welcomeViewRestaurantNameLabel.text = business.name
-                    print("\(business.name) is \(business.distance) mi away from current location")
+                    
+                    // Hide HUD once network request comes back (must be done on main UI thread)
+                    MBProgressHUD.hideHUDForView(self.view, animated: true)
                 }
-                // Hide HUD once network request comes back (must be done on main UI thread)
-                MBProgressHUD.hideHUDForView(self.view, animated: true)
             }
         }
     }

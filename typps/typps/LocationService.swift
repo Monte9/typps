@@ -44,9 +44,9 @@ class LocationService: NSObject, CLLocationManagerDelegate {
             // you have 2 choice
             // 1. requestAlwaysAuthorization
             // 2. requestWhenInUseAuthorization
-            locationManager.requestAlwaysAuthorization()
+            locationManager.requestWhenInUseAuthorization()
         }
-        
+         
         locationManager.desiredAccuracy = kCLLocationAccuracyBest // The accuracy of the location data
         locationManager.distanceFilter = 200 // The minimum distance (measured in meters) a device must move horizontally before an update event is generated.
         locationManager.delegate = self
