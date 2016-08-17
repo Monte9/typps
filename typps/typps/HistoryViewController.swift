@@ -51,6 +51,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         didOpenSecondaryView = true
         
+        settingsCancelled = true
+        
         //customize status bar notification
         notification.notificationLabelBackgroundColor = UIColor.whiteColor()
         notification.notificationLabelTextColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)

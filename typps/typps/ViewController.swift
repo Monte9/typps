@@ -188,7 +188,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
 //                print("current set to new one: \(currentPartySize)")
 //            }
         }
-        setupLabelsFromSettings()
+        
+        if (settingsCancelled == false) {
+            setupLabelsFromSettings()
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -225,7 +228,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         }
         
         hiddenMessageLabel.hidden = true
-        eachPersonCheckAmountLabel.hidden = true
+        if (splitBillMode == true) {
+            self.eachPersonCheckAmountLabel.hidden = false
+        }
     }
     
     @IBAction func mainViewDismissKeyboard(sender: UITapGestureRecognizer) {
@@ -594,8 +599,21 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         check.inputBillAmount = totalBillAmount
         check.totalTipAmount = tipPercent
         check.isTaxIncluded = isTaxEnabled
-        check.partySize = currentPartySize!
-        check.finalCheckAmount = totalCheckAmount
+        
+        if (currentPartySize == partySize) {
+            check.partySize = currentPartySize!
+        } else {
+            check.partySize = 1
+        }
+        
+        var finalAmount = totalCheckAmount
+        
+        if (isTaxEnabled) {
+            finalAmount = totalCheckAmount + (totalCheckAmount * 0.0875)
+        } else {
+            finalAmount = totalCheckAmount
+        }
+        check.finalCheckAmount = ceil(finalAmount)
         
         
         //write the check object to db for persistence

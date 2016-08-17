@@ -11,7 +11,7 @@ import RealmSwift
 import Realm
 import AudioToolbox
 
-var settingsCancelled: Bool?
+var settingsCancelled: Bool? = false
 
 class SettingsViewController: UIViewController {
     
