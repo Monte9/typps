@@ -464,12 +464,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func setupLabelsFromSettings() {
-//        self.tipPercent = (settings.first?.tipPercent)!
-//        self.isTaxEnabled = (settings.first?.isTaxEnabled)!
-//        self.partySize = (settings.first?.partySize)!
-//        self.currentPartySize = partySize
         
         print("setting up now..")
+        let superview = self.view
         
         tipAmountLabel.text = String(tipPercent)
         
@@ -485,6 +482,20 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.buttonTaxView.backgroundColor = UIColor.whiteColor()
         }
         updateTotalBillAmount(totalBillAmount * Float(Float(tipPercent)/100) + totalBillAmount)
+        
+        firstTouchForPartySizeView = true
+        
+        let partySizeImageName: String = partySizeDictionary[self.partySize!]!
+        let selectedPartySizeImageName = partySizeImageName
+        
+        self.partySizeImageView.image = UIImage(named: selectedPartySizeImageName)
+        let selectedPartySizeDescription: String = selectedPartySizeDescriptionDictionary[self.partySize!]!
+        self.partySizeDescriptionLabel.text = "Double tap to confirm party size"
+        
+        if (splitBillMode == true && partySize != 1) {
+            endAnimatingTotalCheckAmountLabel()
+        }
+        splitBillMode = false
     }
     
     func setupTipViewLabels() {
@@ -550,11 +561,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.eachPersonCheckAmountLabel.hidden = true
         })
     }
-    
-    
-    
-    
-    
     
     
     
