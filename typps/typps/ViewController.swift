@@ -637,16 +637,19 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             UIView.animateWithDuration(1.0, animations: {
                 self.hiddenMessageLabel.hidden = false
                 }, completion: { (true) in
-                    UIView.animateWithDuration(3, animations: {
-                        self.mainView.backgroundColor = UIColor.whiteColor()
+                    UIView.animateWithDuration(1.5, animations: {
                         self.hiddenMessageLabel.alpha = 0.0
                         }, completion: { (true) in
-                            self.restaurantImageView.hidden = false
-                            self.yelpButton.hidden = false
-                            self.saveButton.hidden = false
-                            self.taxView.hidden = false
-                            self.partySizeDescriptionLabel.hidden = false
-                            self.partySizeImageView.hidden = false
+                            UIView.animateWithDuration(1.0, animations: { 
+                                self.mainView.backgroundColor = UIColor.whiteColor()
+                                }, completion: { (true) in
+                                    self.restaurantImageView.hidden = false
+                                    self.yelpButton.hidden = false
+                                    self.saveButton.hidden = false
+                                    self.taxView.hidden = false
+                                    self.partySizeDescriptionLabel.hidden = false
+                                    self.partySizeImageView.hidden = false
+                            })
                     })
             })
         }
