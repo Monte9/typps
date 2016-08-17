@@ -205,7 +205,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         navigationBar!.translucent = true
         
         //set navigation bar title with color
-        navigationItem.title = "tyypps"
+        navigationItem.title = "typs"
         navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
         
         //add rounded edges to restaurantImageView
