@@ -365,10 +365,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         self.view.endEditing(true)
     }
     
+    //first point of entry in the app
     @IBAction func textFieldDidChange(sender: AnyObject) {
-        //first point of entry in the app
-        
-        //gets the user input for the totalBill Amount Input field
+
+        //gets the user input for the totalBillAmount input field
         if (totalBillAmountTextField.text == "") {
             totalBillAmountTextField.text = "$"
             welcomeView.hidden = false
@@ -385,17 +385,15 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             if let total = self.totalBillAmountTextField.text {
                 let index: String.Index = total.startIndex.advancedBy(1)
                 
+                //get the entered billAmount value
                 if let totalBillAmount = Float(total.substringFromIndex(index)) {
                     self.totalBillAmount = totalBillAmount
                     
-                    if isTaxEnabled {
-                        let tempTotalBillAmount = totalBillAmount + Float(totalBillAmount * 0.0875)
-                        
-                        updateTotalBillAmount(tempTotalBillAmount + (tempTotalBillAmount * Float(tipPercent) / 100 ))
-                    } else {
-                        updateTotalBillAmount(totalBillAmount + (totalBillAmount * Float(tipPercent) / 100 ))
-                    }
+                    //updateTotalBillAmount based on the set label values
+                    updateTotalBillAmount(totalBillAmount * Float(Float(tipPercent)/100) + totalBillAmount)
+                    
                 } else {
+                    //in case of invalid entry (alphabet or symbol)
                     notification.displayNotificationWithMessage("invalid entry!", forDuration: 1.0)
                 }
             }
@@ -407,6 +405,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         
         var finalAmount = total
         
+        //add tax on the finalAmount
         if (isTaxEnabled) {
             finalAmount = total + (total * 0.0875)
         } else {
@@ -419,14 +418,15 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             currentPartySize = partySize
         }
         
+        //set the finalCheckAmount and split the bill amount based on partySize
         if(finalAmount > 0) {
             self.eachPersonCheckAmountLabel.text = "$\(ceil(finalAmount/Float(currentPartySize!))) each"
             self.totalCheckAmountLabel.text = "total $\(finalAmount)"
         } else {
-            self.eachPersonCheckAmountLabel.text = "$ 0 each"
+            self.eachPersonCheckAmountLabel.text = "$0 each"
             self.totalCheckAmountLabel.text = "total $0"
         }
-        
+   
     }
     
     @IBAction func taxViewTapGesture(sender: UITapGestureRecognizer) {
@@ -453,6 +453,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         firstTouchForTaxView = !firstTouchForTaxView
     }
     
+    //this enables touch gestures on the partySizeImageView within the PartySizeView
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
         let touchLocation = touch.locationInView(self.partySizeView)
         return !CGRectContainsPoint(self.partySizeDescriptionLabel.frame, touchLocation)
@@ -500,7 +501,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.partySizeDescriptionLabel.text = selectedPartySizeDescription
         } else {
             self.partySizeImageView.image = UIImage(named: partySizeImageName)
-            
             self.partySizeDescriptionLabel.text = "Select Party Size"
         }
         
@@ -515,16 +515,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBAction func setTipAmountPanGesture(sender: UIPanGestureRecognizer) {
         //hide decimal pad
         self.view.endEditing(true)
-        
-        var point = sender.locationInView(view)
-        var velocity = sender.velocityInView(view)
-        var translation = sender.translationInView(view)
-        
         let parentView = sender.view
+        
+        let translation = sender.translationInView(view)
         tipLabelCenterMax = (parentView?.frame.width)! - 95
         tipLabelCenterMin = 110
-        
-        var ticks = (parentView?.frame.width)! - 175
         
         if sender.state == UIGestureRecognizerState.Began {
             self.tipPercentTapStart = self.tipPercent;
@@ -537,6 +532,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         } else if sender.state == UIGestureRecognizerState.Changed {
             //set the tipAmountLabel text based on pan gesture
             self.tipPercent = (self.tipPercentTapStart + Int(translation.x / 9))
+            
             if (self.tipPercent > self.tipPercentMax) {
                 self.tipPercent = self.tipPercentMax;
             } else if (self.tipPercent < self.tipPercentMin) {
@@ -559,7 +555,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             endAnimatingTipView(self.view)
             firstTouchForTipView = true
         }
+        
+        //updateTotalBillAmount based on the set label values
         updateTotalBillAmount(totalBillAmount * Float(Float(tipPercent)/100) + totalBillAmount)
+        
     }
     
     @IBAction func tipViewTapGesture(sender: UITapGestureRecognizer) {
@@ -579,7 +578,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     func beginAnimatingTipView(superview: UIView) {
         let availableDistance = tipLabelCenterMax - tipLabelCenterMin
-        
         let displacement = CGFloat(tipPercent - 20) * (availableDistance/30)
         
         UIView.animateWithDuration(0.3, animations: {
@@ -595,14 +593,13 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func getTransformScale(oldFontSize: Float, newFontSize: Float) -> CGFloat {
-        let oldFont = oldFontSize
-        let newFont = newFontSize
-        
         let labelScale = oldFontSize / newFontSize
+        
         return CGFloat(labelScale)
     }
     
     func endAnimatingTipView(superview: UIView) {
+        
         UIView.animateWithDuration(0.5, animations: {
             //change font size
             self.TipNameLabel.transform = CGAffineTransformScale(self.TipNameLabel.transform, self.getTransformScale(65, newFontSize: 50), self.getTransformScale(65, newFontSize: 50))
@@ -616,7 +613,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     func beginAnimatingTotalCheckAmountLabel() {
-        let parentView = self.totalCheckAmountView
         
         UIView.animateWithDuration(0.5, animations: {
             //change font size
@@ -625,7 +621,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.totalCheckAmountLabel.center.x = 70
             self.totalCheckAmountLabel.center.y = 20
             self.updateTotalBillAmount(self.totalCheckAmount)
-            
         }) { (true) in
             self.eachPersonCheckAmountLabel.hidden = false
         }
@@ -633,7 +628,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     
     func endAnimatingTotalCheckAmountLabel() {
         let parentView = self.totalCheckAmountView
-        let superview = self.view
         
         UIView.animateWithDuration(0.5, animations: {
             //change font size
@@ -645,9 +639,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.eachPersonCheckAmountLabel.hidden = true
         })
     }
-    
-    
-    
     
     @IBAction func welcomeViewTapped(sender: UITapGestureRecognizer) {
         //hide decimal pad
@@ -663,31 +654,39 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         check.totalTipAmount = tipPercent
         check.isTaxIncluded = isTaxEnabled
         
-        if (currentPartySize == partySize) {
+        if (currentPartySize == partySize && splitBillMode == true) {
             check.partySize = currentPartySize!
         } else {
             check.partySize = 1
         }
         
-        var finalAmount = totalCheckAmount
+        //calculate finalCheckAmount
+        let total = ceil(totalCheckAmount)
+        var finalAmount = total
         
+        //add tax on the finalAmount
         if (isTaxEnabled) {
-            finalAmount = totalCheckAmount + (totalCheckAmount * 0.0875)
+            finalAmount = total + (total * 0.0875)
         } else {
-            finalAmount = totalCheckAmount
+            finalAmount = total
         }
         check.finalCheckAmount = ceil(finalAmount)
-        
         
         //write the check object to db for persistence
         try! realmObject.write() {
             realmObject.add(check)
-            print("Check saved.. check db for details")
+            
+//DEBUG ONLY
+            debugModeOutput("Saved a new check in saveButtonPressed() method")
+            
+            //show the check saved animation
             checkSavedAnimation()
         }
     }
     
     func checkSavedAnimation() {
+        
+        //LOL, how pretty!
         UIView.animateWithDuration(1.0, animations: {
             self.mainView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
             self.restaurantImageView.hidden = true
@@ -716,15 +715,12 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     })
             })
         }
+        
         self.checkSavedMessageLabel.alpha = 1.0
     }
     
     @IBAction func openRestaurantInYelp(sender: AnyObject) {
         notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
-    }
-    
-    @IBAction func historyNavigationBarButtonPressed(sender: AnyObject) {
-      //  notification.displayNotificationWithMessage("coming soon.", forDuration: 1.0)
     }
     
     @IBAction func launchSettingsToEnableLocation(sender: UITapGestureRecognizer) {
@@ -800,8 +796,8 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         print("************DEBUG MODE: \(origin)")
         print("isTaxEnabled: \(isTaxEnabled)")
         print("tipPercent: \(tipPercent)")
-        print("partySize: \(partySize)")
-        print("currentPartySize: \(currentPartySize)")
+        print("partySize: \(Int(partySize!))")
+        print("currentPartySize: \(Int(currentPartySize!))")
         print("END DEBUG MODE************")
         print()
     }

@@ -358,7 +358,6 @@
                         <barButtonItem key="leftBarButtonItem" image="history" id="4lc-BI-9Xb">
                             <color key="tintColor" red="0.10196078431372549" green="0.73725490196078436" blue="0.61176470588235299" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="historyNavigationBarButtonPressed:" destination="BYZ-38-t0r" id="561-sp-zv2"/>
                                 <segue destination="gXC-FB-Wct" kind="modal" id="29K-Wi-ANw"/>
                             </connections>
                         </barButtonItem>
