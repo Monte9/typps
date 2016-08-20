@@ -1,8 +1,8 @@
 //
 //  ViewController.swift
-//  typps
+//  typs
 //
-//  Created by Monte with Pillow on 7/4/16.
+//  Created by Monte Thakkar on 7/4/16.
 //  Copyright © 2016 Monte Thakkar. All rights reserved.
 //
 
@@ -14,6 +14,7 @@ import Realm
 import AudioToolbox
 import SnapKit
 
+//used to check if either history or settings tab was opened
 var didOpenSecondaryView: Bool?
 
 class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
@@ -21,8 +22,17 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     // instance of Realm object
     let realmObject = try! Realm()
     
-    //current formatter for different currencies
-    var currencyFormatter: NSNumberFormatter?
+    //restaurants returned from yelp search (Yelp Business model class array)
+    var nearbyBusinesses: [YelpBusiness]! = [YelpBusiness]()
+    
+    //min distance of restuarants from current location
+    var minDistance: String?
+    
+    //Yelp Business model class variable (restaurant at current location)
+    var business: YelpBusiness?
+    
+    //variable to check if the location failed (no current location available)
+    var locationError: Bool? = false
     
     //tip percent variables
     var isTaxEnabled: Bool = false
@@ -31,11 +41,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     let tipPercentMin: Int = 10
     var tipPercentTapStart: Int = 20
     
+    //check & bill amount variables
     var totalBillAmount: Float = 0
     var totalCheckAmount: Float = 0
-    var checkTotalViewHeight: CGFloat?
-    
-    var business: YelpBusiness?
     
     //tip label position variables
     var tipLabelCenter: CGFloat = 220
@@ -43,22 +51,27 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     var tipLabelCenterMin: CGFloat = 0
     var tipLabelCenterStart: CGFloat = 0
     
-    var nearbyBusinesses: [YelpBusiness]! = [YelpBusiness]()
-    var minDistance: String?
-    var locationError: Bool? = false
-    
     //split bill variables
-    var splitBillMode : Bool = false
+    var splitBillMode: Bool = false
     var partySize: Int?
     var currentPartySize: Int?
-    var fourPlusPartySize: Int?
+    
+    //Variables for controlsView actions
+    var firstTouchForTaxView: Bool = true
+    var firstTouchForTipView: Bool = true
+    var firstTouchForPartySizeView: Bool = true
+    
+    //party size dictionaries with values as names of images to display
     var partySizeDictionary: [Int:String] = [1: "pika", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"]
     var selectedPartySizeDescriptionDictionary: [Int:String] = [1: "I am here for you!", 2: "Is it a date?", 3: "Who's the third wheel?", 4: "Like a pack of friends", 5: "The five horsemen", 6: "1..2..3..4..5..6", 7: "Seven 11", 8: "Eight sounds fun", 9: "That's too many"]
     
     //Main UIView
     @IBOutlet var mainView: UIView!
     
-    //Controls View -> Tip, tax, party size, total check
+    //Views
+    @IBOutlet weak var welcomeView: UIView!
+    
+    //Controls View -> Tip, tax, party size, total check amount views
     @IBOutlet weak var controlsView: UIView!
     
     //Views within controlsView
@@ -67,7 +80,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var tipView: UIView!
     @IBOutlet weak var buttonTaxView: UIView!
     @IBOutlet weak var totalCheckAmountView: UIView!
-    
     
     //Outlets within controlsView
     @IBOutlet weak var taxLabel: UILabel!
@@ -79,17 +91,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var totalCheckAmountLabel: UILabel!
     @IBOutlet weak var eachPersonCheckAmountLabel: UILabel!
     
-    
-    
     //Gesture recognizers for controlsView
     @IBOutlet var setTipAmountPanGesture: UIPanGestureRecognizer!
     @IBOutlet var tipViewTapGesture: UITapGestureRecognizer!
-    
-    
-    //Variables for controlsView actions
-    var firstTouchForTaxView: Bool = true
-    var firstTouchForTipView: Bool = true
-    var firstTouchForPartySizeView: Bool = true
     
     //Outlets
     @IBOutlet weak var totalBillAmountTextField: UITextField!
@@ -102,9 +106,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var hiddenMessageLabel: UILabel!
     @IBOutlet weak var loggerView: UIView!
     @IBOutlet weak var enableLocationView: UIView!
-    
-    //Views
-    @IBOutlet weak var welcomeView: UIView!
     @IBOutlet weak var yelpButton: UIButton!
     
     override func viewDidLoad() {
@@ -146,12 +147,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     }
     
     override func viewWillAppear(animated: Bool) {
-        
-//        if (isLocationEnabled == true && locationError == true) {
-//            //Fetch current location and find current restaurant/bar
-//            LocationService.sharedInstance.startUpdatingLocation()
-//            locationError = false
-//        }
         
         let settings = realmObject.objects(Settings)
         

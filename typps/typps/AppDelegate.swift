@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  typps
+//  typs
 //
-//  Created by Monte with Pillow on 7/4/16.
+//  Created by Monte Thakkar on 7/4/16.
 //  Copyright © 2016 Monte Thakkar. All rights reserved.
 //
 
@@ -10,6 +10,8 @@ import UIKit
 
 //status bar notification
 let notification = CWStatusBarNotification()
+
+//used to check if location is enabled and perform referesh of current location
 var isLocationEnabled: Bool? = true
 
 @UIApplicationMain
@@ -25,7 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         notification.notificationAnimationInStyle = CWNotificationAnimationStyle.Top
         notification.notificationAnimationOutStyle = CWNotificationAnimationStyle.Top
 
-        // Override point for customization after application launch.
         return true
     }
 
@@ -44,14 +45,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
-        //Fetch current location and find current restaurant/bar
+        
+        //Set location enabled flag to true
+        //this is used in the case that they disallow location at first
+        //but then they turn on location .. this enables the app to referesh and find the current location
+        //once the user comes back into the app
         isLocationEnabled = true
     }
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
 
