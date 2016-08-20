@@ -133,6 +133,11 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         //prints the current path for realm db to view it
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
+        //customize status bar notification
+        notification.notificationLabelBackgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+        notification.notificationLabelTextColor = UIColor.whiteColor()
+        notification.notificationAnimationInStyle = CWNotificationAnimationStyle.Top
+        notification.notificationAnimationOutStyle = CWNotificationAnimationStyle.Top
         
         //Get navigation bar to cutomize the title and color
         let navigationBar = self.navigationController?.navigationBar
@@ -145,7 +150,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         //set navigation bar title with color
         navigationItem.title = "typs"
         navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
-        
         
         //add gesture recognizers for single to toggle party size
         let togglePartySizeTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.togglePartySizeTapGesture))
