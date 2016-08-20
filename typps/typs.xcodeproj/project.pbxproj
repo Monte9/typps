@@ -36,7 +36,7 @@
 		EC61B0FF1D317BB90060F0A9 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ECC32A7C1D360A4C00974644 /* CheckCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckCell.swift; sourceTree = "<group>"; };
 		ECC32A7E1D361FEB00974644 /* PathDynamicModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathDynamicModal.swift; sourceTree = "<group>"; };
-		ECF65F841D2B91340082F5FF /* typps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = typps.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECF65F841D2B91340082F5FF /* typs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = typs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECF65F871D2B91340082F5FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ECF65F891D2B91340082F5FF /* ViewController.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; usesTabs = 0; };
 		ECF65F8C1D2B91340082F5FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -84,7 +84,7 @@
 		ECF65F851D2B91340082F5FF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				ECF65F841D2B91340082F5FF /* typps.app */,
+				ECF65F841D2B91340082F5FF /* typs.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,6 +100,7 @@
 				ECF65FBD1D2E04910082F5FF /* Controllers */,
 				ECF65FBC1D2E048A0082F5FF /* Views */,
 				ECF65FBB1D2E04670082F5FF /* Models */,
+				ECF65FBF1D2E04B50082F5FF /* API Clients */,
 				ECF65FBE1D2E04A00082F5FF /* Supporting Files */,
 			);
 			path = typps;
@@ -140,7 +141,6 @@
 				ECF65FC21D2FAB0E0082F5FF /* CWStatusBarNotificationUtils.swift */,
 				ECF65F991D2B93570082F5FF /* LocationService.swift */,
 				ECC32A7E1D361FEB00974644 /* PathDynamicModal.swift */,
-				ECF65FBF1D2E04B50082F5FF /* API Clients */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -164,9 +164,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		ECF65F831D2B91340082F5FF /* typps */ = {
+		ECF65F831D2B91340082F5FF /* typs */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = ECF65F961D2B91340082F5FF /* Build configuration list for PBXNativeTarget "typps" */;
+			buildConfigurationList = ECF65F961D2B91340082F5FF /* Build configuration list for PBXNativeTarget "typs" */;
 			buildPhases = (
 				7B35B2598E57A68616BD9F2F /* [CP] Check Pods Manifest.lock */,
 				ECF65F801D2B91340082F5FF /* Sources */,
@@ -179,9 +179,9 @@
 			);
 			dependencies = (
 			);
-			name = typps;
+			name = typs;
 			productName = typps;
-			productReference = ECF65F841D2B91340082F5FF /* typps.app */;
+			productReference = ECF65F841D2B91340082F5FF /* typs.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -200,7 +200,7 @@
 					};
 				};
 			};
-			buildConfigurationList = ECF65F7F1D2B91340082F5FF /* Build configuration list for PBXProject "typps" */;
+			buildConfigurationList = ECF65F7F1D2B91340082F5FF /* Build configuration list for PBXProject "typs" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -213,7 +213,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				ECF65F831D2B91340082F5FF /* typps */,
+				ECF65F831D2B91340082F5FF /* typs */,
 			);
 		};
 /* End PBXProject section */
@@ -417,7 +417,7 @@
 				INFOPLIST_FILE = typps/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.manthanbharatthakkar.typs;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = typs;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -432,7 +432,7 @@
 				INFOPLIST_FILE = typps/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.manthanbharatthakkar.typs;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = typs;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
@@ -440,7 +440,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		ECF65F7F1D2B91340082F5FF /* Build configuration list for PBXProject "typps" */ = {
+		ECF65F7F1D2B91340082F5FF /* Build configuration list for PBXProject "typs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				ECF65F941D2B91340082F5FF /* Debug */,
@@ -449,7 +449,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		ECF65F961D2B91340082F5FF /* Build configuration list for PBXNativeTarget "typps" */ = {
+		ECF65F961D2B91340082F5FF /* Build configuration list for PBXNativeTarget "typs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				ECF65F971D2B91340082F5FF /* Debug */,
