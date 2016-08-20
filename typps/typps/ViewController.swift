@@ -103,7 +103,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
     @IBOutlet weak var restaurantNameLabel: UILabel!
     @IBOutlet weak var resultsCountLabel: UILabel!
     @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var hiddenMessageLabel: UILabel!
+    @IBOutlet weak var checkSavedMessageLabel: UILabel!
     @IBOutlet weak var loggerView: UIView!
     @IBOutlet weak var enableLocationView: UIView!
     @IBOutlet weak var yelpButton: UIButton!
@@ -114,84 +114,27 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         // Delegate for billAmountInput textField
         totalBillAmountTextField.delegate = self
         
+        // Delegate for tipAmount Pan gesture
+        setTipAmountPanGesture.delegate = self
+        
+        // Delegate for tipView Tap gesture
+        tipViewTapGesture.delegate = self
+        
         // Delegate for LocationService
         LocationService.sharedInstance.delegate = self
         
+        //Update location from LocationService
         LocationService.sharedInstance.startUpdatingLocation()
         
+        //handle settings; get and set settings or initialize and save new settings object
+        handleSettingsFromRealmDB()
+        
+//DEBUG ONLY
+        //prints the current path for realm db to view it
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
-        //add gesture recognizers for single and double tap
-        let togglePartySizeTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.togglePartySizeTapGesture))
-        togglePartySizeTapGesture.numberOfTapsRequired = 1
-        self.partySizeView.addGestureRecognizer(togglePartySizeTapGesture)
         
-        let selectPartySizeDoubleTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.selectPartySizeDoubleTapGesture))
-        selectPartySizeDoubleTapGesture.numberOfTapsRequired = 2
-        self.partySizeView.addGestureRecognizer(selectPartySizeDoubleTapGesture)
-        
-        togglePartySizeTapGesture.delegate = self
-        selectPartySizeDoubleTapGesture.delegate = self
-        setTipAmountPanGesture.delegate = self
-        tipViewTapGesture.delegate = self
-        
-        //single and double tap in partySizeImageView
-        togglePartySizeTapGesture.requireGestureRecognizerToFail(selectPartySizeDoubleTapGesture)
-        
-        //setup labels for the TipView
-        self.setupTipViewLabels()
-    }
-    
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        
-        let settings = realmObject.objects(Settings)
-        
-        if settings.first == nil {
-            let newSettings = Settings()
-            newSettings.isTaxEnabled = false
-            newSettings.partySize = 1
-            newSettings.tipPercent = 20
-            newSettings.currentPartySize = 1
-            
-            self.tipPercent = 20
-            self.isTaxEnabled = false
-            self.partySize = 1
-            self.currentPartySize = partySize
-            
-            //write the settings object to db for persistence
-            try! realmObject.write() {
-                realmObject.add(newSettings)
-                print("Settings created.. check db for details")
-            }
-        } else {
-            print("Found settings")
-            
-            self.tipPercent = (settings.first?.tipPercent)!
-            self.isTaxEnabled = (settings.first?.isTaxEnabled)!
-            self.partySize = (settings.first?.partySize)!
-            self.currentPartySize = partySize
-            
-//            if settingsCancelled == true {
-//                self.currentPartySize = partySize
-//                print("current stays: \(currentPartySize)")
-//            } else {
-//                self.currentPartySize = partySize
-//                print("current set to new one: \(currentPartySize)")
-//            }
-        }
-        
-        if (settingsCancelled == false) {
-            setupLabelsFromSettings()
-        }
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        
-        //Customize the navigation bar title and color
+        //Get navigation bar to cutomize the title and color
         let navigationBar = self.navigationController?.navigationBar
         
         //make navigation bar transparent
@@ -203,15 +146,49 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         navigationItem.title = "typs"
         navigationBar!.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)]
         
+        
+        //add gesture recognizers for single to toggle party size
+        let togglePartySizeTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.togglePartySizeTapGesture))
+        togglePartySizeTapGesture.numberOfTapsRequired = 1
+        self.partySizeView.addGestureRecognizer(togglePartySizeTapGesture)
+        togglePartySizeTapGesture.delegate = self
+        
+        //add gesture recognizers for double tap to select party size
+        let selectPartySizeDoubleTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.selectPartySizeDoubleTapGesture))
+        selectPartySizeDoubleTapGesture.numberOfTapsRequired = 2
+        self.partySizeView.addGestureRecognizer(selectPartySizeDoubleTapGesture)
+        selectPartySizeDoubleTapGesture.delegate = self
+        
+        //allows single and double tap on the same partySizeImageView
+        togglePartySizeTapGesture.requireGestureRecognizerToFail(selectPartySizeDoubleTapGesture)
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        //remake label constraints to setup the Controls View
+        self.remakeLabelConstraintsToSetupControlsView()
+        
+        //if settings is saved; then get the new settings from the realm object in the db
+        getNewSettingsFromDB()
+        
+        //if settings is saved then set tipPercent, tax and partySize label values appropriately
+        if (settingsSaved == true) {
+            setupLabelValuesFromSettings()
+        } else {
+            resetPartySizeLabelAndValues()
+        }
+        
         //add rounded edges to restaurantImageView
         restaurantImageView.layer.cornerRadius = 5
         restaurantImageView.clipsToBounds = true
         welcomeViewRestaurantImageView.layer.cornerRadius = 5
         welcomeViewRestaurantImageView.clipsToBounds = true
         
-        // add corner radius to saveButton
+        //add corner radius to saveButton
         saveButton.layer.cornerRadius = 17
         
+        //show welcomeView based on whether history or settings tab was opened
         if (didOpenSecondaryView == true) {
             if (totalBillAmountTextField.text != "$" && totalBillAmountTextField.text != "") {
                 welcomeView.hidden = true
@@ -222,17 +199,176 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             welcomeView.hidden = false
         }
         
-        hiddenMessageLabel.hidden = true
-        if (splitBillMode == true) {
-            self.eachPersonCheckAmountLabel.hidden = false
+        //hide the checkSavedMessage label initially
+        checkSavedMessageLabel.hidden = true
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        //start off new threads to things that would take a long time to execute, 
+        //for example doing a webservice call to get extra data for the form above.
+        //The good thing is that because the view already exists and is being displayed to the user, 
+        //you can show a nice "Waiting" message to the user while you get the data.
+    }
+    
+    func handleSettingsFromRealmDB() {
+        
+        //fetch settings object from realm db
+        let settings = realmObject.objects(Settings)
+        
+        //check if settings already exists
+        if settings.first == nil {
+            
+            //since settings does not exist.. it is a new user
+            //initialize with default values
+            self.isTaxEnabled = false
+            self.tipPercent = 20
+            self.partySize = 1
+            self.currentPartySize = 1
+            
+            //create and initialize new settings object
+            let newSettings = Settings()
+            newSettings.isTaxEnabled = self.isTaxEnabled
+            newSettings.tipPercent = self.tipPercent
+            newSettings.partySize = self.partySize!
+            newSettings.currentPartySize = self.currentPartySize!
+            
+            //write the settings object to db for persistence
+            try! realmObject.write() {
+                realmObject.add(newSettings)
+                
+                //set settingsSaved flag to set the appropriate values for the labels
+                settingsSaved = true
+
+//DEBUG ONLY
+                print("New user detected! Created new settings object in Realm with default values")
+                debugModeOutput("Created new settings object in Realm with default values in ViewDidLoad()")
+            }
+        } else {
+            //found setttings.. hence get the values and initialize our instance variables for use
+            self.isTaxEnabled = (settings.first?.isTaxEnabled)!
+            self.tipPercent = (settings.first?.tipPercent)!
+            self.partySize = (settings.first?.partySize)!
+            self.currentPartySize = partySize
+            
+            //set settingsSaved flag to set the appropriate values for the labels
+            settingsSaved = true
+            
+//DEBUG ONLY
+            debugModeOutput("Found Settings from Realm persistence object in ViewDidLoad()")
         }
     }
     
+    func getNewSettingsFromDB() {
+        
+        //fetch settings object from realm db
+        let settings = realmObject.objects(Settings)
+        
+        if(settingsSaved == true) {
+            //found setttings.. hence get the values and initialize our instance variables for use
+            self.isTaxEnabled = (settings.first?.isTaxEnabled)!
+            self.tipPercent = (settings.first?.tipPercent)!
+            self.partySize = (settings.first?.partySize)!
+            self.currentPartySize = partySize
+            
+            //set settingsSaved flag to set the appropriate values for the labels
+            settingsSaved = true
+            
+            //DEBUG ONLY
+            debugModeOutput("Get the new saved setting from Realm persistence object in ViewWillAppear()")
+        }
+    }
+    
+    func remakeLabelConstraintsToSetupControlsView() {
+        let superview = self.view
+        
+        print("****Setting up label constraints in the controlsView")
+        
+        //change font size
+        self.TipNameLabel.font = self.TipNameLabel.font.fontWithSize(50)
+        self.tipPercentLabel.font = self.tipPercentLabel.font.fontWithSize(50)
+        self.tipAmountLabel.font = self.tipAmountLabel.font.fontWithSize(50)
+        
+        //make constraints for labels
+        self.tipAmountLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(17)
+        }
+        self.TipNameLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(-57.5)
+        }
+        self.tipPercentLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(72)
+        }
+        
+        self.totalCheckAmountLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(0)
+            make.centerY.equalTo(superview).offset(150)
+        }
+        self.eachPersonCheckAmountLabel.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(0)
+            make.centerY.equalTo(superview).offset(150)
+        }
+        
+        //hide eachPersonCheckAmountLabel as party size is still 1
+        self.eachPersonCheckAmountLabel.hidden = true
+    }
+    
+    func setupLabelValuesFromSettings() {
+        
+        print("****Setting up label values from Settings Object")
+        
+        //set tipAmountLabel text
+        tipAmountLabel.text = String(tipPercent)
+        
+        //set the taxLabel text
+        if (isTaxEnabled) {
+            self.taxLabel.text = "Tax ON"
+            self.taxLabel.textColor = UIColor.whiteColor()
+            self.buttonTaxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha:
+                1)
+            self.buttonTaxView.layer.cornerRadius = 10
+        } else {
+            self.taxLabel.text = "Tax OFF"
+            self.taxLabel.textColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
+            self.buttonTaxView.backgroundColor = UIColor.whiteColor()
+        }
+        
+        resetPartySizeLabelAndValues()
+        
+        //updateTotalBillAmount based on the set label values
+        updateTotalBillAmount(totalBillAmount * Float(Float(tipPercent)/100) + totalBillAmount)
+    }
+    
+    func resetPartySizeLabelAndValues() {
+        
+        //set the partySizeImageView image and description from dictionaries
+        let partySizeImageName: String = partySizeDictionary[self.partySize!]!
+        let selectedPartySizeImageName = partySizeImageName
+        self.partySizeImageView.image = UIImage(named: selectedPartySizeImageName)
+        let selectedPartySizeDescription: String = selectedPartySizeDescriptionDictionary[self.partySize!]!
+        self.partySizeDescriptionLabel.text = "Double tap to confirm party size"
+        
+        //reset to default totalCheckAmountLabel posititon and deselect the partySizeImageView
+        if (splitBillMode == true && partySize != 1) {
+            endAnimatingTotalCheckAmountLabel()
+        }
+        
+        //set the splitBillMode flag to false to indicate that partySize is not selected yet
+        splitBillMode = false
+        
+        //set firstTouchForPartySizeView to true to toggle partySize with single tap
+        firstTouchForPartySizeView = true
+    }
+    
     @IBAction func mainViewDismissKeyboard(sender: UITapGestureRecognizer) {
+        //tap gesture on the main view to dismiss keyboard if tapped anywhere
         self.view.endEditing(true)
     }
     
     @IBAction func textFieldDidChange(sender: AnyObject) {
+        //first point of entry in the app
+        
+        //gets the user input for the totalBill Amount Input field
         if (totalBillAmountTextField.text == "") {
             totalBillAmountTextField.text = "$"
             welcomeView.hidden = false
@@ -479,74 +615,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         })
     }
     
-    func setupLabelsFromSettings() {
-        
-        print("setting up now..")
-        let superview = self.view
-        
-        tipAmountLabel.text = String(tipPercent)
-        
-        if (isTaxEnabled) {
-            self.taxLabel.text = "Tax ON"
-            self.taxLabel.textColor = UIColor.whiteColor()
-            self.buttonTaxView.backgroundColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha:
-                1)
-            self.buttonTaxView.layer.cornerRadius = 10
-        } else {
-            self.taxLabel.text = "Tax OFF"
-            self.taxLabel.textColor = UIColor(red: 26/255, green: 188/255, blue: 156/255, alpha: 1)
-            self.buttonTaxView.backgroundColor = UIColor.whiteColor()
-        }
-        updateTotalBillAmount(totalBillAmount * Float(Float(tipPercent)/100) + totalBillAmount)
-        
-        firstTouchForPartySizeView = true
-        
-        let partySizeImageName: String = partySizeDictionary[self.partySize!]!
-        let selectedPartySizeImageName = partySizeImageName
-        
-        self.partySizeImageView.image = UIImage(named: selectedPartySizeImageName)
-        let selectedPartySizeDescription: String = selectedPartySizeDescriptionDictionary[self.partySize!]!
-        self.partySizeDescriptionLabel.text = "Double tap to confirm party size"
-        
-        if (splitBillMode == true && partySize != 1) {
-            endAnimatingTotalCheckAmountLabel()
-        }
-        splitBillMode = false
-    }
-    
-    func setupTipViewLabels() {
-        let superview = self.view
-        
-        print("setup tip View labels")
-        
-        //change font size
-        self.TipNameLabel.font = self.TipNameLabel.font.fontWithSize(50)
-        self.tipPercentLabel.font = self.tipPercentLabel.font.fontWithSize(50)
-        self.tipAmountLabel.font = self.tipAmountLabel.font.fontWithSize(50)
-        
-        self.tipAmountLabel.snp_remakeConstraints { (make) in
-            make.centerX.equalTo(superview).offset(17)
-        }
-        self.TipNameLabel.snp_remakeConstraints { (make) in
-            make.centerX.equalTo(superview).offset(-57.5)
-        }
-        self.tipPercentLabel.snp_remakeConstraints { (make) in
-            make.centerX.equalTo(superview).offset(72)
-        }
-        
-        self.totalCheckAmountLabel.snp_remakeConstraints { (make) in
-            make.centerX.equalTo(superview).offset(0)
-            make.centerY.equalTo(superview).offset(150)
-        }
-        
-        self.eachPersonCheckAmountLabel.snp_remakeConstraints { (make) in
-            make.centerX.equalTo(superview).offset(0)
-            make.centerY.equalTo(superview).offset(150)
-        }
-        
-        self.eachPersonCheckAmountLabel.hidden = true
-    }
-    
     func beginAnimatingTotalCheckAmountLabel() {
         let parentView = self.totalCheckAmountView
         
@@ -630,10 +698,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             self.taxView.hidden = true
         }) { (true) in
             UIView.animateWithDuration(1.0, animations: {
-                self.hiddenMessageLabel.hidden = false
+                self.checkSavedMessageLabel.hidden = false
                 }, completion: { (true) in
                     UIView.animateWithDuration(1.5, animations: {
-                        self.hiddenMessageLabel.alpha = 0.0
+                        self.checkSavedMessageLabel.alpha = 0.0
                         }, completion: { (true) in
                             UIView.animateWithDuration(1.0, animations: { 
                                 self.mainView.backgroundColor = UIColor.whiteColor()
@@ -648,7 +716,7 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                     })
             })
         }
-        self.hiddenMessageLabel.alpha = 1.0
+        self.checkSavedMessageLabel.alpha = 1.0
     }
     
     @IBAction func openRestaurantInYelp(sender: AnyObject) {
@@ -663,6 +731,9 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         UIApplication.sharedApplication().openURL(NSURL(string:"prefs:root=LOCATION_SERVICES")!)
     }
     
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
     
     func tracingLocation(currentLocation: CLLocation) {
        // print("Starting yelp search with params: [food, \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)]")
@@ -722,6 +793,17 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 }
             }
         }
+    }
+    
+    func debugModeOutput(origin: String) {
+        print()
+        print("************DEBUG MODE: \(origin)")
+        print("isTaxEnabled: \(isTaxEnabled)")
+        print("tipPercent: \(tipPercent)")
+        print("partySize: \(partySize)")
+        print("currentPartySize: \(currentPartySize)")
+        print("END DEBUG MODE************")
+        print()
     }
     
 }

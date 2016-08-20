@@ -372,10 +372,10 @@
                     <connections>
                         <outlet property="TipNameLabel" destination="pmv-ce-g91" id="nPy-rj-h7H"/>
                         <outlet property="buttonTaxView" destination="icn-cm-g3p" id="De3-XT-eAC"/>
+                        <outlet property="checkSavedMessageLabel" destination="l4I-yZ-GUf" id="8c0-4L-EIc"/>
                         <outlet property="controlsView" destination="hMD-Zc-QnJ" id="3oh-y8-IMx"/>
                         <outlet property="eachPersonCheckAmountLabel" destination="Tlw-wJ-hJ1" id="ZoQ-4W-9Cz"/>
                         <outlet property="enableLocationView" destination="EF1-oh-PSC" id="I3w-WC-7oZ"/>
-                        <outlet property="hiddenMessageLabel" destination="l4I-yZ-GUf" id="svu-PB-A5R"/>
                         <outlet property="loggerView" destination="sWT-iq-dUs" id="9jX-mH-ecv"/>
                         <outlet property="mainView" destination="8bC-Xf-vdC" id="iJu-a9-Wed"/>
                         <outlet property="partySizeDescriptionLabel" destination="FK0-XG-7sW" id="NsS-xJ-kla"/>

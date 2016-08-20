@@ -49,9 +49,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         formatter.dateStyle = NSDateFormatterStyle.LongStyle
         formatter.timeStyle = .MediumStyle
         
-        didOpenSecondaryView = true
-        
-        settingsCancelled = true
+        settingsSaved = false
         
         //customize status bar notification
         notification.notificationLabelBackgroundColor = UIColor.whiteColor()

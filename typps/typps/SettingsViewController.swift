@@ -11,7 +11,7 @@ import RealmSwift
 import Realm
 import AudioToolbox
 
-var settingsCancelled: Bool? = false
+var settingsSaved: Bool? = false
 
 class SettingsViewController: UIViewController {
     
@@ -79,7 +79,7 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func cancelBarButtonPressed(sender: AnyObject) {
-        settingsCancelled = true
+        settingsSaved = false
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -93,7 +93,7 @@ class SettingsViewController: UIViewController {
             settings.first?.setValue(partySize, forKeyPath: "currentPartySize")
             settings.first?.setValue(tipPercent, forKeyPath: "tipPercent")
             print("Settings updated")
-            settingsCancelled = false
+            settingsSaved = true
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
