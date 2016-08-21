@@ -735,20 +735,33 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
         return true
     }
     
+    //delegate method for LocationService Class
+    //gets called by LocationService.sharedInstance.startUpdatingLocation() in the ViewDidLoad() method
     func tracingLocation(currentLocation: CLLocation) {
        // print("Starting yelp search with params: [food, \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)]")
         
         //show loading indicator
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
+        //start yelp search with currentLocation lat and long
+        startYelpSearch("food", latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
+        
+        //stop updating location
+        LocationService.sharedInstance.stopUpdatingLocation()
+        
+        //take care of relevant views
         self.enableLocationView.hidden = true
         self.loggerView.hidden = false
-        startYelpSearch("food", latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
-        LocationService.sharedInstance.stopUpdatingLocation()
     }
     
+    //delegate method for LocationService Class called when it fails to get current location
     func tracingLocationDidFailWithError(error: NSError) {
         print("Location produced error: \(error)")
+        
+        //set locationError flag to indicate that the location failed
         self.locationError = true
+        
+        //take care of relevant views if location fails
         self.loggerView.hidden = true
         self.enableLocationView.hidden = false
     }
@@ -758,7 +771,10 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
             
             if (businesses != nil) {
                 self.minDistance = businesses.first?.distance
+                print("Results returned: \(businesses.count)")
                 for business in businesses {
+                    print()
+                    print("Business: \(String(business.name!)) is \(String(business.distance!)) away")
                     if (business.distance <= self.minDistance) {
                         self.nearbyBusinesses.insert(business, atIndex: 0)
                         self.minDistance = business.distance!
@@ -767,7 +783,23 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 }
             }
             else {
-                print("NO DATA RETURNED")
+                print("ERROR: NO DATA RETURNED")
+                
+                // Hide HUD once network request comes back (must be done on main UI thread)
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+                
+                //Show alert error message telling the user that he/she is not connected to the interwebz
+                let alertController = UIAlertController(title: "Error", message: "Unable to get nearby locations. Please make sure your LTE/WIFI is turned on", preferredStyle:UIAlertControllerStyle.Alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default)
+                { action -> Void in
+                    //set locationError flag to indicate that the location failed
+                    self.locationError = true
+                    
+                    //take care of relevant views if location fails
+                    self.loggerView.hidden = true
+                    self.enableLocationView.hidden = false
+                    })
+                self.presentViewController(alertController, animated: true, completion: nil)
             }
             
             if (self.nearbyBusinesses != nil) {
@@ -777,8 +809,6 @@ class ViewController: UIViewController, LocationServiceDelegate, UITextFieldDele
                 } else {
                     self.resultsCountLabel.text = String("\(self.nearbyBusinesses.count) possible matches")
                 }
-                
-                print(self.nearbyBusinesses.count)
                 
                 for business in self.nearbyBusinesses {
                     if let imageURL = business.imageURL {
