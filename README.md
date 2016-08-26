@@ -1,16 +1,16 @@
-# *tyypps*: Tip Calculator + Restaurant Logger
+# *typs*: Tip Calculator + Restaurant Logger
 
-**tyypps** is a Tip Calculator + Restaurant Logger app for iOS submitted as the pre-work requirement for [CodePath iOS Bootcamp](http://codepath.com/iosbootcamp).
+**typs** is a Tip Calculator + Restaurant Logger app for iOS submitted as the pre-work requirement for [CodePath iOS Bootcamp](http://codepath.com/iosbootcamp). It is also available on the App Store [here](https://appsto.re/us/e2aqeb.i)
 
-It does more than just calculate tips... It is capable of knowing the restaurant you are dining at based on your current location and also allows you to save each check to build your dining history for review later on. 
+It does more than just calculate tips... It is capable of knowing the restaurant you are dining at based on your current location and also allows you to save each check to build your dining history for review later on.
 
 Submitted by: **Monte Thakkar**
 
-Time spent: **40+ passionate** hours spent in total
+Time spent: **60+ passionate** hours spent in total
 
-Status: Beta-testing via TestFlight. Request invites by sending email to **helloomonte@gmail.com**
+Status: currently v1.1 in development. Please send any feedback or suggestions to **helloomonte@gmail.com**
 
-App Store submission: **July 30th, 2016**
+App Store: [typs by Manthan Bharat Thakkar](https://appsto.re/us/e2aqeb.i)
 
 ## User Stories
 
@@ -30,14 +30,14 @@ The following **additional** features are implemented:
 * [x] Supports party size up to 9 people
 
 Coming soon:
-* [ ] Using locale-specific currency and currency thousands separators.
+* [ ] Using locale-specific currency and tax percentage
 * [ ] Improved Yelp location search to produce more accurate restaurant results for current location
 
-## Video Walkthrough 
+## Video Walkthrough
 
 Here's a working demo of the app:
 
-![tyypps walkthrough](tyypps.gif)
+![typs walkthrough](typs.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -46,7 +46,9 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 This app was fairly straighforward to implement. I focused on two main areas while building this app:
 
 1. Minimalistic design: trying to keep the UI as clean and simple as possible. The app uses mostly only two colors with up to 75% of the views filled up with white space.
-2. Intuitive UX: Using pan and tap gestures almost everywhere to receive input to eliminate the use of keyboards. This makes the app's user experience more consistent and interactive. 
+2. Intuitive UX: Using pan and tap gestures almost everywhere to receive input to eliminate the use of keyboards. This makes the app's user experience more consistent and interactive.
+
+Side Note: This is my first app on the App store. I am constaly working on improving the app and making it more intituitive. If you have any feedback or suggestions, I would really appreacite it if you emailed them to me @**helloomonte@gmail.com**
 
 ## License
 
