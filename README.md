@@ -48,7 +48,7 @@ This app was fairly straighforward to implement. I focused on two main areas whi
 1. Minimalistic design: trying to keep the UI as clean and simple as possible. The app uses mostly only two colors with up to 75% of the views filled up with white space.
 2. Intuitive UX: Using pan and tap gestures almost everywhere to receive input to eliminate the use of keyboards. This makes the app's user experience more consistent and interactive.
 
-Side Note: This is my first app on the App store. I am constaly working on improving the app and making it more intituitive. If you have any feedback or suggestions, I would really appreacite it if you emailed them to me @**helloomonte@gmail.com**
+Side Note: This is my first app on the App store. I am constantly working on improving the app to make it more intituitive and functional. If you have any feedback or suggestions, please email them to **helloomonte@gmail.com**
 
 ## License
 
